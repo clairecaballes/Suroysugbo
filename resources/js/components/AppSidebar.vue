@@ -19,6 +19,11 @@ const mainNavItems: NavItem[] = [
         href: '/dashboard',
         icon: LayoutGrid,
     },
+       {
+        title: 'Cebu Legacy',
+        href: '/cebu-legacy',
+        icon: LayoutGrid,
+    },
 ];
 
 const footerNavItems: NavItem[] = [

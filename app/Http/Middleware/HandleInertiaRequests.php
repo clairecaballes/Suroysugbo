@@ -18,6 +18,15 @@ class HandleInertiaRequests extends Middleware
      */
     protected $rootView = 'app';
 
+    public function rootView(Request $request): string
+    {
+        $routeName = $request->route()->getName();
+        if ($routeName == 'home') {
+            return 'tour';
+        } 
+        return $this->rootView;
+    }
+
     /**
      * Determines the current asset version.
      *
@@ -50,7 +59,7 @@ class HandleInertiaRequests extends Middleware
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
-            'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'sidebarOpen' => !$request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }
 }

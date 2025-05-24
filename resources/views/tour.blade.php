@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css" />
 
   <!-- External Stylesheet -->
- <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/style.css') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/style.css') }}" />
   <style>
     * {
       margin: 0;
@@ -67,87 +67,89 @@
       font-weight: bold;
     }
 
-/* Header Section */
-.header {
-  padding: 4rem 1rem;
-  background-color: #061e36;
-}
+    /* Header Section */
+    .header {
+      padding: 4rem 1rem;
+      background-color: #061e36;
+    }
 
-.header-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1200px;
-  margin: auto;
-  gap: 2rem;
-  flex-wrap: wrap;
-}
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: auto;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
 
-.header-left {
-  flex: 1;
-}
+    .header-left {
+      flex: 1;
+    }
 
-.header-left h1 {
-  font-size: 2.5rem;
-  color: #007bff;
-  margin-bottom: 1rem;
-}
+    .header-left h1 {
+      font-size: 2.5rem;
+      color: #007bff;
+      margin-bottom: 1rem;
+    }
 
-.header-left p {
-  font-size: 1.1rem;
-  color: #ffffff;
-  margin-bottom: 2rem;
-  line-height: 1.6;
-}
+    .header-left p {
+      font-size: 1.1rem;
+      color: #ffffff;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
 
-.btn-primary {
-  background-color: #4fa7ff;
-  color: white;
-  padding: 0.75rem 1.75rem;
-  border: none;
-  border-radius: 30px;
-  font-size: 1rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-}
+    .btn-primary {
+      background-color: #4fa7ff;
+      color: white;
+      padding: 0.75rem 1.75rem;
+      border: none;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
 
-.btn-primary:hover {
-  background-color: #0056b3;
-}
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
 
-.header-right {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
+    .header-right {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
 
-.header-image {
-  width: 100%;
-  max-width: 500px;
-  border-radius: 0; /* No border or rounded corners */
-  box-shadow: none; /* Remove any shadow if present */
-}
+    .header-image {
+      width: 100%;
+      max-width: 500px;
+      border-radius: 0;
+      /* No border or rounded corners */
+      box-shadow: none;
+      /* Remove any shadow if present */
+    }
 
-@media (max-width: 768px) {
-  .header-container {
-    flex-direction: column-reverse;
-    text-align: center;
-  }
+    @media (max-width: 768px) {
+      .header-container {
+        flex-direction: column-reverse;
+        text-align: center;
+      }
 
-  .header-left h1 {
-    font-size: 2rem;
-  }
+      .header-left h1 {
+        font-size: 2rem;
+      }
 
-  .header-left p {
-    font-size: 1rem;
-  }
+      .header-left p {
+        font-size: 1rem;
+      }
 
-  .header-image {
-    max-width: 100%;
-    margin-top: 2rem;
-  }
-}
+      .header-image {
+        max-width: 100%;
+        margin-top: 2rem;
+      }
+    }
 
 
 
@@ -249,7 +251,7 @@
       font-weight: bold;
     }
 
-    
+
 
     .user-ratings {
       padding: 4rem 1rem;
@@ -310,306 +312,336 @@
     }
 
     #close-menu-btn {
-  display: none;
-}
+      display: none;
+    }
 
-#open-menu-btn {
-  background: none;
-  border: none;
-  font-size: 1.8rem;
-  color: white;
-  display: none;
-  cursor: pointer;
-}
+    #open-menu-btn {
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      color: white;
+      display: none;
+      cursor: pointer;
+    }
 
-.nav_menu {
-  display: flex;
-  list-style: none;
-  gap: 1.5rem;
-}
+    .nav_menu {
+      display: flex;
+      list-style: none;
+      gap: 1.5rem;
+    }
 
-@media (max-width: 768px) {
-  .nav_menu {
-    display: none;
-    flex-direction: column;
-    background: #007bff;
-    position: absolute;
-    top: 70px;
-    right: 1rem;
-    width: 200px;
-    padding: 1rem;
-    z-index: 1000;
-  }
+    @media (max-width: 768px) {
+      .nav_menu {
+        display: none;
+        flex-direction: column;
+        background: #007bff;
+        position: absolute;
+        top: 70px;
+        right: 1rem;
+        width: 200px;
+        padding: 1rem;
+        z-index: 1000;
+      }
 
-  .nav_menu.active {
-    display: flex;
-  }
+      .nav_menu.active {
+        display: flex;
+      }
 
-  #open-menu-btn {
-    display: block;
-  }
+      #open-menu-btn {
+        display: block;
+      }
 
-  #close-menu-btn {
-    display: none;
-  }
+      #close-menu-btn {
+        display: none;
+      }
 
-  .nav_container.show-menu #open-menu-btn {
-    display: none;
-  }
+      .nav_container.show-menu #open-menu-btn {
+        display: none;
+      }
 
-  .nav_container.show-menu #close-menu-btn {
-    display: block;
-  }
-}
+      .nav_container.show-menu #close-menu-btn {
+        display: block;
+      }
+    }
   </style>
 </head>
 
 <body>
-   <nav>
-        <div class="container nav_container">
-            <a href="index.html"><h4>Explore Cebu</h4></a>
-            <ul class="nav_menu">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="#slider-section">Gallery</a></li>
-                <li><a href="#compact-contact">Contact</a></li>
-                <li><a href="courses.html">About</a></li>
-                <li><a href="#faq-section">FAQ</a></li>
-                <li><a href="signup.html" class="signup-btn">Sign Up</a></li>
-            </ul>
-            <button id="open-menu-btn"><i class="uil uil-bars"></i></button>
-            <button id="close-menu-btn"><i class="uil uil-multiply"></i></button>
+  <nav>
+    <div class="container nav_container">
+      <a href="index.html">
+        <h4>Explore Cebu</h4>
+      </a>
+      <ul class="nav_menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="#slider-section">Gallery</a></li>
+        <li><a href="#compact-contact">Contact</a></li>
+        <li><a href="courses.html">About</a></li>
+        <li><a href="#faq-section">FAQ</a></li>
+        <li><a href="signup.html" class="signup-btn">Sign Up</a></li>
+      </ul>
+      <button id="open-menu-btn"><i class="uil uil-bars"></i></button>
+      <button id="close-menu-btn"><i class="uil uil-multiply"></i></button>
 
-        </div>
-    </nav>
-
-<header class="header">
-  <div class="container header-container">
-    <div class="header-left">
-      <h1>Explore the Beauty of Cebu</h1>
-      <p>
-        From stunning beaches to rich culture, discover unforgettable experiences
-        in the heart of the Philippines. Let your adventure begin here.
-      </p>
-      <a href="courses.html" class="btn-primary">Start Exploring</a>
     </div>
-    <div class="header-right">
-      <img src="./img/header1.png" alt="Cebu Scenery" class="header-image" />
+  </nav>
+
+  <header class="header">
+    <div class="container header-container">
+      <div class="header-left">
+        <h1>Explore the Beauty of Cebu</h1>
+        <p>
+          From stunning beaches to rich culture, discover unforgettable experiences
+          in the heart of the Philippines. Let your adventure begin here.
+        </p>
+        <a href="courses.html" class="btn-primary">Start Exploring</a>
+      </div>
+      <div class="header-right">
+        <img src="./img/header1.png" alt="Cebu Scenery" class="header-image" />
+      </div>
     </div>
-  </div>
-</header>
+  </header>
 
 
 
-    <section id="slider-section" class="slider-section">
-      <h2 class="slider-title">Cebu's Legacy</h2>
-    
-      <div class="slider-wrapper">
-        <div class="slider">
-          <div class="slider-track" id="sliderTrack">
-            <div class="slider-item">
-              <div class="slider-image-wrapper">
-                <a href="about.html" class="slider-link">
-                  <img src="img/image1.jpg" class="slider-image" />
-                  <div class="slider-description">Magellan’s Cross</div>
-                </a>
-              </div>
-            </div>
-    
-            <div class="slider-item">
-              <div class="slider-image-wrapper">
-                <a href="https://example.com/page2" class="slider-link">
-                  <img src="img/image2.jpg" class="slider-image" />
-                  <div class="slider-description">Basilica del Santo Niño</div>
-                </a>
-              </div>
-            </div>
-    
-            <div class="slider-item">
-              <div class="slider-image-wrapper">
-                <a href="https://example.com/page3" class="slider-link">
-                  <img src="img/image3.jpg" class="slider-image" />
-                  <div class="slider-description">Fort San Pedro</div>
-                </a>
-              </div>
-            </div>
+  <section id="slider-section" class="slider-section">
+    <h2 class="slider-title">Cebu's Legacy</h2>
 
-            <div class="slider-item">
-              <div class="slider-image-wrapper">
-                <a href="about.html" class="slider-link">
-                  <img src="img/image1.jpg" class="slider-image" />
-                  <div class="slider-description">Magellan’s Cross</div>
-                </a>
-              </div>
+    <div class="slider-wrapper">
+      <div class="slider">
+        <div class="slider-track" id="sliderTrack">
+          <div class="slider-item">
+            <div class="slider-image-wrapper">
+              <a href="about.html" class="slider-link">
+                <img src="img/image1.jpg" class="slider-image" />
+                <div class="slider-description">Magellan’s Cross</div>
+              </a>
             </div>
-    
-            <!-- Add more items if needed -->
           </div>
-        </div>
-    
-        <div class="arrow-buttons">
-          <button class="arrow-btn" id="leftArrow">&#10094;</button>
-          <button class="arrow-btn" id="rightArrow">&#10095;</button>
-        </div>
-      </div>
-    </section>
-    
-    
-    
-      <script src="main.js"></script>
 
-     
-    <section id="compact-contact" class="compact-contact">
-      <div class="contact-card">
-        
-        <!-- Left: Info -->
-        <div class="contact-left">
-          <h2>Contact Us</h2>
-          <p class="contact-description">We’re here to help! Reach out to us anytime.</p>
-          <ul class="contact-details">
-            <li><i class="fas fa-phone-alt"></i> +1 (123) 456-7890</li>
-            <li><i class="fas fa-envelope"></i> contact@yourdomain.com</li>
-            <li><i class="fas fa-map-marker-alt"></i> 1234 Your Street, City</li>
-          </ul>
-          <img src="img/contact.png" alt="Contact" class="contact-image">
-        </div>
-    
-        <!-- Right: Form -->
-        <div class="contact-right">
-          <form>
-            <input type="text" name="name" placeholder="Your Name" required>
-            <input type="email" name="email" placeholder="Your Email" required>
-            <select name="subject" required>
-              <option value="" disabled selected hidden>Choose a Subject</option>
-              <option value="jeepney">Jeepney Fare</option>
-              <option value="modes">Transportation Modes</option>
-              <option value="others">Others</option>
-            </select>
-            <textarea name="message" placeholder="Your Message" required></textarea>
-            <button type="submit">Send</button>
-          </form>
-        </div>
-    
-      </div>
-    </section>
+          <div class="slider-item">
+            <div class="slider-image-wrapper">
+              <a href="https://example.com/page2" class="slider-link">
+                <img src="img/image2.jpg" class="slider-image" />
+                <div class="slider-description">Basilica del Santo Niño</div>
+              </a>
+            </div>
+          </div>
 
-    
-    <section id="faq-section" class="faq-section">
-      <div class="faq-header">
-        <h2>Frequently Asked Questions</h2>
-        <input type="text" id="faqSearch" placeholder="Search FAQs..." class="faq-search" oninput="filterFAQs()">
-      </div>
-    
-      <div class="faq-item">
-        <button class="faq-question">
-          What is the purpose of this website?
-          <span class="faq-keywords" hidden>cebu heritage culture history travel site about</span>
-        </button>
-        <div class="faq-answer">
-          <p>This website aims to promote awareness and appreciation of Cebu’s cultural heritage by showcasing important historical sites, traditions, and local customs, along with pictures and directions to visit them.</p>
+          <div class="slider-item">
+            <div class="slider-image-wrapper">
+              <a href="https://example.com/page3" class="slider-link">
+                <img src="img/image3.jpg" class="slider-image" />
+                <div class="slider-description">Fort San Pedro</div>
+              </a>
+            </div>
+          </div>
+
+          <div class="slider-item">
+            <div class="slider-image-wrapper">
+              <a href="about.html" class="slider-link">
+                <img src="img/image1.jpg" class="slider-image" />
+                <div class="slider-description">Magellan’s Cross</div>
+              </a>
+            </div>
+          </div>
+
+          <!-- Add more items if needed -->
         </div>
       </div>
-    
-      <div class="faq-item">
-        <button class="faq-question">
-          Are these heritage sites open to the public?
-          <span class="faq-keywords" hidden>open hours visiting access tourism</span>
-        </button>
-        <div class="faq-answer">
-          <p>Most of the featured sites are open to the public, but some may have specific visiting hours or entrance fees. It's best to check in advance or contact local tourism offices.</p>
-        </div>
+
+      <div class="arrow-buttons">
+        <button class="arrow-btn" id="leftArrow">&#10094;</button>
+        <button class="arrow-btn" id="rightArrow">&#10095;</button>
       </div>
-    
-      <div class="faq-item">
-        <button class="faq-question">
-          How can I help preserve Cebu’s cultural heritage?
-          <span class="faq-keywords" hidden>support preserve local tradition donation awareness</span>
-        </button>
-        <div class="faq-answer">
-          <p>You can help by visiting respectfully, spreading awareness, supporting local artisans and heritage programs, and following preservation guidelines set by communities or heritage groups.</p>
-        </div>
+    </div>
+  </section>
+
+
+
+  <script src="main.js"></script>
+
+
+  <section id="compact-contact" class="compact-contact">
+    <div class="contact-card">
+
+      <!-- Left: Info -->
+      <div class="contact-left">
+        <h2>Contact Us</h2>
+        <p class="contact-description">We’re here to help! Reach out to us anytime.</p>
+        <ul class="contact-details">
+          <li><i class="fas fa-phone-alt"></i> +1 (123) 456-7890</li>
+          <li><i class="fas fa-envelope"></i> contact@yourdomain.com</li>
+          <li><i class="fas fa-map-marker-alt"></i> 1234 Your Street, City</li>
+        </ul>
+        <img src="img/contact.png" alt="Contact" class="contact-image">
       </div>
-    
-      <div class="faq-item">
-        <button class="faq-question">
-          Are local transportation options like jeepneys safe for tourists?
-          <span class="faq-keywords" hidden>jeepney transport safety travel tips safe</span>
-        </button>
-        <div class="faq-answer">
-          <p>Jeepneys are widely used and affordable. While generally safe, tourists should stay alert, avoid crowded rides at night, and keep personal items secure.</p>
-        </div>
+
+      <!-- Right: Form -->
+      <div class="contact-right">
+        <form id="contactForm">
+          <input type="text" name="name" placeholder="Your Name" required>
+          <input type="email" name="email" placeholder="Your Email" required>
+          <select name="subject" required>
+            <option value="" disabled selected hidden>Choose a Subject</option>
+            <option value="jeepney">Jeepney Fare</option>
+            <option value="modes">Transportation Modes</option>
+            <option value="others">Others</option>
+          </select>
+          <textarea name="message" placeholder="Your Message" required></textarea>
+          <button type="submit">Send</button>
+        </form>
       </div>
-    </section>
-    
-    <script>
-      // Accordion toggle
-      const questions = document.querySelectorAll('.faq-question');
-    
-      questions.forEach(button => {
-        button.addEventListener('click', () => {
-          const answer = button.nextElementSibling;
-    
-          // Close other open answers
-          document.querySelectorAll('.faq-answer').forEach(a => {
-            if (a !== answer) a.style.display = 'none';
-          });
-    
-          // Toggle this one
-          answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
-        });
+
+    </div>
+  </section>
+
+
+  <section id="faq-section" class="faq-section">
+    <div class="faq-header">
+      <h2>Frequently Asked Questions</h2>
+      <input type="text" id="faqSearch" placeholder="Search FAQs..." class="faq-search" oninput="filterFAQs()">
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        What is the purpose of this website?
+        <span class="faq-keywords" hidden>cebu heritage culture history travel site about</span>
+      </button>
+      <div class="faq-answer">
+        <p>This website aims to promote awareness and appreciation of Cebu’s cultural heritage by showcasing important
+          historical sites, traditions, and local customs, along with pictures and directions to visit them.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        Are these heritage sites open to the public?
+        <span class="faq-keywords" hidden>open hours visiting access tourism</span>
+      </button>
+      <div class="faq-answer">
+        <p>Most of the featured sites are open to the public, but some may have specific visiting hours or entrance
+          fees. It's best to check in advance or contact local tourism offices.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        How can I help preserve Cebu’s cultural heritage?
+        <span class="faq-keywords" hidden>support preserve local tradition donation awareness</span>
+      </button>
+      <div class="faq-answer">
+        <p>You can help by visiting respectfully, spreading awareness, supporting local artisans and heritage programs,
+          and following preservation guidelines set by communities or heritage groups.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        Are local transportation options like jeepneys safe for tourists?
+        <span class="faq-keywords" hidden>jeepney transport safety travel tips safe</span>
+      </button>
+      <div class="faq-answer">
+        <p>Jeepneys are widely used and affordable. While generally safe, tourists should stay alert, avoid crowded
+          rides at night, and keep personal items secure.</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+
+
+    document.getElementById('contactForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        name: form.name.value,
+        email: form.email.value,
+        subject: form.subject.value,
+        message: form.message.value
+      };
+      const response = await fetch('/api/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify(data)
       });
-    
-      // Search filter
-      function filterFAQs() {
-        const query = document.getElementById('faqSearch').value.toLowerCase();
-        const items = document.querySelectorAll('.faq-item');
-    
-        items.forEach(item => {
-          const question = item.querySelector('.faq-question').innerText.toLowerCase();
-          const keywords = item.querySelector('.faq-keywords')?.innerText.toLowerCase() || '';
-          if (question.includes(query) || keywords.includes(query)) {
-            item.style.display = 'block';
-          } else {
-            item.style.display = 'none';
-          }
-        });
-      }
-    </script>
-    
-    <section class="user-ratings">
-      <h3>User Reviews</h3>
-    
-      <div class="reviews-grid">
-        <div class="review-card">
-          <div class="review-header">
-            <span class="reviewer-name">Maria L.</span>
-            <span class="stars">★★★★★</span>
-          </div>
-          <p class="review-text">"An amazing cultural experience! Highly recommended for history lovers."</p>
-        </div>
-    
-        <div class="review-card">
-          <div class="review-header">
-            <span class="reviewer-name">James T.</span>
-            <span class="stars">★★★★☆</span>
-          </div>
-          <p class="review-text">"Great photos and directions! I just wish there were more food spots listed."</p>
-        </div>
-    
-        <div class="review-card">
-          <div class="review-header">
-            <span class="reviewer-name">Ana G.</span>
-            <span class="stars">★★★★★</span>
-          </div>
-          <p class="review-text">"I learned a lot about Cebu. Especially loved the story behind Magellan’s Cross!"</p>
-        </div>
-      </div>
-    
-      <div class="signup-cta">
-        <p>Want to leave a rating? <a href="signup.html">Sign up now</a> </p>
-      </div>
-    </section>
+      const result = await response.json();
+      alert(result.message);
+    });
 
-<!--cards aesthetic     
+    // Accordion toggle
+    const questions = document.querySelectorAll('.faq-question');
+
+    questions.forEach(button => {
+      button.addEventListener('click', () => {
+        const answer = button.nextElementSibling;
+
+        // Close other open answers
+        document.querySelectorAll('.faq-answer').forEach(a => {
+          if (a !== answer) a.style.display = 'none';
+        });
+
+        // Toggle this one
+        answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
+      });
+    });
+
+    // Search filter
+    function filterFAQs() {
+      const query = document.getElementById('faqSearch').value.toLowerCase();
+      const items = document.querySelectorAll('.faq-item');
+
+      items.forEach(item => {
+        const question = item.querySelector('.faq-question').innerText.toLowerCase();
+        const keywords = item.querySelector('.faq-keywords')?.innerText.toLowerCase() || '';
+        if (question.includes(query) || keywords.includes(query)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+  </script>
+
+  <section class="user-ratings">
+    <h3>User Reviews</h3>
+
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-header">
+          <span class="reviewer-name">Maria L.</span>
+          <span class="stars">★★★★★</span>
+        </div>
+        <p class="review-text">"An amazing cultural experience! Highly recommended for history lovers."</p>
+      </div>
+
+      <div class="review-card">
+        <div class="review-header">
+          <span class="reviewer-name">James T.</span>
+          <span class="stars">★★★★☆</span>
+        </div>
+        <p class="review-text">"Great photos and directions! I just wish there were more food spots listed."</p>
+      </div>
+
+      <div class="review-card">
+        <div class="review-header">
+          <span class="reviewer-name">Ana G.</span>
+          <span class="stars">★★★★★</span>
+        </div>
+        <p class="review-text">"I learned a lot about Cebu. Especially loved the story behind Magellan’s Cross!"</p>
+      </div>
+    </div>
+
+    <div class="signup-cta">
+      <p>Want to leave a rating? <a href="signup.html">Sign up now</a> </p>
+    </div>
+  </section>
+
+  <!--cards aesthetic     
     <style>
       body {
         background-color: #f0f8ff;
@@ -714,49 +746,45 @@
       </div>
     </section>
     -->
-    
 
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-section">
-                <h3>About Us</h3>
-                <p>Your go-to travel partner for amazing destinations and experiences.</p>
-            </div>
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Gallery</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Follow Us</h3>
-                <div class="social-icons">
-                  <!--  <a href="#"><img src="facebook-" alt="Facebook"></a>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h3>About Us</h3>
+        <p>Your go-to travel partner for amazing destinations and experiences.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Gallery</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Follow Us</h3>
+        <div class="social-icons">
+          <!--  <a href="#"><img src="facebook-" alt="Facebook"></a>
                     <a href="#"><img src="twitter-icon.png" alt="Twitter"></a>
                     <a href="#"><img src="instagram-icon.png" alt="Instagram"></a> -->
-                </div>
-            </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 CebuExplorer. All rights reserved.</p>
-        </div>
-    </footer>
-    
-   
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 CebuExplorer. All rights reserved.</p>
+    </div>
+  </footer>
+
+
 
 
   <!-- Content remains unchanged -->
   <!-- Paste your HTML body content here as it is -->
   <!-- Only styles were improved -->
 
-      <script type="text/javascript"
-          src="{{ URL::asset('/js/main.js')}}"></script>
+  <script type="text/javascript" src="{{ URL::asset('/js/main.js')}}"></script>
 </body>
 
 </html>
-
-
-
