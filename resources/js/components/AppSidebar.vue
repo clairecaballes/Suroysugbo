@@ -16,7 +16,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Vehicle Routes',
-        href: '/dashboard',
+        href: '/vehicle-routes',
         icon: LayoutGrid,
     },
        {
