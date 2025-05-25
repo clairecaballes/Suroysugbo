@@ -11,8 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
+          Schema::create('cebu_legacy', function (Blueprint $table) {
+            $table->id();
+            $table->string('imagepath');
+            $table->string('description');
+            $table->double(column: 'map_lat')->nullable();
+            $table->double(column: 'map_lng')->nullable();
+            $table->int('ispublished')->default(0);
+            $table->timestamps();
+        });
+
         Schema::create('vehicle_route', function (Blueprint $table) {
             $table->id();
+            $table->integer('cebu_legacy_id')->unsigned();
+            $table->foreign('cebu_legacy_id')->references('id')->on('cebu_legacy');
             $table->string('route_name');
             $table->string('vehicle_code');
             $table->string('from')->nullable();
@@ -26,6 +38,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('cebu_legacy');
         Schema::dropIfExists('vehicle_route');
     }
 };

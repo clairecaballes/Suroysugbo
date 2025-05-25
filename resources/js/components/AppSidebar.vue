@@ -24,6 +24,16 @@ const mainNavItems: NavItem[] = [
         href: '/cebu-legacy',
         icon: LayoutGrid,
     },
+    {
+        title: 'Messages',
+        href: '/messages',
+        icon: LayoutGrid,
+    },
+    {
+        title: 'User Reviews',
+        href: '/user-reviews',
+        icon: LayoutGrid,
+    },
 ];
 
 const footerNavItems: NavItem[] = [

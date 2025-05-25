@@ -2,14 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Message;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class MessageController extends Controller
 {
     
     public function index()
     {
-        return view('message');
+        return Inertia::render('Messages/Index', [
+        'messages' => Message::all()->map(function ($message) {
+            return [
+                'id' => $message->id,
+                'name' => $message->name,
+                'email' => $message->email,
+                'subject' => $message->subject,
+                'message' => $message->message,
+                'created_at' => $message->created_at->format('Y-m-d H:i'), // format as needed
+            ];
+        }),
+    ]);
     }
 
     public function store(Request $request)
@@ -21,8 +34,12 @@ class MessageController extends Controller
             'message' => 'required|string',
         ]);
 
-        // Store the message in the database or send an email
-        // ...
+        Message::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'subject' => $request->subject,
+            'message' => $request->message,
+        ]);
 
         return redirect()->back()->with('success', 'Message sent successfully!');
     }
