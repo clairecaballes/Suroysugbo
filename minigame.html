@@ -7,50 +7,35 @@
     body {
       font-family: sans-serif;
       margin: 0;
-      padding: 0;
-    }
-
-    /* Modal Styles */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 999;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background-color: rgba(0,0,0,0.7);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background: white;
       padding: 20px;
-      border-radius: 12px;
-      max-width: 600px;
-      width: 90%;
-      position: relative;
-      text-align: center;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 10px; right: 15px;
-      font-size: 24px;
-      cursor: pointer;
-      user-select: none;
+      background: url('img/minigame.jpg') no-repeat center center fixed;
+      background-size: cover;
     }
 
     h2 {
+      text-align: center;
       margin-bottom: 10px;
     }
 
-    .game-board {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 20px;
-      justify-content: center;
-    }
+  .game-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgb(255, 255, 255);
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(32, 32, 32, 0.2); /* Stronger and softer shadow */
+  text-align: center;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+  .game-board {
+  display: grid;
+  grid-template-columns: repeat(3, auto); /* Use auto, not 1fr */
+  gap: 10px;
+  justify-content: center; /* Now this will work properly */
+  margin-top: 20px;
+}
+
 
     .card {
       width: 100px;
@@ -76,10 +61,10 @@
       width: 100%; height: 100%;
       backface-visibility: hidden;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       border-radius: 10px;
-      user-select: none;
       font-weight: bold;
     }
 
@@ -93,140 +78,163 @@
       background-color: #fff;
       border: 2px solid #2e507c;
       transform: rotateY(180deg);
-      font-size: 18px;
+      font-size: 14px;
+      color: #2e507c;
     }
 
-    button#openGame {
-      position: relative;   /* <-- Added */
-      z-index: 1000;        /* <-- Added */
-      margin: 40px auto;
-      display: block;
-      padding: 10px 20px;
-      font-size: 18px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      user-select: none;
-      transition: background-color 0.3s ease;
-    }
-
-    button#openGame:hover {
-      background-color: #218838;
+    .card-back img {
+      max-width: 80px;
+      max-height: 60px;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      object-fit: cover;
     }
 
     .message {
-      margin-top: 10px;
+      margin-top: 20px;
       color: green;
       font-weight: bold;
       min-height: 24px;
+    }
+
+    .buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .buttons button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .restart-btn {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .restart-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .back-btn {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .back-btn:hover {
+      background-color: #a71d2a;
     }
   </style>
 </head>
 <body>
 
-<button id="openGame">Play Cultural Match Quest</button>
-
-<div class="modal" id="gameModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
-  <div class="modal-content">
-    <span class="close-btn" id="closeModal" role="button" aria-label="Close game">&times;</span>
-    <h2 id="modalTitle">Cultural Match Quest</h2>
+ <div class="game-container">
+    <h2>Cultural Match Quest</h2>
     <p>Match all the cultural items to win!</p>
-    <div class="game-board" id="gameBoard" aria-live="polite"></div>
-    <div class="message" id="messageBox" aria-live="assertive"></div>
+    <div class="game-board" id="gameBoard"></div>
+    <div class="message" id="messageBox"></div>
+
+    <div class="buttons">
+      <button class="restart-btn" onclick="setupGame()">Restart</button>
+      <button class="back-btn" onclick="window.history.back()">Back</button>
+    </div>
   </div>
-</div>
 
-<script>
-  const items = ['Lechon', 'Banig', 'Sinulog', 'Lechon', 'Banig', 'Sinulog'];
-  let flipped = [];
-  let matched = [];
-  const gameBoard = document.getElementById('gameBoard');
-  const messageBox = document.getElementById('messageBox');
+  <script>
+    const items = ['Lechon', 'Banig', 'Sinulog', 'Lechon', 'Banig', 'Sinulog'];
 
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
+    const funFacts = {
+      'Lechon': 'Lechon is a roasted pig dish popular in the Philippines, often served at festive occasions.',
+      'Banig': 'Banig is a traditional handwoven mat made from palm leaves, commonly used in Filipino homes.',
+      'Sinulog': 'Sinulog is a colorful cultural and religious festival held every January in Cebu City.'
+    };
+
+    let flipped = [];
+    let matched = [];
+    const gameBoard = document.getElementById('gameBoard');
+    const messageBox = document.getElementById('messageBox');
+
+    function getImageForItem(item) {
+      const images = {
+        'Lechon': 'img/background.jpg',
+        'Banig': 'https://upload.wikimedia.org/wikipedia/commons/7/7e/Banig_mat_Philippines.jpg',
+        'Sinulog': 'https://upload.wikimedia.org/wikipedia/commons/2/2a/Sinulog_festival_parade%2C_Cebu_City_-_2017.jpg'
+      };
+      return images[item] || '';
     }
-  }
 
-  function setupGame() {
-    gameBoard.innerHTML = '';
-    flipped = [];
-    matched = [];
-    messageBox.textContent = '';
-    let cards = [...items];
-    shuffle(cards);
-
-    cards.forEach((item) => {
-      const card = document.createElement('div');
-      card.classList.add('card');
-      card.dataset.item = item;
-
-      card.innerHTML = `
-        <div class="card-inner">
-          <div class="card-front" aria-label="Card front">?</div>
-          <div class="card-back" aria-label="Card back">${item}</div>
-        </div>
-      `;
-
-      card.addEventListener('click', () => flipCard(card));
-      gameBoard.appendChild(card);
-    });
-  }
-
-  function flipCard(card) {
-    if (flipped.length >= 2 || card.classList.contains('flipped') || matched.includes(card)) return;
-
-    card.classList.add('flipped');
-    flipped.push(card);
-
-    if (flipped.length === 2) {
-      const [card1, card2] = flipped;
-      if (card1.dataset.item === card2.dataset.item) {
-        matched.push(card1, card2);
-        messageBox.textContent = `Matched: ${card1.dataset.item}`;
-        flipped = [];
-
-        if (matched.length === items.length) {
-          messageBox.textContent = 'You matched all items! Cultural hero!';
-        }
-      } else {
-        setTimeout(() => {
-          card1.classList.remove('flipped');
-          card2.classList.remove('flipped');
-          flipped = [];
-          messageBox.textContent = '';
-        }, 1000);
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
       }
     }
-  }
 
-  // Modal Controls
-  const modal = document.getElementById('gameModal');
-  const openBtn = document.getElementById('openGame');
-  const closeBtn = document.getElementById('closeModal');
-
-  openBtn.onclick = () => {
-    modal.style.display = 'flex';
-    setupGame();
-    modal.focus();
-  };
-
-  closeBtn.onclick = () => {
-    modal.style.display = 'none';
-    messageBox.textContent = '';
-  };
-
-  window.onclick = (e) => {
-    if (e.target === modal) {
-      modal.style.display = 'none';
+    function setupGame() {
+      gameBoard.innerHTML = '';
+      flipped = [];
+      matched = [];
       messageBox.textContent = '';
+      let cards = [...items];
+      shuffle(cards);
+
+      cards.forEach((item) => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.dataset.item = item;
+
+        card.innerHTML = `
+          <div class="card-inner">
+            <div class="card-front" aria-label="Card front">?</div>
+            <div class="card-back" aria-label="Card back">
+              <img src="${getImageForItem(item)}" alt="${item}" />
+              <div>${item}</div>
+            </div>
+          </div>
+        `;
+
+        card.addEventListener('click', () => flipCard(card));
+        gameBoard.appendChild(card);
+      });
     }
-  };
-</script>
+
+    function flipCard(card) {
+      if (flipped.length >= 2 || card.classList.contains('flipped') || matched.includes(card)) return;
+
+      card.classList.add('flipped');
+      flipped.push(card);
+
+      if (flipped.length === 2) {
+        const [card1, card2] = flipped;
+        if (card1.dataset.item === card2.dataset.item) {
+          matched.push(card1, card2);
+          const matchedItem = card1.dataset.item;
+          if (matched.length === items.length) {
+            messageBox.innerHTML = `Matched: ${matchedItem} — Fun fact: ${funFacts[matchedItem]}<br>Congratulations! You matched all items! Cultural hero! 🎉`;
+          } else {
+            messageBox.textContent = `Matched: ${matchedItem} — Fun fact: ${funFacts[matchedItem]}`;
+          }
+          flipped = [];
+        } else {
+          setTimeout(() => {
+            card1.classList.remove('flipped');
+            card2.classList.remove('flipped');
+            flipped = [];
+            messageBox.textContent = '';
+          }, 1000);
+        }
+      }
+    }
+
+    // Start game on load
+    setupGame();
+  </script>
 
 </body>
 </html>

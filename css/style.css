@@ -126,18 +126,19 @@ nav {
     background: var(--violet);
     box-shadow: 0 1rem 2rem rgba(0, 0,0, 0.2);
 }
-.signup-btn {
-    background-color: #2643FF;
-    color: white;
-    padding: 0.4rem 0.8rem;
-    border-radius: 50px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
 
+ .signup-btn {
+      background: #007bff;
+      color: #007bff;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      font-weight: bold;
+    }
 .signup-btn:hover {
     background-color: #2643FF;
 }
+
+
 
 /* style nav_container class see index html from the start */
 .nav_container { 
@@ -162,7 +163,7 @@ nav button {
     transition: var(--transition);  
 }
 
-.nav_menu :hover {
+/*.nav_menu :hover {
     color: var(--bg2);
 
 }
@@ -192,58 +193,8 @@ nav button {
 .header_left p {
     margin: 1rem 0 2.4rem;
 }  */
-/* --------------------------------------- categories 
-.categories {
-    background: var(--white);
-    
-}
-.categories h1 {
-    line-height: 1;
-    margin-bottom: 3rem;
-}
 
-.categories_container {
-    display: grid;
-    grid-template-columns: 40% 60%;
-    gap: 4rem;
-}
-/*.category img {
-    width: 50%; 
-    height: auto;
-    display: block; 
-    margin: 0 auto;
-} */
-/*
-.categories_left p {
-    margin: 1rem 0 4rem;
-}
 
-.categories_right {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); 
-  gap: 1.2rem; 
- 
-}
-
-.category {
-   background: var(--bg2); 
-   padding: 2rem;
-   border-radius: 2rem;
-   transition: var(--transition);
-}
-
-.category:hover {
-    box-shadow: 0 3rem 3rem rgba(0, 208, 255, 0.944)
-    ;
-}
-.map h3 {
-    line-height: .000003;
-    margin-bottom: 1rem;
-} 
-
-.map {
-    padding-top: 3rem;
-}
  */
  
  .slider-section {
@@ -527,23 +478,7 @@ body {
   /* Contact Section */
 /* Base Styles */
 /* Compact Contact Section */
-.compact-contact {
-  padding: 20px 10px;
-  background: #f1f5f9;
-  display: flex;
-  justify-content: center;
-}
 
-.contact-card {
-  display: flex;
-  flex-wrap: wrap;
-  max-width: 750px;
-  width: 100%;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  overflow: hidden;
-}
 
 .contact-left, .contact-right {
   flex: 1 1 300px;
