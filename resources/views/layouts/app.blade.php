@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Explore Cebu</title>
+  <title>Explore Cebuer</title>
 
   <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet" />
@@ -60,7 +60,7 @@
     }
 
     .signup-btn {
-      background: white;
+      background: #007bff;
       color: #007bff;
       padding: 0.5rem 1rem;
       border-radius: 25px;
@@ -367,24 +367,7 @@
 </head>
 
 <body>
-  <nav>
-    <div class="container nav_container">
-      <a href="index.html">
-        <h4>Explore Cebu</h4>
-      </a>
-      <ul class="nav_menu">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="#slider-section">Gallery</a></li>
-        <li><a href="#compact-contact">Contact</a></li>
-        <li><a href="courses.html">About</a></li>
-        <li><a href="#faq-section">FAQ</a></li>
-        <li><a href="signup.html" class="signup-btn">Sign Up</a></li>
-      </ul>
-      <button id="open-menu-btn"><i class="uil uil-bars"></i></button>
-      <button id="close-menu-btn"><i class="uil uil-multiply"></i></button>
-
-    </div>
-  </nav>
+ @include('inc.navbar')
 
   <header class="header">
     <div class="container header-container">
@@ -403,150 +386,18 @@
   </header>
 
 
-
-  <section id="slider-section" class="slider-section">
-    <h2 class="slider-title">Cebu's Legacy</h2>
-
-    <div class="slider-wrapper">
-      <div class="slider">
-        <div class="slider-track" id="sliderTrack">
-          <div class="slider-item">
-            <div class="slider-image-wrapper">
-              <a href="about.html" class="slider-link">
-                <img src="img/image1.jpg" class="slider-image" />
-                <div class="slider-description">Magellan’s Cross</div>
-              </a>
-            </div>
-          </div>
-
-          <div class="slider-item">
-            <div class="slider-image-wrapper">
-              <a href="https://example.com/page2" class="slider-link">
-                <img src="img/image2.jpg" class="slider-image" />
-                <div class="slider-description">Basilica del Santo Niño</div>
-              </a>
-            </div>
-          </div>
-
-          <div class="slider-item">
-            <div class="slider-image-wrapper">
-              <a href="https://example.com/page3" class="slider-link">
-                <img src="img/image3.jpg" class="slider-image" />
-                <div class="slider-description">Fort San Pedro</div>
-              </a>
-            </div>
-          </div>
-
-          <div class="slider-item">
-            <div class="slider-image-wrapper">
-              <a href="about.html" class="slider-link">
-                <img src="img/image1.jpg" class="slider-image" />
-                <div class="slider-description">Magellan’s Cross</div>
-              </a>
-            </div>
-          </div>
-
-          <!-- Add more items if needed -->
-        </div>
-      </div>
-
-      <div class="arrow-buttons">
-        <button class="arrow-btn" id="leftArrow">&#10094;</button>
-        <button class="arrow-btn" id="rightArrow">&#10095;</button>
-      </div>
-    </div>
-  </section>
+ @yield('content')
+ 
 
 
 
   <script src="main.js"></script>
 
 
-  <section id="compact-contact" class="compact-contact">
-    <div class="contact-card">
-
-      <!-- Left: Info -->
-      <div class="contact-left">
-        <h2>Contact Us</h2>
-        <p class="contact-description">We’re here to help! Reach out to us anytime.</p>
-        <ul class="contact-details">
-          <li><i class="fas fa-phone-alt"></i> +1 (123) 456-7890</li>
-          <li><i class="fas fa-envelope"></i> contact@yourdomain.com</li>
-          <li><i class="fas fa-map-marker-alt"></i> 1234 Your Street, City</li>
-        </ul>
-        <img src="img/contact.png" alt="Contact" class="contact-image">
-      </div>
-
-      <!-- Right: Form -->
-      <div class="contact-right">
-        <form id="contactForm">
-          <input type="text" name="name" placeholder="Your Name" required>
-          <input type="email" name="email" placeholder="Your Email" required>
-          <select name="subject" required>
-            <option value="" disabled selected hidden>Choose a Subject</option>
-            <option value="jeepney">Jeepney Fare</option>
-            <option value="modes">Transportation Modes</option>
-            <option value="others">Others</option>
-          </select>
-          <textarea name="message" placeholder="Your Message" required></textarea>
-          <button type="submit">Send</button>
-        </form>
-      </div>
-
-    </div>
-  </section>
+  
 
 
-  <section id="faq-section" class="faq-section">
-    <div class="faq-header">
-      <h2>Frequently Asked Questions</h2>
-      <input type="text" id="faqSearch" placeholder="Search FAQs..." class="faq-search" oninput="filterFAQs()">
-    </div>
-
-    <div class="faq-item">
-      <button class="faq-question">
-        What is the purpose of this website?
-        <span class="faq-keywords" hidden>cebu heritage culture history travel site about</span>
-      </button>
-      <div class="faq-answer">
-        <p>This website aims to promote awareness and appreciation of Cebu’s cultural heritage by showcasing important
-          historical sites, traditions, and local customs, along with pictures and directions to visit them.</p>
-      </div>
-    </div>
-
-    <div class="faq-item">
-      <button class="faq-question">
-        Are these heritage sites open to the public?
-        <span class="faq-keywords" hidden>open hours visiting access tourism</span>
-      </button>
-      <div class="faq-answer">
-        <p>Most of the featured sites are open to the public, but some may have specific visiting hours or entrance
-          fees. It's best to check in advance or contact local tourism offices.</p>
-      </div>
-    </div>
-
-    <div class="faq-item">
-      <button class="faq-question">
-        How can I help preserve Cebu’s cultural heritage?
-        <span class="faq-keywords" hidden>support preserve local tradition donation awareness</span>
-      </button>
-      <div class="faq-answer">
-        <p>You can help by visiting respectfully, spreading awareness, supporting local artisans and heritage programs,
-          and following preservation guidelines set by communities or heritage groups.</p>
-      </div>
-    </div>
-
-    <div class="faq-item">
-      <button class="faq-question">
-        Are local transportation options like jeepneys safe for tourists?
-        <span class="faq-keywords" hidden>jeepney transport safety travel tips safe</span>
-      </button>
-      <div class="faq-answer">
-        <p>Jeepneys are widely used and affordable. While generally safe, tourists should stay alert, avoid crowded
-          rides at night, and keep personal items secure.</p>
-      </div>
-    </div>
-  </section>
+ 
 
   <script>
 

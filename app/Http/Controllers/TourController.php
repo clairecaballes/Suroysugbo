@@ -8,7 +8,7 @@ class TourController extends Controller
 {
     public function index()
     {
-        return View('tour');
+        return View('layouts.app');
     }
 
   
