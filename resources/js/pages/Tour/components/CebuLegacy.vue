@@ -13,7 +13,7 @@
             :key="idx"
           >
             <div class="slider-image-wrapper">
-              <a @click="openModal(item)" class="slider-link" target="_blank">
+              <a @click="$inertia.visit(`/cebu-legacy/view/${item.id}`)" class="slider-link" target="_blank">
                 <img :src="item.imageUrl" class="slider-image" />
                 <div class="slider-description">{{ item.title }}</div>
               </a>

@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', [App\Http\Controllers\TourController::class,'index'])->name('home');
+Route::get('/cebu-legacy/view/{id}', [App\Http\Controllers\TourController::class,'view'])->name('view');
+
 
 Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
