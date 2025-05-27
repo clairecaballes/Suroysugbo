@@ -76,7 +76,7 @@ class CebuLegacyController extends Controller
             if(isset($imagePath)) {
                 $legacyItem->imagepath = $imagePath; // Update image path if a new image is uploaded
             }else{
-               $legacyItem->imagepath ='' ;
+               $legacyItem->imagepath ='' ; 
             }
             
             $legacyItem->save();
