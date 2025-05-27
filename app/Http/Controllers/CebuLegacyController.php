@@ -46,22 +46,17 @@ class CebuLegacyController extends Controller
         $legacyItem = new CebuLegacy();
         $imagePath = null; // Initialize image path
         if ($request->file('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-           try {
-                $imagePath = Storage::disk('s3')->putFileAs('images/', $image, $imageName, 'public');
-                $legacyItem->imagepath = Storage::disk('s3')->url($imagePath);
-            } catch (\Exception $e) {
-                \Log::error('S3 upload failed: ' . $e->getMessage());
-                $legacyItem->imagepath = null;
-            }
-            if ($imagePath) { // Check if the upload was successful
-                $legacyItem->imagepath = Storage::disk('s3')->url($imagePath);
-            } else {
-                $legacyItem->imagepath = null; // Or a default value
-                // Log the error, handle it appropriately
-                \Log::error('S3 upload failed for image: ' . $imageName);
-            }
+        $image = $request->file('image');
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $imagePath = Storage::disk('s3')->putFileAs('/images/', $image, $imageName,'public'); // Store in 'images' folder in S3
+
+        if ($imagePath) { // Check if the upload was successful
+            $legacyItem->imagepath = Storage::disk('s3')->url($imagePath);
+        } else {
+            $legacyItem->imagepath = null; // Or a default value
+            // Log the error, handle it appropriately
+            \Log::error('S3 upload failed for image: ' . $imageName);
+        }
         }
 
         if ($request->input('mode') === 'edit') {
