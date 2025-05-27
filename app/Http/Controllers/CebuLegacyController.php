@@ -40,8 +40,6 @@ class CebuLegacyController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'map_lat' => 'required|numeric',
-            'map_lng' => 'required|numeric',
         ]);
         $legacyItem = new CebuLegacy();
         $imagePath = null; // Initialize image path
@@ -62,16 +60,24 @@ class CebuLegacyController extends Controller
            
             if(isset($imagePath)) {
                 $legacyItem->imagepath = $imagePath; // Update image path if a new image is uploaded
+            }else{
+               $legacyItem->imagepath = $legacyItem->imagepath ?? ''; // Keep existing image path if no new image is uploaded
             }
             $legacyItem->save();
             $legacyId = $legacyItem->id;
         } else {
-
+            $legacyItem = new CebuLegacy();
             $legacyItem->title = $request->input('title');
             $legacyItem->description = $request->input('description');
             $legacyItem->map_lat = $request->input('map_lat');
             $legacyItem->map_lng = $request->input('map_lng');// Ensure imagepath is set, even if not provided
             $legacyItem->ispublished = $request->input('ispublished') == 'true' ? 1:0; // Default to false if not provided
+
+            if(isset($imagePath)) {
+                $legacyItem->imagepath = $imagePath; // Update image path if a new image is uploaded
+            }else{
+               $legacyItem->imagepath ='' ;
+            }
             
             $legacyItem->save();
             $legacyId = $legacyItem->id;
