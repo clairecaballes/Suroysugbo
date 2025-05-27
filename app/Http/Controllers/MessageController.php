@@ -25,6 +25,15 @@ class MessageController extends Controller
     ]);
     }
 
+    public function read($id)
+    {
+        $message = Message::findOrFail($id);
+        $message->is_read = true; // Assuming you have an 'is_read' column
+        $message->save();
+
+        return redirect()->route('messages.index')->with('success', 'Message marked as read.');
+    }
+
     public function store(Request $request)
     {
         $request->validate([

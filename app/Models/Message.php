@@ -14,6 +14,7 @@ class Message extends Model
         'email',
         'subject',
         'message',
+        'is_read', // Optional: if you want to track if the message has been read
     ];
 
   

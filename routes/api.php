@@ -11,4 +11,5 @@ Route::get('/greeting', function () {
     return response()->json(['message' => 'Hello from API!']);
 });
 
-
+Route::get('/legacy', [App\Http\Controllers\CebuLegacyController::class, 'showPublished'])
+    ->name('legacy.isPublished');
