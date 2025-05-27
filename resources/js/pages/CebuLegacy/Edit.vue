@@ -17,13 +17,13 @@
 
             <div>
                 <label for="map_lat" class="block text-sm font-medium text-gray-700 mb-1">Map Latitude</label>
-                <input id="map_lat" v-model="form.map_lat" type="number" required
+                <input id="map_lat" v-model="form.map_lat" type="number"  step="any"
                     class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-400" />
             </div>
 
             <div>
                 <label for="map_lng" class="block text-sm font-medium text-gray-700 mb-1">Map Longitude</label>
-                <input id="map_lng" v-model="form.map_lng" type="number" required
+                <input id="map_lng" v-model="form.map_lng" type="number"  step="any"
                     class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-400" />
             </div>
 

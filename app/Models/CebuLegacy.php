@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-use Illuminate\Support\Facades\Storage;
+
 use Illuminate\Database\Eloquent\Model;
 
 class CebuLegacy extends Model
@@ -22,11 +22,8 @@ class CebuLegacy extends Model
     {
         return $this->hasMany(VehicleRoute::class, 'cebu_legacy_id', 'id');
     }
-   public function getImageUrlAttribute()
+    public function getImageUrlAttribute()
     {
-        if ($this->imagepath) {
-            return Storage::disk('s3')->url($this->imagepath);
-        }
-        return null; // Or a default image URL
+        return asset($this->imagepath); // Assuming imagepath is a relative path
     }
 }
