@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('imagepath');
             $table->string('title');
-            $table->string('description');
+            $table->text('description');
             $table->double(column: 'map_lat')->nullable();
             $table->double(column: 'map_lng')->nullable();
             $table->integer('ispublished')->default(0);
