@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\CebuLegacy;
 use App\Models\VehicleRoute; // Assuming you have a VehicleRoute model for routes
-
+use Illuminate\Support\Facades\Storage;
 class CebuLegacyController extends Controller
 {
     public function index()
@@ -48,8 +48,20 @@ class CebuLegacyController extends Controller
         if ($request->file('image')) {
             $image = $request->file('image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images'), $imageName);
-            $imagePath = 'images/' . $imageName; // Store the path to the image
+           try {
+                $imagePath = Storage::disk('s3')->putFileAs('images/', $image, $imageName, 'public');
+                $legacyItem->imagepath = Storage::disk('s3')->url($imagePath);
+            } catch (\Exception $e) {
+                \Log::error('S3 upload failed: ' . $e->getMessage());
+                $legacyItem->imagepath = null;
+            }
+            if ($imagePath) { // Check if the upload was successful
+                $legacyItem->imagepath = Storage::disk('s3')->url($imagePath);
+            } else {
+                $legacyItem->imagepath = null; // Or a default value
+                // Log the error, handle it appropriately
+                \Log::error('S3 upload failed for image: ' . $imageName);
+            }
         }
 
         if ($request->input('mode') === 'edit') {

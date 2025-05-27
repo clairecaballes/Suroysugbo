@@ -94,7 +94,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import axios from 'axios';
-
+import Swal from 'sweetalert2';
 const props = defineProps({ mode: String, legacyItem: Object });
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -183,12 +183,18 @@ function handleSubmit() {
         }
     })
         .then(response => {
-            console.log('Legacy updated successfully:', response.data)
-            // Optionally redirect or show success message
+             Swal.fire({ // Show success message
+                icon: 'success',
+                title: 'Success!',
+                text: 'Cebu Legacy item saved successfully!',
+            });
         })
         .catch(error => {
-            console.error('Error updating legacy:', error)
-            // Optionally show error message
+             Swal.fire({ // Show error message
+                icon: 'error',
+                title: 'Error!',
+                text: 'Failed to save Cebu Legacy item.',
+            });
         })
 }
 </script>
