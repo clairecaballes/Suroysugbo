@@ -26,25 +26,19 @@
         <button class="arrow-btn" @click="next">&#10095;</button>
       </div>
     </div>
+    
   </section>
-<div v-if="showModal" class="fixed inset-0 bg-stone-300 opacity-75 flex items-center justify-center z-50">
-            <div class="bg-white rounded-lg shadow-lg p-6 min-w-[300px] max-w-[90vw]">
-               
-            
-                <button
-                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                    @click="closeModal"
-                >Close</button>
-            </div>
-        </div>
+
  
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 import { Head } from '@inertiajs/vue3'
 import axios from 'axios'
 const slides = ref([]);
+
+const openModal = inject('openModal')
 
 onMounted(() => {
   axios.get('/api/legacy')
@@ -58,22 +52,10 @@ onMounted(() => {
 
 const itemsPerRow = 4
 
-const showModal = ref(false)
-const selectedLegacy = ref({})
-
 const maxIndex = Math.max(0, slides.length - itemsPerRow)
 const currentIndex = ref(0)
 
-function openModal(item) {
-    selectedLegacy.value = item
-    showModal.value = true
 
-}
-
-function closeModal() {
-    showModal.value = false
-    selectedMessage.value = {}
-}
 function prev() {
   currentIndex.value = currentIndex.value === 0 ? maxIndex : currentIndex.value - 1
 }
@@ -125,20 +107,5 @@ function next() {
   position: relative;
 }
 
-.modal-backdrop {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-       background: rgba(255,255,255,0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-.modal {
-    background: #fff;
-    padding: 24px;
-    border-radius: 8px;
-    min-width: 300px;
-    max-width: 90vw;
-}
+
 </style>
