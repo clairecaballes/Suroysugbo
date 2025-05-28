@@ -47,11 +47,11 @@ class CebuLegacyController extends Controller
             $image = $request->file('image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
 
-            $imagePath = Storage::disk('s3')->putFileAs('images/', $image, $imageName ); // Store the image in S3
-            $legacyItem->imagepath = Storage::disk('s3')->url($imagePath);
+            $imagePath = Storage::disk('image')->putFileAs('images/', $image, $imageName ); // Store the image in S3
+            $legacyItem->imagepath = Storage::disk('images')->url($imagePath);
 
             if ($imagePath) { // Check if the upload was successful
-                $legacyItem->imagepath = Storage::disk('s3')->url($imagePath);
+                $legacyItem->imagepath = Storage::disk('images')->url($imagePath);
             } else {
                 $legacyItem->imagepath = null; // Or a default value
                 // Log the error, handle it appropriately

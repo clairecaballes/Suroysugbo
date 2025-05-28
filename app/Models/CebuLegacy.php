@@ -32,7 +32,7 @@ class CebuLegacy extends Model
             if (!file_exists($publicPath)) {
                 // Get the image from S3
                 try {
-                    $s3Image = Storage::disk('s3')->get($this->imagepath);
+                    $s3Image = Storage::disk('images')->get($this->imagepath);
 
                     // Ensure the directory exists
                     $directory = dirname($publicPath);
