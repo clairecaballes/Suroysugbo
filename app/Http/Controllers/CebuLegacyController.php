@@ -19,7 +19,7 @@ class CebuLegacyController extends Controller
     public function edit($id)
     {
         $legacyItem = CebuLegacy::with(['vehicleRoutes'])->findOrFail($id);
-        
+
         return Inertia::render('CebuLegacy/Edit', [
             'mode' => 'edit',
             'legacyItem' => $legacyItem, // Pass the legacy item to the edit view
@@ -48,13 +48,10 @@ class CebuLegacyController extends Controller
         if ($request->file('image')) {
             $image = $request->file('image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-           try {
-                $imagePath = Storage::disk('s3')->putFileAs('images/', $image, $imageName, 'public');
-                $legacyItem->imagepath = Storage::disk('s3')->url($imagePath);
-            } catch (\Exception $e) {
-                \Log::error('S3 upload failed: ' . $e->getMessage());
-                $legacyItem->imagepath = null;
-            }
+
+            $imagePath = Storage::disk('s3')->putFileAs('images/', $image, $imageName ); // Store the image in S3
+            $legacyItem->imagepath = Storage::disk('s3')->url($imagePath);
+
             if ($imagePath) { // Check if the upload was successful
                 $legacyItem->imagepath = Storage::disk('s3')->url($imagePath);
             } else {
@@ -70,9 +67,9 @@ class CebuLegacyController extends Controller
             $legacyItem->description = $request->input('description');
             $legacyItem->map_lat = $request->input('map_lat');
             $legacyItem->map_lng = $request->input('map_lng');// Ensure imagepath is set, even if not provided
-            $legacyItem->ispublished = $request->input('ispublished') == 'true' ? 1:0; // Default to false if not provided
-           
-            if(isset($imagePath)) {
+            $legacyItem->ispublished = $request->input('ispublished') == 'true' ? 1 : 0; // Default to false if not provided
+
+            if (isset($imagePath)) {
                 $legacyItem->imagepath = $imagePath; // Update image path if a new image is uploaded
             }
             $legacyItem->save();
@@ -83,8 +80,8 @@ class CebuLegacyController extends Controller
             $legacyItem->description = $request->input('description');
             $legacyItem->map_lat = $request->input('map_lat');
             $legacyItem->map_lng = $request->input('map_lng');// Ensure imagepath is set, even if not provided
-            $legacyItem->ispublished = $request->input('ispublished') == 'true' ? 1:0; // Default to false if not provided
-             if(isset($imagePath)) {
+            $legacyItem->ispublished = $request->input('ispublished') == 'true' ? 1 : 0; // Default to false if not provided
+            if (isset($imagePath)) {
                 $legacyItem->imagepath = $imagePath; // Update image path if a new image is uploaded
             }
             $legacyItem->save();
@@ -99,8 +96,8 @@ class CebuLegacyController extends Controller
                     [
                         'route_name' => $route->route_name,
                         'cebu_legacy_id' => $legacyId,
-                        'vehicle_code' => $route->vehicle_code ,
-                        'price' => $route->price, 
+                        'vehicle_code' => $route->vehicle_code,
+                        'price' => $route->price,
                         'from' => $route->from,
                         'to' => $route->to,
                         'description' => $route->description,
