@@ -40,8 +40,6 @@ class CebuLegacyController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'map_lat' => 'required|numeric',
-            'map_lng' => 'required|numeric',
         ]);
         $legacyItem = new CebuLegacy();
         $imagePath = null; // Initialize image path
