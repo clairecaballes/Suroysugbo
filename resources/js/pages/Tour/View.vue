@@ -38,8 +38,8 @@
                 <!-- Google Map View Placeholder -->
                 <GoogleMap api-key="AIzaSyAb2zmIqQ0nDC9lb-ZhOku_hC-0OsPK8j8" mapId="DEMO_MAP_ID" style="width: 100%; height: 500px"
                     :center="center" :zoom="15">
-                    <!-- <AdvancedMarker :options="markerOptions" :pin-options="pinOptions" />
-                    <AdvancedMarker :options="markerOptions">
+                    <AdvancedMarker :options="markerOptions" :pin-options="pinOptions" />
+                    <!-- <AdvancedMarker :options="markerOptions">
                         <div style="background: white; color: black; padding: 5px; border-radius: 5px">
                             Custom Content
                         </div>
@@ -64,6 +64,6 @@ const props = defineProps({
 
 const center = { lat: props.legacyItem.map_lat, lng: props.legacyItem.map_lng }
 
-const markerOptions = { position: center, label: 'L', title: 'LADY LIBERTY' }
+const markerOptions = { position: center, label: 'L', title: props.legacyItem.title }
 const pinOptions = { background: '#FBBC04' }
 </script>
