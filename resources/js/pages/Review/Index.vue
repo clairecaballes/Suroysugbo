@@ -26,7 +26,7 @@
                             <span v-for="star in 5 - message.rating" :key="star" class="text-gray-300">★</span>
                         </td>
                         <td class="px-3 py-2">{{ message.created_at }}</td>
-                        <td class="px-3 py-2">{{ message.isPublish ==1 ? 'YES' : 'NO' }}</td>
+                        <td class="px-3 py-2">{{ message.isPublish  ? 'YES' : 'NO' }}</td>
                         <td class="px-3 py-2">
                             <button
                                 class="text-blue-600 hover:underline"
@@ -56,8 +56,9 @@
                     <input
                         id="isPublished"
                         type="checkbox"
-                        v-model="selectedMessage.is_published"
+                        v-model="selectedMessage.isPublish"
                         @change="togglePublish(selectedMessage)"
+                        
                         class="w-5 h-5 accent-blue-600"
                     />
                 </div>
@@ -96,7 +97,7 @@ const showModal = ref(false)
 const selectedMessage = ref({})
 
 const togglePublish = (message) => {
-    const newStatus = !message.isPublished
+    const newStatus = !message.isPublish
     axios.post(`/reviews/${message.id}/publish`, { is_published: newStatus })
         .then(() => {
             message.is_published = newStatus

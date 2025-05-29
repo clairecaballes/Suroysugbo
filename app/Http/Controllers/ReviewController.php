@@ -19,7 +19,7 @@ class ReviewController extends Controller
                 'rating' => $message->rating,
                 'isRead' => $message->isRead,
                 'message' => $message->message,
-                'isPublish' => $message->isPublish,
+                'isPublish' => $message->isPublish ==1 ? true : false, // Assuming you have an 'is_publish' column
                 'created_at' => $message->created_at->format('Y-m-d H:i'), // format as needed
             ];
         }),

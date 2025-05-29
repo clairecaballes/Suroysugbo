@@ -124,4 +124,9 @@ class CebuLegacyController extends Controller
             ];
         }));
     }
+
+    public function destroy($id)
+    {
+        VehicleRoute::where('id', $id)->delete(); // Delete associated vehicle routes
+    }
 }

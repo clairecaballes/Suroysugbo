@@ -153,7 +153,27 @@ function addRoute() {
 }
 
 function removeRoute(idx: number) {
+    //get id 
+    const route = form.value.routes[idx]
     form.value.routes.splice(idx, 1)
+    if (route.id) {
+        // If the route has an ID, it means it's an existing route that needs to be deleted
+        axios.delete(`/cebu-legacy/route/${route.id}`)
+            .then(response => {
+                Swal.fire({ // Show success message
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Route deleted successfully!',
+                });
+            })
+            .catch(error => {
+                Swal.fire({ // Show error message
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Failed to delete route.',
+                });
+            })
+    }
 }
 
 function handleImageUpload(event) {
