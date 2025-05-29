@@ -23,10 +23,22 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         ->name('messages.index');
     Route::get('/messages/{id}/read/', [App\Http\Controllers\MessageController::class, 'read'])
         ->name('messages.read');
+
+       Route::get('/reviews', [App\Http\Controllers\ReviewController::class, 'index'])
+        ->name('reviews.index');
+    Route::get('/reviews/{id}/read/', [App\Http\Controllers\ReviewController::class, 'read'])
+        ->name('reviews.read');
+    Route::post('/reviews/{id}/publish/', [App\Http\Controllers\ReviewController::class, 'publish'])
+        ->name('reviews.publish');
+
+
 });
 
 Route::post('/message-post', [App\Http\Controllers\MessageController::class, 'store'])
     ->name('messages.store');
+
+Route::post('/review-post', [App\Http\Controllers\ReviewController::class, 'store'])
+    ->name('review.store');
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

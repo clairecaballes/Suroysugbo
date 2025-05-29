@@ -26,7 +26,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'User Reviews',
-        href: '/user-reviews',
+        href: '/reviews',
         icon: Star,
     },
 ];

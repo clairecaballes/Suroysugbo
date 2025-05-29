@@ -28,101 +28,108 @@
       </div>
     </div>
 
-<p>Want to leave a rating? <a href="#" class="leave-review-link" @click.prevent="openReviewModal">Leave a review</a></p>
+    <p>Want to leave a rating? <a href="#" class="leave-review-link" @click.prevent="openReviewModal">Leave a review</a></p>
+
     <!-- Review Modal -->
     <div v-if="showReviewModal" class="modal">
       <div class="modal-content">
         <h2>Leave a Review</h2>
-        <!-- Inside your modal-content form -->
-<form @submit.prevent="submitReview">
-  <!-- Star Rating -->
-  <label>Your Rating:</label>
-  <div class="stars">
-    <span
-      v-for="star in 5"
-      :key="star"
-      @click="setRating(star)"
-      :class="{ active: star <= rating }"
-    >★</span>
-  </div>
+        <form @submit.prevent="submitReview">
+          <!-- Star Rating -->
+          <label>Your Rating:</label>
+          <div class="stars">
+            <span
+              v-for="star in 5"
+              :key="star"
+              @click="setRating(star)"
+              :class="{ active: star <= rating }"
+            >★</span>
+          </div>
 
-  <!-- Name Field -->
-  <div class="form-group">
-    <label for="reviewerName">Your Name:</label>
-    <input
-      id="reviewerName"
-      type="text"
-      v-model="reviewerName"
-      placeholder="Enter your name"
-      required
-      class="input-box"
-    >
-  </div>
+          <!-- Name Field -->
+          <div class="form-group">
+            <label for="reviewerName">Your Name:</label>
+            <input
+              id="reviewerName"
+              type="text"
+              v-model="reviewerName"
+              placeholder="Enter your name"
+              required
+              class="input-box"
+            >
+          </div>
 
-  <!-- Comment -->
-  <textarea
-    id="comment"
-    v-model="reviewComment"
-    placeholder="Share your thoughts..."
-  ></textarea>
+          <!-- Comment -->
+          <textarea
+            id="comment"
+            v-model="reviewComment"
+            placeholder="Share your thoughts..."
+          ></textarea>
 
-  <!-- Optional Email -->
-  <div class="form-group">
-    <label for="email">Optional Email:</label>
-    <input
-      id="email"
-      type="email"
-      v-model="reviewEmail"
-      placeholder="Enter your email"
-      class="input-box"
-    >
-  </div>
+          <!-- Optional Email -->
+          <div class="form-group">
+            <label for="email">Optional Email:</label>
+            <input
+              id="email"
+              type="email"
+              v-model="reviewEmail"
+              placeholder="Enter your email"
+              class="input-box"
+            >
+          </div>
 
-  <!-- Submit Button -->
-  <div class="modal-buttons">
-  <button type="submit">Submit Review</button>
-  <button type="button" @click="closeReviewModal">Cancel</button>
-</div>
-</form>
+          <!-- Submit Button -->
+          <div class="modal-buttons">
+            <button type="submit">Submit Review</button>
+            <button type="button" @click="closeReviewModal">Cancel</button>
+          </div>
+        </form>
       </div>
     </div>
   </section>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      showReviewModal: false,
-      reviewerName: '',
-      reviewComment: '',
-      reviewEmail: '',
-      rating: 0
-    };
-  },
-  methods: {
-    openReviewModal() {
-      this.showReviewModal = true;
-    },
-    closeReviewModal() {
-      this.showReviewModal = false;
-      this.reviewComment = '';
-      this.reviewEmail = '';
-      this.reviewerName = '';
-      this.rating = 0;
-    },
-    setRating(star) {
-      this.rating = star;
-    },
-    submitReview() {
-      console.log('Name:', this.reviewerName);
-      console.log('Submitted rating:', this.rating);
-      console.log('Comment:', this.reviewComment);
-      console.log('Email:', this.reviewEmail);
-      alert('Thank you for your review!');
-      this.closeReviewModal();
-    }
-  }
+<script setup>
+import { ref } from 'vue';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+const showReviewModal = ref(false);
+const reviewerName = ref('');
+const reviewComment = ref('');
+const reviewEmail = ref('');
+const rating = ref(0);
+
+const openReviewModal = () => {
+  showReviewModal.value = true;
+};
+
+const closeReviewModal = () => {
+  showReviewModal.value = false;
+  reviewComment.value = '';
+  reviewEmail.value = '';
+  reviewerName.value = '';
+  rating.value = 0;
+};
+
+const setRating = (star) => {
+  rating.value = star;
+};
+
+const submitReview = () => {
+  axios.post('/review-post', {
+    name: reviewerName.value,
+    message: reviewComment.value,
+    email: reviewEmail.value,
+    rating: rating.value
+  }).then(() => {
+       Swal.fire({ // Show success message
+                icon: 'success',
+                title: 'Success!',
+                text: 'Thank you for your review!',
+                confirmButtonText: 'OK'
+            });
+    closeReviewModal();
+  });
 };
 </script>
 
@@ -133,9 +140,11 @@ export default {
   text-decoration: underline;
   cursor: pointer;
 }
+
 .leave-review-link:hover {
   color: #0056b3;
 }
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -159,40 +168,39 @@ export default {
   box-sizing: border-box;
   margin-bottom: 0;
 }
-    .user-ratings {
-      padding: 4rem 1rem;
-  
-      text-align: center;
-    }
 
-    .reviews-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1.5rem;
-      margin-bottom: 2.5rem;
-    }
+.user-ratings {
+  padding: 4rem 1rem;
+  text-align: center;
+}
 
-    .review-card {
-      background-color: #f8f8f8;
-      border-radius: 12px;
-      padding: 1.5rem;
-      width: 300px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+.reviews-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
 
-    .review-header {
-      display: flex;
-      justify-content: space-between;
-      font-weight: bold;
-      margin-bottom: 1rem;
-    }
+.review-card {
+  background-color: #f8f8f8;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
 
 .reviewer-name {
   font-weight: bold;
   color: #007bff;
-  text-align: left; /* Explicitly align left */
+  text-align: left;
   flex: 1;
   margin-right: auto;
 }
@@ -226,17 +234,20 @@ export default {
   cursor: pointer;
   margin-bottom: 10px;
 }
+
 .stars span {
   color: gray;
   transition: color 0.3s;
   cursor: pointer;
 }
+
 .stars span:hover,
 .stars span.active {
   color: gold;
 }
 
-textarea, input[type="email"] {
+textarea,
+input[type="email"] {
   width: 100%;
   margin-bottom: 10px;
   padding: 8px;
@@ -255,9 +266,11 @@ button {
   border-radius: 4px;
   cursor: pointer;
 }
+
 button:hover {
   background: #0056b3;
 }
+
 .modal-buttons {
   display: flex;
   gap: 12px;
@@ -270,6 +283,7 @@ button:hover {
     align-items: center;
     gap: 1rem;
   }
+
   .review-card {
     width: 90vw;
     min-width: 0;
@@ -283,12 +297,14 @@ button:hover {
   .user-ratings {
     padding: 2rem 0.5rem;
   }
+
   .reviews-grid {
     flex-direction: column;
     align-items: center;
     gap: 0.75rem;
     margin-bottom: 1.5rem;
   }
+
   .review-card {
     width: 98vw;
     max-width: 98vw;
@@ -296,27 +312,31 @@ button:hover {
     padding: 0.75rem;
     font-size: 0.98rem;
   }
+
   .modal {
     min-width: 98vw;
     max-width: 98vw;
     padding: 8px;
   }
+
   .modal-content {
     padding: 0;
   }
+
   .stars {
     font-size: 20px;
   }
+
   .input-box,
   textarea,
   input[type="email"] {
     font-size: 0.98rem;
     padding: 7px 10px;
   }
+
   button {
     font-size: 0.98rem;
     padding: 7px;
   }
 }
-
 </style>
