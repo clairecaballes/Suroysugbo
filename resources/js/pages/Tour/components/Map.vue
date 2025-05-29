@@ -150,8 +150,8 @@ export default {
 
 <style scoped>
 .popup-content {
-  padding: 4px;
-  font-size: 14px;
+  padding: 2px;
+  font-size: 10px;
 }
 
 @media (max-width: 768px) {
@@ -164,7 +164,7 @@ export default {
 
 #map-section {
   position: relative;
-  overflow: hidden; /* Prevents scrolling beyond boundaries */
+  
 }
 
 #map {
@@ -214,8 +214,8 @@ export default {
 .map-legend {
   position: absolute;
   left: 12px;
-  bottom: 12px;
-  z-index: 1000;
+  bottom: 12px; /* Adjust for navbar height */
+  z-index: 10;
   background: white;
   padding: 2px 6px;
   border-radius: 3px;

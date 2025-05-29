@@ -51,12 +51,12 @@ export default {
   methods: {
     getImageForItem(item) {
       const images = {
-        "Sto Nino": 'img/background.jpg',
-        "Gazebo": 'img/background.jpg',
-        "Sinulog": 'img/background.jpg',
-        "Cross": 'img/background.jpg',
-        "Mural": 'img/background.jpg',
-        "Fort": 'img/fortsanpedro.jpg',
+        "Sto Nino": 'img/santo.jpg',
+        "Gazebo": 'img/gazebo.jpg',
+        "Sinulog": 'img/sinulog.jpg',
+        "Cross": 'img/cross.jpg',
+        "Mural": 'img/mural.jpg',
+        "Fort": 'img/fort.jpg',
        
       };
       return images[item] || '';
@@ -205,9 +205,12 @@ export default {
   color: white;
   border-radius: 6px;
 }
+
 #minigame-container {
-     background-color: #061e36;
+  background-image: url('/img/minigame.jpg');
   background-size: cover;
+  /* ...rest of your styles... */
+
   width: 100vw;
   height: 100vh;
   min-height: 100vh;
