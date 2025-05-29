@@ -57,17 +57,20 @@
                         id="isPublished"
                         type="checkbox"
                         v-model="selectedMessage.isPublish"
-                        @change="togglePublish(selectedMessage)"
-                        
                         class="w-5 h-5 accent-blue-600"
                     />
                 </div>
 
 
                 <button
-                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                    class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
                     @click="closeModal"
                 >Close</button>
+                &nbsp;
+                <button
+                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                    @click="onOK"
+                >Ok</button>
             </div>
         </div>
     </AppLayout>
@@ -79,6 +82,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
@@ -96,11 +100,23 @@ defineProps({messages: Array});
 const showModal = ref(false)
 const selectedMessage = ref({})
 
-const togglePublish = (message) => {
-    const newStatus = !message.isPublish
-    axios.post(`/reviews/${message.id}/publish`, { is_published: newStatus })
+const onOK = () => {
+
+    axios.post(`/reviews/${selectedMessage.value.id}/publish`, { is_published: selectedMessage.value.isPublish })
         .then(() => {
-            message.is_published = newStatus
+            if(selectedMessage.value.isPublish) {
+               Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Message has been published successfully.',
+                })
+            } else {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Info',
+                    text: 'Message has been unpublished successfully.',
+                })
+            }
         })
         .catch(error => {
             console.error('Error updating publish status:', error)
