@@ -1,13 +1,13 @@
 <template>
     <Head :title="`${props.legacyItem?.title}`" />
+    <!-- Back Button above main content -->
+    <button
+        @click="$inertia.visit('/cebu-legacy')"
+        class="mb-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-gray-700 font-semibold"
+    >
+        ← Back
+    </button>
     <div class="flex gap-8 w-900 max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-7">
-        <!-- Back Button -->
-        <button
-            @click="$inertia.visit('/tour')"
-            class="mb-4 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-gray-700 font-semibold"
-        >
-            ← Back
-        </button>
 
 
         <!-- Left: Image Container -->
