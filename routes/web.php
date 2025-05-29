@@ -19,7 +19,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/cebu-legacy/edit/{id}', [App\Http\Controllers\CebuLegacyController::class, 'edit'])->name('cebu-legacy.edit');
     Route::put('/cebu-legacy/update/{id}', [App\Http\Controllers\CebuLegacyController::class, 'update'])->name('cebu-legacy.update');
     Route::delete('/cebu-legacy/route/{id}', [App\Http\Controllers\CebuLegacyController::class, 'destroy'])->name('cebu-legacy.destroy');
-    
+    Route::delete('/cebu-legacy/delete/{id}', [App\Http\Controllers\CebuLegacyController::class, 'delete'])->name('cebu-legacy.delete');
     // Route::get('/cebu-legacy/{id}', [App\Http\Controllers\CebuLegacyController::class, 'show'])->name('cebu-legacy.show');
     Route::get('/vehicle-routes', [App\Http\Controllers\VehicleRouteController::class, 'index'])->name('cebu-legacy.edit');
     Route::get('/messages', [App\Http\Controllers\MessageController::class, 'index'])

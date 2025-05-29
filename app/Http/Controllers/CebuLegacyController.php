@@ -47,7 +47,7 @@ class CebuLegacyController extends Controller
             $image = $request->file('image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
 
-            $imagePath = Storage::disk('images')->putFileAs('images/', $image, $imageName ); // Store the image in S3
+            $imagePath = Storage::disk('images')->putFileAs('images/', $image, $imageName); // Store the image in S3
             $legacyItem->imagepath = Storage::disk('images')->url($imagePath);
 
             if ($imagePath) { // Check if the upload was successful
@@ -128,5 +128,11 @@ class CebuLegacyController extends Controller
     public function destroy($id)
     {
         VehicleRoute::where('id', $id)->delete(); // Delete associated vehicle routes
+    }
+
+    public function delete($id)
+    {
+        VehicleRoute::where('cebu_legacy_id', $id)->delete(); // Delete associated vehicle routes
+        CebuLegacy::findOrFail($id)->delete(); // Delete the legacy item
     }
 }
