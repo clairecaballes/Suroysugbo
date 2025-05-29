@@ -2,6 +2,7 @@
   <PageNav/>
   <PageHeader/>
   <CebuLegacy />
+  <Map />
   <About/>
   <minigame/>
   <Contact />
@@ -88,6 +89,7 @@ import UserReview from './components/UserReview.vue'
 import {  onMounted, onUnmounted } from 'vue';
 import About from './components/About.vue'
 import Minigame from './components/minigame.vue'
+import Map from './components/Map.vue'
 
 // Reactive state for modal visibility
 const isModalOpen = ref(false);
