@@ -1,8 +1,8 @@
 <template>
     <Head :title="`${props.legacyItem?.title}`" />
     <!-- Back Button above main content -->
-   <button
-    @click="$inertia.visit('/')"
+  <button
+    @click="$inertia.go(-1)"
     class="mb-4 px-5 py-2.5 bg-gray-800 hover:bg-gray-900 rounded-lg text-white font-medium shadow-md transition duration-300 ease-in-out"
 >
     ← Back
@@ -79,6 +79,7 @@ const pinOptions = { background: '#FBBC04' }
 </script>
 
 <style scoped>
+/* Stack columns on smaller screens */
 @media (max-width: 900px) {
   .flex.gap-8 {
     flex-direction: column;
@@ -94,6 +95,7 @@ const pinOptions = { background: '#FBBC04' }
   }
 }
 
+/* Further adjustments for mobile */
 @media (max-width: 600px) {
   .max-w-6xl {
     padding: 0.5rem !important;
@@ -106,11 +108,27 @@ const pinOptions = { background: '#FBBC04' }
   }
   #DEMO_MAP_ID,
   .google-map {
-    height: 250px !important;
-    min-height: 180px;
+    height: 220px !important;
+    min-height: 140px;
+    width: 100% !important;
   }
   table {
     font-size: 0.95rem;
+  }
+}
+
+/* Always make the image cover its box */
+.w-\[400px\].object-cover, .object-cover {
+  object-fit: cover;
+}
+
+/* Make table horizontally scrollable on small screens */
+@media (max-width: 900px) {
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
   }
 }
 </style>
