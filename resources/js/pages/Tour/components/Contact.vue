@@ -6,9 +6,19 @@
         <h2>Contact Us</h2>
         <p class="contact-description">We’re here to help! Reach out to us anytime.</p>
         <ul class="contact-details">
-          <li><i class="fas fa-phone-alt"></i> +1 (123) 456-7890</li>
-          <li><i class="fas fa-envelope"></i> contact@yourdomain.com</li>
-          <li><i class="fas fa-map-marker-alt"></i> 1234 Your Street, City</li>
+          <li>
+  <i class="fas fa-phone-alt"></i>
+  <a href="tel:+639060490920" style="color:inherit;text-decoration:underline;">
+    +63 906 049 0920
+  </a>
+</li>
+          <li>
+        <i class="fas fa-envelope"></i>
+        <a href="mailto:cleyrni@gmail.com" style="color:inherit;text-decoration:underline;">
+    cleyrni@gmail.com
+  </a>
+</li>
+          <li><i class="fas fa-map-marker-alt"></i> Cogon Danao, City</li>
         </ul>
         <img src="img/contact.png" alt="Contact" class="contact-image">
       </div>
@@ -61,3 +71,47 @@ const submitForm = async () => {
   }
 }
 </script>
+
+<style scoped>
+#compact-contact {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  
+
+
+}
+
+@media (max-width: 500px) {
+
+  .contact-left {
+    align-items: center;
+    text-align: center;
+  }
+  .contact-image {
+    max-width: 90vw;
+    margin: 18px auto 0 auto;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</style>

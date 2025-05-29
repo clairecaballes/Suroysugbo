@@ -2,8 +2,9 @@
   <PageNav/>
   <PageHeader/>
   <CebuLegacy />
+  <About/>
+  <minigame/>
   <Contact />
-  <Faq />
   <UserReview />
   <PageFooter/>
 
@@ -85,6 +86,8 @@ import Faq from './components/Faq.vue'
 import UserReview from './components/UserReview.vue'
 
 import {  onMounted, onUnmounted } from 'vue';
+import About from './components/About.vue'
+import Minigame from './components/minigame.vue'
 
 // Reactive state for modal visibility
 const isModalOpen = ref(false);

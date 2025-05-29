@@ -9,22 +9,22 @@
         <h3>Quick Links</h3>
         <ul>
           <li><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Gallery</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="#about-container">About</a></li>
+          <li><a href="#slider-section">Gallery</a></li>
+          <li><a href="#compact-contact">Contact</a></li>
         </ul>
       </div>
       <div class="footer-section">
         <h3>Follow Us</h3>
         <div class="social-icons">
-          <!--  <a href="#"><img src="facebook-" alt="Facebook"></a>
-                    <a href="#"><img src="twitter-icon.png" alt="Twitter"></a>
-                    <a href="#"><img src="instagram-icon.png" alt="Instagram"></a> -->
+            <a href="https://www.facebook.com/jeanclaire.caballes"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://x.com/jeyu_123"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/accounts/login/?hl=en"><i class="fab fa-instagram"></i></a>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2025 CebuExplorer. All rights reserved.</p>
+      <p>&copy; 2025 SuroySugbo. All rights reserved.</p>
     </div>
   </footer>
 </template>

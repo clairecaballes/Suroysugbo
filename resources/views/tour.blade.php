@@ -11,7 +11,8 @@
 
   <!-- Iconscout Icons -->
   <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css" />
-
+  <!-- Add this in the <head> section -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <!-- External Stylesheet -->
   <link rel="stylesheet" type="text/css" href="{{ URL::asset('css/style.css') }}" />
   <style>
@@ -47,12 +48,7 @@
       font-size: 1.5rem;
     }
 
-    .nav_menu {
-      display: flex;
-      list-style: none;
-      gap: 1.5rem;
-    }
-
+   
     .nav_menu a {
       text-decoration: none;
       color: white;
@@ -228,7 +224,9 @@
     }
 
     .contact-left img {
-      max-width: 100%;
+     
+  width: 100%;
+
     }
 
     .contact-right input,
@@ -239,6 +237,7 @@
       margin-bottom: 1rem;
       border: 1px solid #ccc;
       border-radius: 8px;
+      border-left: 6px solid #007bff;
     }
 
     .contact-right button {
@@ -255,7 +254,7 @@
 
     .user-ratings {
       padding: 4rem 1rem;
-      background-color: #fff;
+  
       text-align: center;
     }
 

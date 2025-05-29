@@ -2,12 +2,13 @@
       <header class="header">
     <div class="container header-container">
       <div class="header-left">
-        <h1>Explore the Beauty of Cebu</h1>
+        <h1>Discover Cebu’s Heritage</h1>
         <p>
-          From stunning beaches to rich culture, discover unforgettable experiences
-          in the heart of the Philippines. Let your adventure begin here.
+         Where History, Faith, and Celebration Unite.
+From iconic landmarks to vibrant traditions, experience the living legacy of Cebu."
+
         </p>
-        <a href="courses.html" class="btn-primary">Start Exploring</a>
+        <a href="#about-container" class="btn-primary">Learn More</a>
       </div>
       <div class="header-right">
         <img src="/img/header1.png" alt="Cebu Scenery" class="header-image" />
