@@ -1,4 +1,5 @@
 <template>
+<Head title="Review" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <h2 class="text-xl font-bold mb-4">Review</h2>
         <div class="overflow-x-auto">
@@ -10,6 +11,7 @@
                         <th class="px-3 py-2 font-semibold">Comment</th>
                          <th class="px-3 py-2 font-semibold">Rating</th>
                         <th class="px-3 py-2 font-semibold">Date</th>
+                        <th class="px-3 py-2 font-semibold">Publish</th>
                         <th class="px-3 py-2 font-semibold">Action</th>
                     </tr>
                 </thead>
@@ -24,6 +26,7 @@
                             <span v-for="star in 5 - message.rating" :key="star" class="text-gray-300">★</span>
                         </td>
                         <td class="px-3 py-2">{{ message.created_at }}</td>
+                        <td class="px-3 py-2">{{ message.isPublish ==1 ? 'YES' : 'NO' }}</td>
                         <td class="px-3 py-2">
                             <button
                                 class="text-blue-600 hover:underline"
@@ -74,7 +77,6 @@ import { ref } from 'vue'
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import PlaceholderPattern from '../components/PlaceholderPattern.vue';
 import axios from 'axios';
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -94,7 +96,7 @@ const showModal = ref(false)
 const selectedMessage = ref({})
 
 const togglePublish = (message) => {
-    const newStatus = !message.is_published
+    const newStatus = !message.isPublished
     axios.post(`/reviews/${message.id}/publish`, { is_published: newStatus })
         .then(() => {
             message.is_published = newStatus

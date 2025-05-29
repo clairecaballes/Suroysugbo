@@ -13,3 +13,6 @@ Route::get('/greeting', function () {
 
 Route::get('/legacy', [App\Http\Controllers\CebuLegacyController::class, 'showPublished'])
     ->name('legacy.isPublished');
+
+Route::get('/show-publish-review', [App\Http\Controllers\ReviewController::class, 'show'])
+    ->name('reviews.show');

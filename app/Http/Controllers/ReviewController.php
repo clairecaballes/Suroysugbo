@@ -19,6 +19,7 @@ class ReviewController extends Controller
                 'rating' => $message->rating,
                 'isRead' => $message->isRead,
                 'message' => $message->message,
+                'isPublish' => $message->isPublish,
                 'created_at' => $message->created_at->format('Y-m-d H:i'), // format as needed
             ];
         }),
@@ -37,7 +38,7 @@ class ReviewController extends Controller
     public function publish(Request $request,$id)
     {
         $message = Review::findOrFail($id);
-        $message->isPublish = true; // Assuming you have an 'is_publish' column
+        $message->isPublish = $request->input('is_published'); // Assuming you have an 'is_publish' column
         $message->save();
 
         return redirect()->route('reviews.index')->with('success', 'Message published successfully.');
@@ -60,11 +61,12 @@ class ReviewController extends Controller
 
         return redirect()->back()->with('success', 'Message sent successfully!');
     }
-    public function show($id)
+    public function show()
     {
-        // Retrieve the message from the database
-        // ...
+        $review = Review::where('isPublish', 1)->get();;
 
-        return view('message.show', compact('message'));
+        return response()->json([
+            'review' => $review,
+        ]);
     }
 }
