@@ -13,8 +13,7 @@ class CebuLegacy extends Model
         'imagepath',
         'title',
         'description',
-        'map_lat',
-        'map_lng',
+        'coordinates',
         'ispublished',
     ];
 

@@ -39,9 +39,9 @@
                     </tbody>
                 </table>
                 <!-- Google Map View Placeholder -->
-                <GoogleMap api-key="AIzaSyAb2zmIqQ0nDC9lb-ZhOku_hC-0OsPK8j8" mapId="DEMO_MAP_ID" style="width: 100%; height: 500px"
+                <GoogleMap api-key="AIzaSyCVi0HNMRa3sByY_4O8cwrwF2D7DdVV2hA" mapId="DEMO_MAP_ID" style="width: 100%; height: 500px"
                     :center="center" :zoom="15">
-                    <AdvancedMarker :options="markerOptions" :pin-options="pinOptions" />
+                  
                     <!-- <AdvancedMarker :options="markerOptions">
                         <div style="background: white; color: black; padding: 5px; border-radius: 5px">
                             Custom Content
@@ -69,9 +69,11 @@ const props = defineProps({
 
 
 
+// Split the coordinates string into latitude and longitude
+const [lat, lng] = props.legacyItem.coordinates.split(',').map(coord => parseFloat(coord.trim()));
 
-const center = { lat: props.legacyItem.map_lat, lng: props.legacyItem.map_lng }
-
+// Use the split values to set the center
+const center = { lat, lng };
 
 const markerOptions = { position: center, label: 'L', title: props.legacyItem.title }
 const pinOptions = { background: '#FBBC04' }

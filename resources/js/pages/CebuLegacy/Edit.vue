@@ -77,7 +77,7 @@
           
             <section class="mt-4" v-if="mode ==='edit'">
                   <hr class="my-4" />
-                <h3 class="text-lg font-semibold mb-2">Uploaded Tour Image</h3>
+                <h3 class="text-lg font-semibold mb-2">Upload Tour Image</h3>
                 <input type="file" multiple handleTourImageUpload @change="handleTourImageUpload" accept="image/*"
                     class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mb-2" />
                 <div v-if="form.image" class="flex items-center space-x-4">
@@ -211,8 +211,7 @@ onMounted(() => {
         form.value.id = props.legacyItem.id || null
         form.value.title = props.legacyItem.title || ''
         form.value.description = props.legacyItem.description || ''
-        form.value.map_lat = props.legacyItem.map_lat || ''
-        form.value.map_lng = props.legacyItem.map_lng || ''
+        form.value.coordinates = props.legacyItem.coordinates || ''
         form.value.ispublished = props.legacyItem.ispublished == 1 ? true : false
         form.value.image = null // Reset image for edit mode
         form.value.routes = props.legacyItem.vehicle_routes || []
@@ -259,8 +258,7 @@ function handleSubmit() {
     }
     formData.append('title', form.value.title)
     formData.append('description', form.value.description)
-    formData.append('map_lat', form.value.map_lat)
-    formData.append('map_lng', form.value.map_lng)
+    formData.append('coordinates', form.value.coordinates)
     formData.append('ispublished', form.value.ispublished)
     formData.append('mode', form.value.mode)
     formData.append('routes', JSON.stringify(form.value.routes))
