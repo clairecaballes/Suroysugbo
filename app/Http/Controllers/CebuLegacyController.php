@@ -63,8 +63,7 @@ class CebuLegacyController extends Controller
             $legacyItem = CebuLegacy::findOrFail($request->input('id'));
             $legacyItem->title = $request->input('title');
             $legacyItem->description = $request->input('description');
-            $legacyItem->map_lat = $request->input('map_lat');
-            $legacyItem->map_lng = $request->input('map_lng');// Ensure imagepath is set, even if not provided
+            $legacyItem->coordinates = $request->input('coordinates');
             $legacyItem->ispublished = $request->input('ispublished') == 'true' ? 1 : 0; // Default to false if not provided
 
             if (isset($imagePath)) {
@@ -76,8 +75,7 @@ class CebuLegacyController extends Controller
 
             $legacyItem->title = $request->input('title');
             $legacyItem->description = $request->input('description');
-            $legacyItem->map_lat = $request->input('map_lat');
-            $legacyItem->map_lng = $request->input('map_lng');// Ensure imagepath is set, even if not provided
+            $legacyItem->coordinates = $request->input('coordinates');
             $legacyItem->ispublished = $request->input('ispublished') == 'true' ? 1 : 0; // Default to false if not provided
             if (isset($imagePath)) {
                 $legacyItem->imagepath = $imagePath; // Update image path if a new image is uploaded
@@ -118,8 +116,7 @@ class CebuLegacyController extends Controller
                 'title' => $item->title,
                 'description' => $item->description,
                 'imageUrl' => $item->imageUrl, // Assuming you have an accessor for image URL
-                'map_lat' => $item->map_lat,
-                'map_lng' => $item->map_lng,
+                'coordinates' => $item->coordinates,
                 'vehicleRoutes' => $item->vehicleRoutes, // Include vehicle routes
             ];
         }));
@@ -134,5 +131,36 @@ class CebuLegacyController extends Controller
     {
         VehicleRoute::where('cebu_legacy_id', $id)->delete(); // Delete associated vehicle routes
         CebuLegacy::findOrFail($id)->delete(); // Delete the legacy item
+    }
+
+
+    public function uploadImages(Request $request)
+    {
+         $request->validate([
+        'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120', // Validate each image (5MB limit)
+        'cebu_legacy_id' => 'required|exists:cebu_legacy,id', // Ensure the related Cebu Legacy ID exists
+        'title' => 'required|string|max:255', // Title for the tour site
+    ]);
+
+    $uploadedPaths = [];
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $image) {
+            $imageName = time() . '-' . $image->getClientOriginalName();
+            $path = $image->storeAs('public/images', $imageName); // Store in storage/app/public/images
+            $uploadedPaths[] = Storage::url($path); // Generate a public URL for the image
+
+            // Save the image path and other details into the tour_site table
+            DB::table('tour_site')->insert([
+                'cebu_legacy_id' => $request->input('cebu_legacy_id'),
+                'imagepath' => $path,
+                'title' => $request->input('title'),
+                'ispublished' => $request->input('ispublished', 0), // Default to 0 if not provided
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+    }
+
+        return response()->json(['message' => 'Images uploaded successfully!', 'paths' => $uploadedPaths]);
     }
 }
