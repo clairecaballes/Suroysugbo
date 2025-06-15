@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\CebuLegacy;
+use App\Models\TourSite;
 use App\Models\VehicleRoute; // Assuming you have a VehicleRoute model for routes
 use Illuminate\Support\Facades\Storage;
 class CebuLegacyController extends Controller
@@ -137,9 +138,8 @@ class CebuLegacyController extends Controller
     public function uploadImages(Request $request)
     {
          $request->validate([
-        'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:5120', // Validate each image (5MB limit)
+        'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:10120', // Validate each image (5MB limit)
         'cebu_legacy_id' => 'required|exists:cebu_legacy,id', // Ensure the related Cebu Legacy ID exists
-        'title' => 'required|string|max:255', // Title for the tour site
     ]);
 
     $uploadedPaths = [];
@@ -150,13 +150,11 @@ class CebuLegacyController extends Controller
             $uploadedPaths[] = Storage::url($path); // Generate a public URL for the image
 
             // Save the image path and other details into the tour_site table
-            DB::table('tour_site')->insert([
+            TourSite::create([
                 'cebu_legacy_id' => $request->input('cebu_legacy_id'),
                 'imagepath' => $path,
-                'title' => $request->input('title'),
+                'title' => '',
                 'ispublished' => $request->input('ispublished', 0), // Default to 0 if not provided
-                'created_at' => now(),
-                'updated_at' => now(),
             ]);
         }
     }

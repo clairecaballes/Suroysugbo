@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class TourSite extends Model
 {
-    protected $table = 'tour_sites'; // Specify the table name if different from the model name
+    protected $table = 'tour_sites'; 
+    protected $primaryKey = 'id';
+    public $timestamps = false; // Enable timestamps if your table has created_at and updated_at columns
     protected $fillable = [
         'imagepath',
         'title',

@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('cebu_legacy_id');
             $table->foreign('cebu_legacy_id')->references('id')->on('cebu_legacy');
             $table->string('imagepath');
-            $table->string('title');
+            $table->string('title')->nullable();
             $table->integer('ispublished')->default(0);
             $table->timestamps();
         });

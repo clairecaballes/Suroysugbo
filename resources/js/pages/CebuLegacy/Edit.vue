@@ -182,6 +182,7 @@ const uploadImages = () => {
     }
 
     const formData = new FormData();
+    formData.append('cebu_legacy_id', form.value.id || ''); // Append legacy ID if available
     images.value.forEach((image, index) => {
         formData.append(`images[${index}]`, image);
     });
