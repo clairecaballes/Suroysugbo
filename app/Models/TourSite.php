@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class TourSite extends Model
 {
-    protected $table = 'tour_sites'; 
+    protected $table = 'tour_site'; 
     protected $primaryKey = 'id';
     public $timestamps = false; // Enable timestamps if your table has created_at and updated_at columns
     protected $fillable = [
+        'cebu_legacy_id',
         'imagepath',
         'title',
         'is_published',

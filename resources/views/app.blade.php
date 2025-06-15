@@ -21,6 +21,8 @@
             })();
         </script>
 
+    
+
         {{-- Inline style to set the HTML background color based on our theme in app.css --}}
         <style>
             html {
@@ -40,7 +42,11 @@
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
-
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVi0HNMRa3sByY_4O8cwrwF2D7DdVV2hA&libraries=places"
+  async
+  defer
+></script>
         @routes
         @vite(['resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
         @inertiaHead

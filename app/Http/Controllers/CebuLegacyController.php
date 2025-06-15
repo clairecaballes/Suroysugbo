@@ -19,8 +19,16 @@ class CebuLegacyController extends Controller
 
     public function edit($id)
     {
-        $legacyItem = CebuLegacy::with(['vehicleRoutes'])->findOrFail($id);
-
+        $legacyItem = CebuLegacy::with(['vehicleRoutes','tourSites' ])->findOrFail($id);
+        // Map tourSites to include the imageUrl
+            $legacyItem->tourSites = $legacyItem->tourSites->map(function ($tourSite) {
+                return [
+                    'id' => $tourSite->id,
+                    'title' => $tourSite->title,
+                    'ispublished' => $tourSite->ispublished,
+                    'imageUrl' => $tourSite->imageUrl, // Use the accessor for the image URL
+                ];
+            });
         return Inertia::render('CebuLegacy/Edit', [
             'mode' => 'edit',
             'legacyItem' => $legacyItem, // Pass the legacy item to the edit view
@@ -146,7 +154,7 @@ class CebuLegacyController extends Controller
     if ($request->hasFile('images')) {
         foreach ($request->file('images') as $image) {
             $imageName = time() . '-' . $image->getClientOriginalName();
-            $path = $image->storeAs('public/images', $imageName); // Store in storage/app/public/images
+            $path = Storage::disk('images')->putFileAs('images/', $image, $imageName); 
             $uploadedPaths[] = Storage::url($path); // Generate a public URL for the image
 
             // Save the image path and other details into the tour_site table
@@ -160,5 +168,21 @@ class CebuLegacyController extends Controller
     }
 
         return response()->json(['message' => 'Images uploaded successfully!', 'paths' => $uploadedPaths]);
+    }
+
+    public function deleteImage($id)
+    {
+        $tourSite = TourSite::findOrFail($id);
+        $imagePath = $tourSite->imagepath;
+
+        // Delete the image from S3
+        if (Storage::disk('images')->exists($imagePath)) {
+            Storage::disk('images')->delete($imagePath);
+        }
+
+        // Delete the record from the database
+        $tourSite->delete();
+
+        return response()->json(['message' => 'Image deleted successfully!']);
     }
 }

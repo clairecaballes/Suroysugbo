@@ -21,6 +21,11 @@ class CebuLegacy extends Model
     {
         return $this->hasMany(VehicleRoute::class, 'cebu_legacy_id', 'id');
     }
+
+    public function tourSites()
+    {
+        return $this->hasMany(TourSite::class, 'cebu_legacy_id', 'id');
+    }
    public function getImageUrlAttribute()
     {
         if ($this->imagepath) {

@@ -22,6 +22,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::delete('/cebu-legacy/delete/{id}', [App\Http\Controllers\CebuLegacyController::class, 'delete'])->name('cebu-legacy.delete');
     Route::post('/cebu-legacy/image-upload', [App\Http\Controllers\CebuLegacyController::class, 'uploadImages'])
         ->name('cebu-legacy.image-upload');
+    Route::delete('/cebu-legacy/image-delete', [App\Http\Controllers\CebuLegacyController::class, 'deleteImage'])
+        ->name('cebu-legacy.image-delete');
     // Route::get('/cebu-legacy/{id}', [App\Http\Controllers\CebuLegacyController::class, 'show'])->name('cebu-legacy.show');
     Route::get('/vehicle-routes', [App\Http\Controllers\VehicleRouteController::class, 'index'])->name('cebu-legacy.edit');
     Route::get('/messages', [App\Http\Controllers\MessageController::class, 'index'])

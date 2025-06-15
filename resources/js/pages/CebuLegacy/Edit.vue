@@ -80,10 +80,23 @@
                 <h3 class="text-lg font-semibold mb-2">Upload Tour Image</h3>
                 <input type="file" multiple handleTourImageUpload @change="handleTourImageUpload" accept="image/*"
                     class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mb-2" />
-                <div v-if="form.image" class="flex items-center space-x-4">
-                    <!-- <img :src="URL.createObjectURL(form.image)" alt="Uploaded Image"
-                        class="w-32 h-32 object-cover rounded shadow" />
-                    <span class="text-sm text-gray-600">{{ form.image.name }}</span> -->
+                <div v-if="legacyItem.tourSites" class="flex items-center space-x-4">
+                    <div v-for="(image, index) in legacyItem.tourSites" :key="index"
+                        class="relative w-32 h-32 mb-2">
+                        <img :src="image.imageUrl" :alt="image.title"
+                            class="w-full h-full object-cover rounded shadow" />
+                        <button type="button" @click="removeImage(index)"
+                            class="absolute top-0 right-0 bg-red-600 text-white rounded-full p-1 hover:bg-red-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                        <input type="text" v-model="image.title" placeholder="Title" 
+                            class="absolute bottom-0 left-0 w-full px-2 py-1 bg-white border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-400" />
+                    </div>
+
                 </div>
 
                 <div v-else class="text-sm text-gray-500">No image uploaded</div>
@@ -200,10 +213,11 @@ const uploadImages = () => {
             });
         })
         .catch(error => {
+            const errorMessage = error.response?.data?.message || 'Failed to upload images.';
             Swal.fire({
                 icon: 'error',
                 title: 'Error!',
-                text: 'Failed to upload images.',
+                text: errorMessage,
             });
         });
 };
