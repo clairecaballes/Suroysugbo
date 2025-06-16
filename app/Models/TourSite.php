@@ -13,13 +13,14 @@ class TourSite extends Model
         'cebu_legacy_id',
         'imagepath',
         'title',
-        'is_published',
+        'coordinates',
+        'ispublished',
     ];
 
 
     public function scopePublished($query)
     {
-        return $query->where('is_published', true);
+        return $query->where('ispublished', true);
     }
 
     public function cebuLegacy()

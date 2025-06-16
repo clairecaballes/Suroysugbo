@@ -19,16 +19,17 @@ class CebuLegacyController extends Controller
 
     public function edit($id)
     {
-        $legacyItem = CebuLegacy::with(['vehicleRoutes','tourSites' ])->findOrFail($id);
+        $legacyItem = CebuLegacy::with(['vehicleRoutes', 'tourSites'])->findOrFail($id);
         // Map tourSites to include the imageUrl
-            $legacyItem->tourSites = $legacyItem->tourSites->map(function ($tourSite) {
-                return [
-                    'id' => $tourSite->id,
-                    'title' => $tourSite->title,
-                    'ispublished' => $tourSite->ispublished,
-                    'imageUrl' => $tourSite->imageUrl, // Use the accessor for the image URL
-                ];
-            });
+        $legacyItem->tourSites = $legacyItem->tourSites->map(function ($tourSite) {
+            return [
+                'id' => $tourSite->id,
+                'title' => $tourSite->title,
+                'ispublished' => $tourSite->ispublished,
+                'coordinates' => $tourSite->coordinates,
+                'imageUrl' => $tourSite->imageUrl, // Use the accessor for the image URL
+            ];
+        });
         return Inertia::render('CebuLegacy/Edit', [
             'mode' => 'edit',
             'legacyItem' => $legacyItem, // Pass the legacy item to the edit view
@@ -143,31 +144,51 @@ class CebuLegacyController extends Controller
     }
 
 
-    public function uploadImages(Request $request)
+    public function storeTourSite(Request $request)
     {
-         $request->validate([
-        'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:10120', // Validate each image (5MB limit)
-        'cebu_legacy_id' => 'required|exists:cebu_legacy,id', // Ensure the related Cebu Legacy ID exists
-    ]);
+        $request->validate([
+            'image.*' => 'image|mimes:jpeg,png,jpg,gif|max:10120', // Validate each image (5MB limit)
+            'cebu_legacy_id' => 'required|exists:cebu_legacy,id', // Ensure the related Cebu Legacy ID exists
+        ]);
 
-    $uploadedPaths = [];
-    if ($request->hasFile('images')) {
-        foreach ($request->file('images') as $image) {
+        $path = ''; // Initialize path variable
+        if ($request->file('image')) {
+            $image = $request->file('image'); // Get the uploaded image file
             $imageName = time() . '-' . $image->getClientOriginalName();
-            $path = Storage::disk('images')->putFileAs('images/', $image, $imageName); 
-            $uploadedPaths[] = Storage::url($path); // Generate a public URL for the image
-
-            // Save the image path and other details into the tour_site table
-            TourSite::create([
-                'cebu_legacy_id' => $request->input('cebu_legacy_id'),
-                'imagepath' => $path,
-                'title' => '',
-                'ispublished' => $request->input('ispublished', 0), // Default to 0 if not provided
-            ]);
+            $path = Storage::disk('images')->putFileAs('images/', $image, $imageName);
         }
-    }
 
-        return response()->json(['message' => 'Images uploaded successfully!', 'paths' => $uploadedPaths]);
+        // If no new image is uploaded, use the existing image path
+        if (empty($path) && $request->input('id')) {
+            $existingTourSite = TourSite::find($request->input('id'));
+            if ($existingTourSite) {
+                $path = $existingTourSite->imagepath;
+            }
+        }
+
+        // Save the image path and other details into the tour_site table
+        TourSite::updateOrCreate(['id' => $request->input('id') ?? null], [
+            'cebu_legacy_id' => $request->input('cebu_legacy_id'),
+            'imagepath' => $path,
+            'title' => $request->input('title'),
+            'coordinates' => $request->input('coordinates', null), // Default to null if not provided
+            'ispublished' => intval($request->input('ispublished', 0)), // Default to 0 if not provided
+        ]);
+
+
+
+        $getSites = TourSite::where('cebu_legacy_id', $request->input('cebu_legacy_id'))->get()
+            ->map(function ($tourSite) {
+                return [
+                    'id' => $tourSite->id,
+                    'title' => $tourSite->title,
+                    'ispublished' => $tourSite->ispublished,
+                    'coordinates' => $tourSite->coordinates,
+                    'imageUrl' => $tourSite->imageUrl, // Use the accessor for the image URL
+                ];
+            });
+
+        return response()->json(['message' => 'Images uploaded successfully!', 'tourSites' => $getSites]);
     }
 
     public function deleteImage($id)

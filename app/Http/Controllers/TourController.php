@@ -21,7 +21,10 @@ class TourController extends Controller
 
     public function view($id)
     {
-       $legacyItem = CebuLegacy::with(['vehicleRoutes','tourSites'])->where('id',$id)
+       $legacyItem = CebuLegacy::with(['vehicleRoutes','tourSites' => function($query){
+        $query->where('ispublished', 1)
+              ->orderBy('title'); 
+       }])->where('id',$id)
        ->where('ispublished', 1)
        ->first(); 
 
@@ -32,6 +35,7 @@ class TourController extends Controller
                 'id' => $tourSite->id,
                 'title' => $tourSite->title,
                 'ispublished' => $tourSite->ispublished,
+                'coordinates' => $tourSite->coordinates,
                 'imageUrl' => $tourSite->imageUrl, // Use the accessor for the image URL
             ];
         });

@@ -7,9 +7,7 @@ Route::get('/', [App\Http\Controllers\TourController::class, 'index'])->name('ho
 Route::get('/cebu-legacy/view/{id}', [App\Http\Controllers\TourController::class, 'view'])->name('view');
 
 
-Route::get('dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('dashboard', [App\Http\Controllers\DashboardController::class,'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::group(['middleware' => ['auth', 'verified']], function () {
 
@@ -20,9 +18,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::put('/cebu-legacy/update/{id}', [App\Http\Controllers\CebuLegacyController::class, 'update'])->name('cebu-legacy.update');
     Route::delete('/cebu-legacy/route/{id}', [App\Http\Controllers\CebuLegacyController::class, 'destroy'])->name('cebu-legacy.destroy');
     Route::delete('/cebu-legacy/delete/{id}', [App\Http\Controllers\CebuLegacyController::class, 'delete'])->name('cebu-legacy.delete');
-    Route::post('/cebu-legacy/image-upload', [App\Http\Controllers\CebuLegacyController::class, 'uploadImages'])
+    Route::post('/cebu-legacy/image-upload', [App\Http\Controllers\CebuLegacyController::class, 'storeTourSite'])
         ->name('cebu-legacy.image-upload');
-    Route::delete('/cebu-legacy/image-delete', [App\Http\Controllers\CebuLegacyController::class, 'deleteImage'])
+    Route::delete('/cebu-legacy/image-delete/{id}', [App\Http\Controllers\CebuLegacyController::class, 'deleteImage'])
         ->name('cebu-legacy.image-delete');
     // Route::get('/cebu-legacy/{id}', [App\Http\Controllers\CebuLegacyController::class, 'show'])->name('cebu-legacy.show');
     Route::get('/vehicle-routes', [App\Http\Controllers\VehicleRouteController::class, 'index'])->name('cebu-legacy.edit');
