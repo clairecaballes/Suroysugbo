@@ -95,8 +95,12 @@ const props = defineProps({
 
 
 // Split the coordinates string into latitude and longitude
-const [lat, lng] = props.legacyItem.coordinates.split(',').map(coord => parseFloat(coord.trim()));
+let lat = 0;
+let lng = 0;
 
+if (props.legacyItem?.coordinates) {
+    [lat, lng] = props.legacyItem.coordinates.split(',').map(coord => parseFloat(coord.trim()));
+}
 // Use the split values to set the center
 const center = { lat, lng };
 
@@ -115,8 +119,12 @@ const openModal = (param) => {
     isModalOpen.value = true;
 
     nextTick(() => {
+        let lat = 0;
+        let lng = 0;
+        if (param?.coordinates) {
         const [lat, lng] = param.coordinates.split(',').map(coord => parseFloat(coord.trim()));
-        const location = { lat, lng: lng }; // Change to your desired location
+        }
+        const location = { lat,  lng }; // Change to your desired location
 
         const panorama = new google.maps.StreetViewPanorama(
             document.getElementById("street-view"),
