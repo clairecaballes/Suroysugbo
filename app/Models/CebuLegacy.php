@@ -14,6 +14,7 @@ class CebuLegacy extends Model
         'title',
         'description',
         'coordinates',
+        'bgSoundPath',
         'ispublished',
     ];
 
@@ -26,7 +27,7 @@ class CebuLegacy extends Model
     {
         return $this->hasMany(TourSite::class, 'cebu_legacy_id', 'id');
     }
-   public function getImageUrlAttribute()
+    public function getImageUrlAttribute()
     {
         if ($this->imagepath) {
             $filePath = 'images/' . $this->imagepath; // Define the path in the public/storage/images directory
@@ -57,4 +58,38 @@ class CebuLegacy extends Model
         }
         return null; // Or a default image URL
     }
+
+    public function getSoundUrlAttribute()
+    {
+        if ($this->bgSoundPath) {
+            $filePath = 'sound/' . $this->bgSoundPath; // Define the path in the public/storage/images directory
+            $publicPath = public_path('storage/' . $filePath);
+
+            // Check if the image already exists in the public directory
+            if (!file_exists($publicPath)) {
+                // Get the image from S3
+                try {
+                    $s3Image = Storage::disk('images')->get($this->bgSoundPath);
+
+                    // Ensure the directory exists
+                    $directory = dirname($publicPath);
+                    if (!is_dir($directory)) {
+                        mkdir($directory, 0755, true);
+                    }
+
+                    // Store the image in the public directory
+                    file_put_contents($publicPath, $s3Image);
+                } catch (\Exception $e) {
+                    // Handle the exception (e.g., log the error)
+                    \Log::error('Error downloading image from S3: ' . $e->getMessage());
+                    return null; // Or a default image URL or error placeholder
+                }
+            }
+
+            return asset('storage/' . $filePath);
+        }
+        return null; //
+    }
+
+
 }

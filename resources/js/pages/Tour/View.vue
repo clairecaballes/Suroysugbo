@@ -18,8 +18,7 @@
                 <div v-for="(image, index) in props.legacyItem.tourSites" :key="index"
                     class="relative w-32 h-32 mb-2 group  m-1">
                     <img :src="image.imageUrl" :alt="image.title"
-                        class="w-full h-full object-cover rounded shadow cursor-pointer"
-                        @click="openModal(image)" />
+                        class="w-full h-full object-cover rounded shadow cursor-pointer" @click="openModal(image)" />
 
                     <label
                         class="absolute bottom-0 left-0 w-full px-2 py-1 bg-gray-700 bg-opacity-50 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -81,7 +80,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted,onUnmounted, inject, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, inject, nextTick } from 'vue'
 import { GoogleMap, AdvancedMarker } from 'vue3-google-map'
 import { Head } from '@inertiajs/vue3'
 
@@ -90,8 +89,12 @@ const container = ref(null)
 const props = defineProps({
     legacyItem: Object,
     imageUrl: String,
+    soundUrl: String,
 })
 
+
+const audio = new Audio(props.soundUrl);
+audio.volume = 0.25;
 
 
 // Split the coordinates string into latitude and longitude
@@ -119,29 +122,38 @@ const openModal = (param) => {
     isModalOpen.value = true;
 
     nextTick(() => {
+        debugger;
         let lat = 0;
         let lng = 0;
         if (param?.coordinates) {
-        const [lat, lng] = param.coordinates.split(',').map(coord => parseFloat(coord.trim()));
-        }
-        const location = { lat,  lng }; // Change to your desired location
+            const [lat, lng] = param.coordinates.split(',').map(coord => parseFloat(coord.trim()));
+            const location = { lat, lng }; // Change to your desired location
 
-        const panorama = new google.maps.StreetViewPanorama(
-            document.getElementById("street-view"),
-            {
-                position: location,
-                pov: {
-                    heading: 34,
-                    pitch: 10,
-                },
-                zoom: 1,
-            }
-        );
+            const panorama = new google.maps.StreetViewPanorama(
+                document.getElementById("street-view"),
+                {
+                    position: location,
+                    pov: {
+                        heading: 34,
+                        pitch: 10,
+                    },
+                    zoom: 1,
+                }
+            );
+        }
+
+
+        //play mp3 audio
+        audio.play();
     });
 };
 
 // Close modal
 const closeModal = () => {
+    if (!audio.paused) {
+        audio.pause();
+        audio.currentTime = 0;
+    }
     isModalOpen.value = false;
     modalImageUrl.value = '';
     // Clear the Street View container
@@ -149,6 +161,7 @@ const closeModal = () => {
     if (streetViewContainer) {
         streetViewContainer.innerHTML = '';
     }
+
 
 };
 

@@ -10,42 +10,43 @@ class TourController extends Controller
 {
     public function index()
     {
-
-
         return Inertia::render('Tour/Index', [
             'tours' => [], // Replace with actual data retrieval logic
         ]);
-
-
     }
 
     public function view($id)
     {
-       $legacyItem = CebuLegacy::with(['vehicleRoutes','tourSites' => function($query){
-        $query->where('ispublished', 1)
-              ->orderBy('title'); 
-       }])->where('id',$id)
-       ->where('ispublished', 1)
-       ->first(); 
+        $legacyItem = CebuLegacy::with([
+            'vehicleRoutes',
+            'tourSites' => function ($query) {
+                $query->where('ispublished', 1)
+                    ->orderBy('title');
+            }
+        ])->where('id', $id)
+            ->where('ispublished', 1)
+            ->first();
 
         if ($legacyItem) {
-        // Map tourSites to include the imageUrl
-        $legacyItem->tourSites = $legacyItem->tourSites->map(function ($tourSite) {
-            return [
-                'id' => $tourSite->id,
-                'title' => $tourSite->title,
-                'ispublished' => $tourSite->ispublished,
-                'coordinates' => $tourSite->coordinates,
-                'imageUrl' => $tourSite->imageUrl, // Use the accessor for the image URL
-            ];
-        });
-    }
+            // Map tourSites to include the imageUrl
+            $legacyItem->tourSites = $legacyItem->tourSites->map(function ($tourSite) {
+                return [
+                    'id' => $tourSite->id,
+                    'title' => $tourSite->title,
+                    'ispublished' => $tourSite->ispublished,
+                    'coordinates' => $tourSite->coordinates,
+                    'imageUrl' => $tourSite->imageUrl, // Use the accessor for the image URL
+                ];
+            });
+            
+        }
 
         return Inertia::render('Tour/View', [
             'legacyItem' => $legacyItem,
-            'imageUrl' => $legacyItem->imageUrl// Get image URL if legacy item exists
+            'imageUrl' => $legacyItem->imageUrl,
+            'soundUrl' => $legacyItem->soundUrl, // Assuming you have a bgSoundUrl accessor in the model
         ]);
     }
 
-  
+
 }

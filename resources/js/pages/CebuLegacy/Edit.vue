@@ -36,6 +36,15 @@
                     class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
             </div>
 
+            <!-- upload music -->
+
+            <div>
+                <label for="audio" class="block text-sm font-medium text-gray-700 mb-1">Audio Upload</label>
+                <input id="audio" type="file" @change="handleAudioUpload" accept="audio/*"
+                    class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+            </div>
+
+
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Routes</label>
                 <table class="min-w-full text-xs text-left text-gray-700 border border-gray-200 rounded-lg mb-2">
@@ -210,6 +219,7 @@ const form = ref({
     ispublished: true,
     image: null,
     mode: props.mode,
+    audio: null,
     routes: [
     ]
 })
@@ -247,6 +257,13 @@ const handleModalImageUpload = (event: Event) => {
     const target = event.target as HTMLInputElement;
     if (target.files && target.files[0]) {
         modalForm.value.image = target.files[0];
+    }
+};
+
+const handleAudioUpload = (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files[0]) {
+        form.value.audio = target.files[0];
     }
 };
 
@@ -448,6 +465,9 @@ function handleSubmit() {
     formData.append('coordinates', form.value.coordinates)
     formData.append('ispublished', form.value.ispublished)
     formData.append('mode', form.value.mode)
+    if (form.value.audio) {
+        formData.append('audio', form.value.audio)
+    }
     formData.append('routes', JSON.stringify(form.value.routes))
     if (form.value.image) {
         formData.append('image', form.value.image)

@@ -69,6 +69,21 @@ class CebuLegacyController extends Controller
             }
         }
 
+        $soundPath = null;
+        if ($request->file('audio')) {
+            $bgSound = $request->file('audio');
+            $bgSoundName = time() . '.' . $bgSound->getClientOriginalExtension();
+            $soundPath = Storage::disk('images')->putFileAs('sound/', $bgSound, $bgSoundName); // Store the image in S3
+            $legacyItem->bgSoundPath = Storage::disk('images')->url($soundPath);
+
+            if ($soundPath) { // Check if the upload was successful
+                $legacyItem->bgSoundPath = Storage::disk('images')->url($soundPath);
+            } else {
+                $legacyItem->bgSoundPath = null;
+                \Log::error('S3 upload failed for image: ' . $imageName);
+            }
+        }
+
         if ($request->input('mode') === 'edit') {
             $legacyItem = CebuLegacy::findOrFail($request->input('id'));
             $legacyItem->title = $request->input('title');
@@ -78,6 +93,9 @@ class CebuLegacyController extends Controller
 
             if (isset($imagePath)) {
                 $legacyItem->imagepath = $imagePath; // Update image path if a new image is uploaded
+            }
+            if (isset($soundPath)) {
+                $legacyItem->bgSoundPath = $soundPath; // Update sound path if a new sound is uploaded
             }
             $legacyItem->save();
             $legacyId = $legacyItem->id;
@@ -89,6 +107,9 @@ class CebuLegacyController extends Controller
             $legacyItem->ispublished = $request->input('ispublished') == 'true' ? 1 : 0; // Default to false if not provided
             if (isset($imagePath)) {
                 $legacyItem->imagepath = $imagePath; // Update image path if a new image is uploaded
+            }
+            if (isset($soundPath)) {
+                $legacyItem->bgSoundPath = $soundPath; // Update sound path if a new sound is uploaded
             }
             $legacyItem->save();
             $legacyId = $legacyItem->id;
@@ -128,6 +149,7 @@ class CebuLegacyController extends Controller
                 'imageUrl' => $item->imageUrl, // Assuming you have an accessor for image URL
                 'coordinates' => $item->coordinates,
                 'vehicleRoutes' => $item->vehicleRoutes, // Include vehicle routes
+                'bgSoundUrl' => $item->soundUrl, // Assuming you have an accessor for sound URL
             ];
         }));
     }
