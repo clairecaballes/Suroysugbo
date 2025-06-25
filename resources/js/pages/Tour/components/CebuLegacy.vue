@@ -50,7 +50,7 @@ onMounted(() => {
     })
 })
 
-const itemsPerRow = 4
+const itemsPerRow = 3
 
 const maxIndex = Math.max(0, slides.length - itemsPerRow)
 const currentIndex = ref(0)

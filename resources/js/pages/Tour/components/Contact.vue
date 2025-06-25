@@ -11,10 +11,14 @@
   <a href="tel:+639060490920" style="color:inherit;text-decoration:underline;">
     +63 906 049 0920
   </a>
-</li>
-          <li>
-        <i class="fas fa-envelope"></i>
-        <a href="mailto:cleyrni@gmail.com" style="color:inherit;text-decoration:underline;">
+<li>
+  <i class="fas fa-envelope"></i>
+  <a 
+    href="https://mail.google.com/mail/?view=cm&to=cleyrni@gmail.com" 
+    target="_blank" 
+    rel="noopener noreferrer" 
+    style="color:inherit;text-decoration:underline;"
+  >
     cleyrni@gmail.com
   </a>
 </li>

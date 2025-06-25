@@ -35,12 +35,12 @@ export default {
     return {
       items: ['Sto Nino', 'Gazebo', 'Sinulog', 'Cross', 'Mural', 'Fort', 'Sto Nino', 'Gazebo', 'Sinulog', 'Cross', 'Mural', 'Fort'],
       funFacts: {
-        "Sto Nino": 'Santo Niño image in 1565, believed to be the one gifted by Magellan in 1521.',
-        "Gazebo": 'Built in 1834 to protect the cross',
-        "Sinulog": 'Sinulog Festival is held annually to honor the Santo Niño, with movements symbolizing the waves that brought Christianity to Cebu',
-        "Cross": 'Magellan planted the cross in 1521, marking the arrival of Christianity in the Philippines.',
-        "Mural": 'Shows the baptism of Rajah Humabo',
-        "Fort": 'Fort San Pedro is the oldest and smallest fort in the Philippines.',
+        "Sto Nino": 'The Santo Niño de Cebu is a small statue of the Child Jesus, found in a burned hut in Cebu in 1565, believed to be the same image gifted by Magellan to Queen Juana in 1521.',
+        "Gazebo": 'Magellan’s Cross gazebo is an octagonal coral-stone structure built in 1834 beside the Basilica Minore del Santo Niño in Cebu to protect the historic cross planted by Magellan’s expedition.',
+        "Sinulog": 'The Sinulog Festival is a vibrant cultural and religious celebration held every third Sunday of January in Cebu City, where devotees honor the Santo Niño through dance and devotion centered around the Basilica Minore del Santo Niño.',
+        "Cross": 'what when why  of this if possible add details make it  short  because  its for thesis website: Santo Niño image in 1565, believed to be the one gifted by Magellan in 1521.',
+        "Mural": 'The Magellan’s Cross mural was painted on the ceiling of the cross’s coral-stone gazebo in Cebu City, showing the 1521 baptism of Rajah Humabon and his people at the very site where Christianity was first introduced in the Philippines.',
+        "Fort": 'Fort San Pedro is the oldest and smallest fort in the Philippines, built in 1565 by Spanish and Cebuano laborers under Miguel López de Legazpi in Cebu City’s Plaza Independencia to defend the first Spanish settlement.',
       },
       shuffledItems: [],
       flippedCards: [],
