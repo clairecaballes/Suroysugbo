@@ -1,10 +1,12 @@
 <template>
     <Head :title="`${props.legacyItem?.title}`" />
-    <div class="mb-4">
-  <Link href="/" class="inline-block px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
-    ← Back to Home
-  </Link>
-</div>
+   <button
+  type="button"
+  @click="$inertia.go(-1)"
+  class="inline-block px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 mb-4"
+>
+  ← Back
+</button>
     <div class="flex flex-col lg:flex-row gap-8 w-full max-w-6xl mx-auto p-4 lg:p-6 bg-white rounded-lg shadow-lg mt-4 lg:mt-7">
         <!-- Left: Image Container -->
         <div class="flex flex-col items-center lg:items-start">
@@ -67,12 +69,13 @@
                 <button class="absolute top-2 right-2 text-2xl text-gray-700 hover:text-black" @click="closeModal">×</button>
                 <div id="street-view" class="street-view"></div>
             </div>
-        </div>
-    </div>
-    <button @click="toggleMusic"
+            <button @click="toggleMusic"
         class="ml-auto mb-2 px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
   {{ isPlaying ? '🔇 Stop Music' : '🔊 Play Music' }}
 </button>
+        </div>
+    </div>
+    
 </template>
 <script setup>
 import { ref, onMounted, onUnmounted, inject, nextTick } from 'vue'
