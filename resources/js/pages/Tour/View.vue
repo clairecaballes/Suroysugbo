@@ -69,10 +69,12 @@
                 <button class="absolute top-2 right-2 text-2xl text-gray-700 hover:text-black" @click="closeModal">×</button>
                 <div id="street-view" class="street-view"></div>
             </div>
-            <button @click="toggleMusic"
-        class="ml-auto mb-2 px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
-  {{ isPlaying ? '🔇 Stop Music' : '🔊 Play Music' }}
-</button>
+             <button
+      @click="toggleMusic"
+      class="music-btn absolute left-4 bottom-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+    >
+      {{ isPlaying ? '🔇 Stop Music' : '🔊 Play Music' }}
+    </button>
         </div>
     </div>
     
