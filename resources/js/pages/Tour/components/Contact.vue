@@ -10,7 +10,9 @@
   <i class="fas fa-phone-alt"></i>
   <a href="tel:+639060490920" style="color:inherit;text-decoration:underline;">
     +63 906 049 0920
-  </a>
+  </a> 
+  </li>
+         
 <li>
   <i class="fas fa-envelope"></i>
   <a 

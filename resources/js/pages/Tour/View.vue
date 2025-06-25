@@ -64,6 +64,10 @@
             </div>
         </div>
     </div>
+    <button @click="toggleMusic"
+        class="ml-auto mb-2 px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
+  {{ isPlaying ? '🔇 Stop Music' : '🔊 Play Music' }}
+</button>
 </template>
 <script setup>
 import { ref, onMounted, onUnmounted, inject, nextTick } from 'vue'
@@ -167,11 +171,24 @@ onMounted(() => {
     });
 })
 
+const isPlaying = ref(false)
+
+const toggleMusic = () => {
+  if (isPlaying.value) {
+    audio.pause()
+  } else {
+    audio.play()
+  }
+  isPlaying.value = !isPlaying.value
+}
 </script>
 
 <style scoped>
 .street-view {
     width: 100%;
     height: 500px;
+}
+button {
+  transition: background 0.3s ease;
 }
 </style>
