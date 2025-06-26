@@ -197,7 +197,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 ];
 
-const tourSites = ref(props.legacyItem.tourSites || []);
+const tourSites = ref(props.legacyItem?.tourSites || []);
 if (props.mode == 'create') {
     breadcrumbs.push({
         title: 'Create Legacy',
