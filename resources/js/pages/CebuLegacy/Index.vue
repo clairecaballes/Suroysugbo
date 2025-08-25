@@ -94,7 +94,7 @@ const onDelte = (item) => {
         if (result.isConfirmed) {
             axios.delete(`/cebu-legacy/delete/${item.id}`)
                 .then(() => {
-                    // Optionally, you can show a success message or refresh the page
+                    //  show a success message or refresh the page
                     Swal.fire({
                         icon: 'success',
                         title: 'Deleted',

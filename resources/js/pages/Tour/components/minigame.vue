@@ -23,90 +23,124 @@
       <div class="message">{{ message }}</div>
       <div class="buttons">
         <button class="restart-btn" @click="setupGame">Restart</button>
-       
+        <button class="help-btn" @click="showHelp = true">How to Play</button>
       </div>
     </div>
+    <GameHelpGuide :is-open="showHelp" @close="showHelp = false" />
+    <div v-show="showConfetti" class="confetti-container"></div>
   </section>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      items: ['Sto Nino', 'Gazebo', 'Sinulog', 'Cross', 'Mural', 'Fort', 'Sto Nino', 'Gazebo', 'Sinulog', 'Cross', 'Mural', 'Fort'],
-      funFacts: {
-        "Sto Nino": 'The Santo Niño de Cebu is a small statue of the Child Jesus, found in a burned hut in Cebu in 1565, believed to be the same image gifted by Magellan to Queen Juana in 1521.',
-        "Gazebo": 'Magellan’s Cross gazebo is an octagonal coral-stone structure built in 1834 beside the Basilica Minore del Santo Niño in Cebu to protect the historic cross planted by Magellan’s expedition.',
-        "Sinulog": 'The Sinulog Festival is a vibrant cultural and religious celebration held every third Sunday of January in Cebu City, where devotees honor the Santo Niño through dance and devotion centered around the Basilica Minore del Santo Niño.',
-        "Cross": 'what when why  of this if possible add details make it  short  because  its for thesis website: Santo Niño image in 1565, believed to be the one gifted by Magellan in 1521.',
-        "Mural": 'The Magellan’s Cross mural was painted on the ceiling of the cross’s coral-stone gazebo in Cebu City, showing the 1521 baptism of Rajah Humabon and his people at the very site where Christianity was first introduced in the Philippines.',
-        "Fort": 'Fort San Pedro is the oldest and smallest fort in the Philippines, built in 1565 by Spanish and Cebuano laborers under Miguel López de Legazpi in Cebu City’s Plaza Independencia to defend the first Spanish settlement.',
-      },
-      shuffledItems: [],
-      flippedCards: [],
-      matchedCards: [],
-      message: '',
-    };
-  },
-  methods: {
-    getImageForItem(item) {
-      const images = {
-        "Sto Nino": 'img/santo.jpg',
-        "Gazebo": 'img/gazebo.jpg',
-        "Sinulog": 'img/sinulog.jpg',
-        "Cross": 'img/cross.jpg',
-        "Mural": 'img/mural.jpg',
-        "Fort": 'img/fort.jpg',
-       
-      };
-      return images[item] || '';
-    },
-    shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    },
-    setupGame() {
-      this.shuffledItems = [...this.items];
-      this.shuffle(this.shuffledItems);
-      this.flippedCards = [];
-      this.matchedCards = [];
-      this.message = '';
-    },
-    flipCard(index) {
-      if (this.flippedCards.length >= 2 || this.flippedCards.includes(index) || this.matchedCards.includes(index)) return;
-      
-      this.flippedCards.push(index);
-      
-      if (this.flippedCards.length === 2) {
-        const [firstIndex, secondIndex] = this.flippedCards;
-        if (this.shuffledItems[firstIndex] === this.shuffledItems[secondIndex]) {
-          this.matchedCards.push(firstIndex, secondIndex);
-          const matchedItem = this.shuffledItems[firstIndex];
-          this.message = `Matched: ${matchedItem} — Fun fact: ${this.funFacts[matchedItem]}`;
-          
-          if (this.matchedCards.length === this.items.length) {
-            this.message += ` Congratulations! You matched all items! Cultural hero! 🎉`;
-          }
-          
-          this.flippedCards = [];
-        } else {
-          setTimeout(() => {
-            this.flippedCards = [];
-            this.message = '';
-          }, 1000);
-        }
-      }
-    },
-    goBack() {
-      this.$router.go(-1);
-    },
-  },
-  mounted() {
-    this.setupGame();
-  },
+<script setup>
+import { ref, reactive, onMounted, onUnmounted } from 'vue';
+import GameHelpGuide from '@/components/GameHelpGuide.vue';
+
+const items = ['Sto Nino', 'Gazebo', 'Sinulog', 'Cross', 'Mural', 'Fort', 'Sto Nino', 'Gazebo', 'Sinulog', 'Cross', 'Mural', 'Fort'];
+const funFacts = reactive({
+  "Sto Nino": 'The Santo Niño de Cebu is a small statue of the Child Jesus, found in a burned hut in Cebu in 1565, believed to be the same image gifted by Magellan to Queen Juana in 1521.',
+  "Gazebo": 'Magellan’s Cross gazebo is an octagonal coral-stone structure built in 1834 beside the Basilica Minore del Santo Niño in Cebu to protect the historic cross planted by Magellan’s expedition.',
+  "Sinulog": 'The Sinulog Festival is a vibrant cultural and religious celebration held every third Sunday of January in Cebu City, where devotees honor the Santo Niño through dance and devotion centered around the Basilica Minore del Santo Niño.',
+  "Cross": 'what when why  of this if possible add details make it  short  because  its for thesis website: Santo Niño image in 1565, believed to be the one gifted by Magellan in 1521.',
+  "Mural": 'The Magellan’s Cross mural was painted on the ceiling of the cross’s coral-stone gazebo in Cebu City, showing the 1521 baptism of Rajah Humabon and his people at the very site where Christianity was first introduced in the Philippines.',
+  "Fort": 'Fort San Pedro is the oldest and smallest fort in the Philippines, built in 1565 by Spanish and Cebuano laborers under Miguel López de Legazpi in Cebu City’s Plaza Independencia to defend the first Spanish settlement.',
+});
+
+const shuffledItems = ref([]);
+const flippedCards = ref([]);
+const matchedCards = ref([]);
+const message = ref('');
+const showHelp = ref(false);
+const showConfetti = ref(false);
+const audio = new Audio('/sounds/success.mp3'); // Add your success sound file
+
+const getImageForItem = (item) => {
+  const images = {
+    "Sto Nino": 'img/santo.jpg',
+    "Gazebo": 'img/gazebo.jpg',
+    "Sinulog": 'img/sinulog.jpg',
+    "Cross": 'img/cross.jpg',
+    "Mural": 'img/mural.jpg',
+    "Fort": 'img/fort.jpg',
+  };
+  return images[item] || '';
 };
+
+const shuffle = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+};
+
+const setupGame = () => {
+  shuffledItems.value = [...items];
+  shuffle(shuffledItems.value);
+  flippedCards.value = [];
+  matchedCards.value = [];
+  message.value = '';
+};
+
+const createConfetti = () => {
+  const confettiContainer = document.querySelector('.confetti-container');
+  for (let i = 0; i < 100; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    confetti.style.left = Math.random() * 100 + 'vw';
+    confetti.style.animationDelay = Math.random() * 2 + 's';
+    confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+    confettiContainer.appendChild(confetti);
+  }
+};
+
+const clearConfetti = () => {
+  const confettiContainer = document.querySelector('.confetti-container');
+  confettiContainer.innerHTML = '';
+  showConfetti.value = false;
+};
+
+const celebrateWin = () => {
+  showConfetti.value = true;
+  audio.play();
+  createConfetti();
+  setTimeout(clearConfetti, 5000);
+};
+
+const flipCard = (index) => {
+  if (flippedCards.value.length >= 2 || flippedCards.value.includes(index) || matchedCards.value.includes(index)) return;
+  
+  flippedCards.value.push(index);
+  
+  if (flippedCards.value.length === 2) {
+    const [firstIndex, secondIndex] = flippedCards.value;
+    if (shuffledItems.value[firstIndex] === shuffledItems.value[secondIndex]) {
+      matchedCards.value.push(firstIndex, secondIndex);
+      const matchedItem = shuffledItems.value[firstIndex];
+      message.value = `Matched: ${matchedItem} — Fun fact: ${funFacts[matchedItem]}`;
+      
+      if (matchedCards.value.length === items.length) {
+        message.value += ` Congratulations! You matched all items! Cultural hero! 🎉`;
+        celebrateWin();
+      }
+      
+      flippedCards.value = [];
+    } else {
+      setTimeout(() => {
+        flippedCards.value = [];
+        message.value = '';
+      }, 1000);
+    }
+  }
+};
+
+onMounted(() => {
+  setupGame();
+});
+
+onUnmounted(() => {
+  audio.pause();
+  audio.currentTime = 0;
+  clearConfetti();
+});
 </script>
 
 <style scoped>
@@ -200,6 +234,18 @@ export default {
   cursor: pointer;          /* Optional: pointer cursor on hover */
   transition: background 0.2s;
 }
+.help-btn {
+  background-color: #28a745;
+  color: white;
+  border-radius: 100px;
+  padding: 0.40em 1.5em;
+  min-width: 160px;
+  font-size: 1.1rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-left: 1rem;
+}
 .back-btn {
   background-color: #dc3545;
   color: white;
@@ -255,8 +301,40 @@ export default {
     font-size: 1rem;
     padding: 0.4em 1em;
   }
+  .help-btn {
+    min-width: 120px;
+    font-size: 1rem;
+    padding: 0.4em 1em;
+    margin-top: 1rem;
+    margin-left: 0;
+  }
 }
 
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1000;
+}
 
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  animation: fall 3s linear forwards;
+}
 
+@keyframes fall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
 </style>
