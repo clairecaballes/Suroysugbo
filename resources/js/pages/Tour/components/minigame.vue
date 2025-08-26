@@ -34,6 +34,7 @@
 <script setup>
 import { ref, reactive, onMounted, onUnmounted } from 'vue';
 import GameHelpGuide from '@/components/GameHelpGuide.vue';
+import Swal from 'sweetalert2';
 
 const items = ['Sto Nino', 'Gazebo', 'Sinulog', 'Cross', 'Mural', 'Fort', 'Sto Nino', 'Gazebo', 'Sinulog', 'Cross', 'Mural', 'Fort'];
 const funFacts = reactive({
@@ -102,6 +103,28 @@ const celebrateWin = () => {
   showConfetti.value = true;
   audio.play();
   createConfetti();
+  
+  // Show congratulations modal
+  Swal.fire({
+    title: 'Congratulations! 🎉',
+    text: 'You\'ve completed the Cultural Match Quest!',
+    icon: 'success',
+    confirmButtonText: 'Play Again',
+    showConfirmButton: true,
+    timer: 5000,
+    timerProgressBar: true,
+    background: '#fff',
+    customClass: {
+      popup: 'congratulations-modal',
+      title: 'congratulations-title',
+      confirmButton: 'congratulations-button'
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      setupGame();
+    }
+  });
+  
   setTimeout(clearConfetti, 5000);
 };
 
@@ -163,10 +186,15 @@ onUnmounted(() => {
 }
 
 .card {
-  width: 100px;
-  height: 100px;
-  perspective: 800px;
+  width: 120px;
+  height: 120px;
+  perspective: 1000px;
   cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
 }
 
 .card-inner {
@@ -201,19 +229,34 @@ onUnmounted(() => {
 }
 
 .card-back {
-  background-color: white;
-  border: 2px solid #2e507c;
+  background: linear-gradient(to bottom, #ffffff, #f8fafc);
+  border: 2px solid #3b82f6;
   transform: rotateY(180deg);
   font-size: 14px;
-  color: #2e507c;
+  color: #1e3a8a;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .card-back img {
-  max-width: 80px;
-  max-height: 60px;
+  width: 85%;
+  height: 70%;
   border-radius: 8px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   object-fit: cover;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.card.flipped:hover .card-back img {
+  transform: scale(1.05);
+}
+
+.card-back div {
+  font-weight: 600;
+  font-size: 12px;
+  color: #2563eb;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .message {
@@ -287,15 +330,19 @@ onUnmounted(() => {
    
   }
   .card {
-    width: 70px;
-    height: 70px;
-     justify-content: center; /* <-- Add this line */
-    align-items: center;
+    width: 85px;
+    height: 85px;
   }
+  
   .card-back img {
-    max-width: 50px;
-    max-height: 36px;
+    width: 80%;
+    height: 65%;
   }
+  
+  .card-back div {
+    font-size: 10px;
+  }
+  
   .restart-btn {
     min-width: 120px;
     font-size: 1rem;
@@ -322,9 +369,10 @@ onUnmounted(() => {
 
 .confetti {
   position: absolute;
-  width: 10px;
-  height: 10px;
-  animation: fall 3s linear forwards;
+  width: 8px;
+  height: 16px;
+  background-color: var(--confetti-color);
+  animation: fall 4s linear forwards, sway 2s ease-in-out infinite alternate;
 }
 
 @keyframes fall {
@@ -332,9 +380,49 @@ onUnmounted(() => {
     transform: translateY(-100vh) rotate(0deg);
     opacity: 1;
   }
+  90% {
+    opacity: 1;
+  }
   100% {
     transform: translateY(100vh) rotate(720deg);
     opacity: 0;
   }
+}
+
+@keyframes sway {
+  0% {
+    transform: translateX(-5px) rotate(-15deg);
+  }
+  100% {
+    transform: translateX(5px) rotate(15deg);
+  }
+}
+
+/* SweetAlert Custom Styles */
+:deep(.congratulations-modal) {
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 0 30px rgba(0,0,0,0.1);
+}
+
+:deep(.congratulations-title) {
+  color: #2563eb;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+:deep(.congratulations-button) {
+  background: linear-gradient(to right, #3b82f6, #2563eb);
+  color: white;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+:deep(.congratulations-button:hover) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 </style>

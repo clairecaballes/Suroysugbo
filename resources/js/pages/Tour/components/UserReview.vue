@@ -1,6 +1,6 @@
 <template>
   <section class="user-ratings">
-    <h3>User Reviews</h3>
+    <h3 class="section-title">What Our Users Say</h3>
 
     <div class="reviews-grid">
       <div class="review-card" v-for="(review, index) in reviews" :key="index">
@@ -18,38 +18,40 @@
     </p>
 
     <!-- Review Modal -->
-    <div v-if="showReviewModal" class="modal">
-      <div class="modal-content">
-        <h2>Leave a Review</h2>
-        <form @submit.prevent="submitReview">
-          <!-- Star Rating -->
-          <label>Your Rating:</label>
-          <div class="stars">
-            <span v-for="star in 5" :key="star" @click="setRating(star)" :class="{ active: star <= rating }">★</span>
-          </div>
+    <div v-if="showReviewModal" class="modal-overlay">
+      <div class="modal">
+        <div class="modal-content">
+          <h2 class="modal-title">Share Your Experience</h2>
+          <form @submit.prevent="submitReview" class="review-form">
+            <div class="rating-group">
+              <label class="rating-label">Your Rating:</label>
+              <div class="stars">
+                <span v-for="star in 5" :key="star" @click="setRating(star)" 
+                      :class="{ active: star <= rating }">★</span>
+              </div>
+            </div>
 
-          <!-- Name Field -->
-          <div class="form-group">
-            <label for="reviewerName">Your Name:</label>
-            <input id="reviewerName" type="text" v-model="reviewerName" placeholder="Enter your name" required
-              class="input-box">
-          </div>
+            <div class="form-group">
+              <label for="reviewerName">Name</label>
+              <input id="reviewerName" type="text" v-model="reviewerName" required>
+            </div>
 
-          <!-- Comment -->
-          <textarea id="comment" v-model="reviewComment" placeholder="Share your thoughts..."></textarea>
+            <div class="form-group">
+              <label for="comment">Your Review</label>
+              <textarea id="comment" v-model="reviewComment" rows="4"></textarea>
+            </div>
 
-          <!-- Optional Email -->
-          <div class="form-group">
-            <label for="email">Optional Email:</label>
-            <input id="email" type="email" v-model="reviewEmail" placeholder="Enter your email" class="input-box">
-          </div>
+            <div class="form-group">
+              <label for="email">Email (Optional)</label>
+              <input id="email" type="email" v-model="reviewEmail">
+            </div>
 
-          <!-- Submit Button -->
-          <div class="modal-buttons">
-            <button type="submit">Submit Review</button>
-            <button type="button" @click="closeReviewModal">Cancel</button>
-          </div>
-        </form>
+            <div class="modal-buttons">
+              <button type="submit" class="submit-btn">Submit Review</button>
+              <button type="button" class="cancel-btn" @click="closeReviewModal">Cancel</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </section>
@@ -111,44 +113,17 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.leave-review-link {
-  font-weight: bold;
-  color: #007bff;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.leave-review-link:hover {
-  color: #0056b3;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-bottom: 12px;
-}
-
-.form-group label {
-  font-weight: 500;
-  margin-bottom: 4px;
-  color: #222;
-}
-
-.input-box {
-  width: 100%;
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1.5px solid #cfd8dc;
-  font-size: 1rem;
-  background: #f7faff;
-  box-sizing: border-box;
-  margin-bottom: 0;
-}
-
 .user-ratings {
-  padding: 4rem 1rem;
-  text-align: center;
+  padding: 5rem 2rem;
+  background: linear-gradient(to bottom, #f8fafc, #ffffff);
+}
+
+.section-title {
+  font-size: 2.5rem;
+  color: #1e3a8a;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  font-family: 'Inter', sans-serif;
 }
 
 .reviews-grid {
@@ -160,160 +135,173 @@ onMounted(() => {
 }
 
 .review-card {
-  background-color: #f8f8f8;
-  border-radius: 12px;
-  padding: 1.5rem;
-  width: 300px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  width: 340px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
 }
 
-.review-header {
+.review-card:hover {
+  transform: translateY(-5px);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
-  justify-content: space-between;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-
-.reviewer-name {
-  font-weight: bold;
-  color: #007bff;
-  text-align: left;
-  flex: 1;
-  margin-right: auto;
-}
-
-.review-text {
-  color: #222;
-  font-size: 1rem;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
 .modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgb(252, 252, 252);
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  min-width: 320px;
-  max-width: 95vw;
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
-.modal-content {
-  display: flex;
-  flex-direction: column;
+.modal-title {
+  color: #1e3a8a;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.rating-group {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.rating-label {
+  display: block;
+  color: #4b5563;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
 }
 
 .stars {
-  font-size: 24px;
-  cursor: pointer;
-  margin-bottom: 10px;
+  font-size: 2rem;
 }
 
 .stars span {
-  color: gray;
-  transition: color 0.3s;
+  color: #d1d5db;
   cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
 .stars span:hover,
 .stars span.active {
-  color: gold;
+  color: #fbbf24;
+  transform: scale(1.2);
 }
 
-textarea,
-input[type="email"] {
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  color: #4b5563;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
   width: 100%;
-  margin-bottom: 10px;
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #cfd8dc;
+  padding: 0.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
   font-size: 1rem;
-  resize: vertical;
+  transition: all 0.3s ease;
+  background: #f9fafb;
 }
 
-button {
-  margin-top: 10px;
-  padding: 8px;
-  border: none;
-  background: #007bff;
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #0056b3;
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #3b82f6;
+  background: white;
+  outline: none;
 }
 
 .modal-buttons {
   display: flex;
-  gap: 12px;
-  margin-top: 10px;
+  gap: 1rem;
+  margin-top: 2rem;
 }
 
-@media (max-width: 900px) {
-  .reviews-grid {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .review-card {
-    width: 90vw;
-    min-width: 0;
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 1rem;
-  }
+.submit-btn,
+.cancel-btn {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
 }
 
-@media (max-width: 600px) {
+.submit-btn {
+  background: #1e3a8a;
+  color: white;
+}
+
+.submit-btn:hover {
+  background: #1e40af;
+  transform: translateY(-2px);
+}
+
+.cancel-btn {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.cancel-btn:hover {
+  background: #e5e7eb;
+}
+
+@media (max-width: 768px) {
   .user-ratings {
-    padding: 2rem 0.5rem;
+    padding: 3rem 1rem;
   }
 
-  .reviews-grid {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .review-card {
-    width: 98vw;
-    max-width: 98vw;
-    min-width: 0;
-    padding: 0.75rem;
-    font-size: 0.98rem;
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
   }
 
   .modal {
-    min-width: 98vw;
-    max-width: 98vw;
-    padding: 8px;
+    padding: 1.5rem;
+    margin: 1rem;
   }
 
-  .modal-content {
-    padding: 0;
+  .modal-title {
+    font-size: 1.5rem;
   }
 
   .stars {
-    font-size: 20px;
+    font-size: 1.75rem;
   }
 
-  .input-box,
-  textarea,
-  input[type="email"] {
-    font-size: 0.98rem;
-    padding: 7px 10px;
+  .form-group input,
+  .form-group textarea {
+    padding: 0.625rem;
+    font-size: 0.875rem;
   }
 
-  button {
-    font-size: 0.98rem;
-    padding: 7px;
+  .submit-btn,
+  .cancel-btn {
+    padding: 0.625rem;
+    font-size: 0.875rem;
   }
 }
 </style>

@@ -1,35 +1,56 @@
 <template>
-  <section id="map-section" style="position: relative;">
-    <!-- Search Bar and Categories (if any) -->
-<div class="flex items-center gap-2 p-2 rounded-lg shadow-sm"><div class="flex items-center gap-2 bg-white p-2 rounded-lg shadow-sm">
-<input 
-  v-model="searchQuery" 
-  placeholder="Search a place..."
-  class="faq-search border shadow-sm focus:ring-2 focus:ring-blue-500"
->
-
- <button 
-  @click="searchPlace"
-  class="px-4 py-2 text-blue-700 rounded-md text-sm border border-blue-600 transition-all duration-300"
->
-  🔍
-</button>
-  
-</div>
-      <!-- Add category checkboxes here if needed -->
+  <section id="map-section" class="map-layout">
+    <div class="map-container">
+      <!-- Search Bar -->
+      <div class="flex justify-center w-full p-3 search-wrapper">
+        <div class="search-container">
+          <div class="relative flex items-center justify-center w-full">
+            <input 
+              v-model="searchQuery" 
+              placeholder="🔍 Discover Places in Cebu"
+              class="search-input w-full pl-4 pr-24 py-3 text-center"
+              :style="{ textIndent: searchQuery ? '0' : '60px' }"
+            >
+            <button 
+              @click="searchPlace"
+              class="search-button absolute right-3"
+            >
+              <span>Explore</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Map -->
+      <div id="map" style="height: 500px; width: 100%; margin-top: 10px;"></div>
     </div>
 
-    <!-- Map -->
-    <div id="map" style="height: 500px; width: 100%; margin-top: 10px;"></div>
-
-    <!-- Legend OVER the map -->
+    <!-- Legend moved outside -->
     <div class="map-legend">
-      <strong>Legend:</strong>
-      <img src="https://cdn-icons-png.flaticon.com/512/1046/1046784.png" alt="Restaurant" /> Restaurant
-      <img src="https://cdn-icons-png.flaticon.com/512/1046/1046790.png" alt="Cafe" /> Cafe
-      <img src="https://cdn-icons-png.flaticon.com/512/1046/1046786.png" alt="Fast Food" /> Fast Food
-      <img src="https://cdn-icons-png.flaticon.com/512/1046/1046787.png" alt="Mall" /> Mall
-      <img src="https://cdn-icons-png.flaticon.com/512/1046/1046785.png" alt="Search Location" /> Search Location
+      <div class="legend-header">
+        <span class="legend-title">📍 Places to Visit</span>
+      </div>
+      <div class="legend-items">
+        <div class="legend-item">
+          <img src="https://cdn-icons-png.flaticon.com/512/1046/1046784.png" alt="Restaurant" />
+          <span>Restaurant</span>
+        </div>
+        <div class="legend-item">
+          <img src="https://cdn-icons-png.flaticon.com/512/1046/1046790.png" alt="Cafe" />
+          <span>Cafe</span>
+        </div>
+        <div class="legend-item">
+          <img src="https://cdn-icons-png.flaticon.com/512/1046/1046786.png" alt="Fast Food" />
+          <span>Fast Food</span>
+        </div>
+        <div class="legend-item">
+          <img src="https://cdn-icons-png.flaticon.com/512/1046/1046787.png" alt="Mall" />
+          <span>Mall</span>
+        </div>
+        <div class="legend-item">
+          <img src="https://cdn-icons-png.flaticon.com/512/1046/1046785.png" alt="Search Location" />
+          <span>Your Search</span>
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -212,25 +233,211 @@ export default {
   }
 }
 .map-legend {
-  position: absolute;
-  left: 12px;
-  bottom: 12px; /* Adjust for navbar height */
-  z-index: 10;
-  background: white;
-  padding: 2px 6px;
-  border-radius: 3px;
-  font-size: 11px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.10);
+  position: static;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 300px;
+  height: fit-content;
+}
+
+.legend-header {
+  margin-bottom: 8px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 6px;
+}
+
+.legend-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.legend-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.legend-item {
   display: flex;
   align-items: center;
   gap: 6px;
-  opacity: 0.95;
-  max-width: 90vw;
-  flex-wrap: wrap;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.8);
+  transition: all 0.2s;
 }
-.map-legend img {
-  width: 14px !important;
-  height: 14px !important;
-  margin-right: 1px;
+
+.legend-item:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-1px);
+}
+
+.legend-item img {
+  width: 20px !important;
+  height: 20px !important;
+  object-fit: contain;
+}
+
+.legend-item span {
+  font-size: 13px;
+  color: #4b5563;
+  white-space: nowrap;
+}
+
+.search-container {
+  width: 100%;
+  max-width: 600px;
+ margin: 0 auto;
+  background: white;
+  border-radius: 12px;
+  padding: 4px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.search-input {
+  font-size: 15px;
+  border: none;
+  outline: none;
+  background: transparent;
+  border-radius: 8px;
+  text-align: center;
+  padding-left: 60px;
+  padding-right: 100px;
+}
+
+.search-input:focus::placeholder {
+  opacity: 0;
+}
+
+.search-input::placeholder {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+/* Reset text alignment when user starts typing */
+.search-input:not(:placeholder-shown) {
+  text-align: left;
+}
+
+.search-button {
+  padding: 8px 16px;
+  background: linear-gradient(to right, #3b82f6, #2563eb);
+  color: white;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s;
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+.search-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+}
+
+.map-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+  padding: 20px;
+  min-height: calc(100vh - 64px);
+  background: #f8fafc;
+}
+
+.map-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+#map {
+  flex: 1;
+  min-height: 600px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.search-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: white;
+  padding: 8px 0;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 1024px) {
+  .map-layout {
+    grid-template-columns: 1fr;
+    padding: 12px;
+  }
+
+  .map-container {
+    padding: 12px;
+  }
+
+  #map {
+    min-height: 450px;
+  }
+
+  .map-legend {
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .map-layout {
+    padding: 8px;
+    min-height: calc(100vh - 56px);
+  }
+
+  .map-container {
+    padding: 8px;
+    border-radius: 12px;
+  }
+
+  #map {
+    min-height: 350px;
+  }
+
+  .search-wrapper {
+    padding: 4px 0;
+  }
+
+  .legend-items {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Custom Leaflet Styling */
+:deep(.leaflet-control-zoom) {
+  border: none !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+:deep(.leaflet-control-zoom a) {
+  background: white !important;
+  color: #2563eb !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+:deep(.leaflet-popup-content-wrapper) {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
 }
 </style>
