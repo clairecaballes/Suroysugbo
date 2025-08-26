@@ -1,10 +1,13 @@
 <template>
-  <section id ="about-container">
+  <section id="about-container" class="about-container">
     <div class="header-section">
-      <h1>
-        <span class="brand">SuroySugbo</span>
-        <span class="subtitle">Discover Cebu's Heritage</span>
-      </h1>
+      <div class="header-content">
+        <h1>
+          <span class="brand">SuroySugbo</span>
+          <span class="subtitle">Discover Cebu's Heritage</span>
+        </h1>
+      </div>
+      <div class="header-pattern"></div>
     </div>
     
     <div class="content-section">
@@ -58,38 +61,59 @@ export default {
 <style scoped>
 .about-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f6f9fc 0%, #ffffff 100%);
+  background: linear-gradient(180deg, #1a365d 0%, #ffffff 100%);
+  position: relative;
 }
 
 .header-section {
-  background: linear-gradient(120deg, #2563eb 0%, #3b82f6 100%);
-  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  padding: 6rem 2rem;
   text-align: center;
   color: white;
-  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.header-pattern {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(45deg, transparent 33.333%, #ffffff 33.333%, #ffffff 66.666%, transparent 66.666%),
+              linear-gradient(-45deg, transparent 33.333%, #ffffff 33.333%, #ffffff 66.666%, transparent 66.666%);
+  background-size: 20px 40px;
+  opacity: 0.1;
 }
 
 .brand {
-  font-size: 2.5rem;
+  font-size: 3.5rem;
   font-weight: 800;
   display: block;
-  margin-bottom: 0.5rem;
-  background: linear-gradient(120deg, #ffffff 0%, #e5e7eb 100%);
+  margin-bottom: 1rem;
+  background: linear-gradient(to right, #ffffff, #e2e8f0);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .subtitle {
-  font-size: 1.25rem;
-  font-weight: 400;
-  opacity: 0.9;
-  display: block;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #e2e8f0;
+  letter-spacing: 1px;
 }
 
 .content-section {
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem 4rem;
+  margin: -3rem auto 0;
+  padding: 3rem 2rem;
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 24px 24px 0 0;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
 }
 
 .intro {
@@ -105,26 +129,40 @@ export default {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
-  margin: 3rem 0;
+  margin: 4rem 0;
 }
 
 .feature-item {
-  background: white;
-  padding: 2rem;
-  border-radius: 16px;
+  background: linear-gradient(145deg, #ffffff, #f8fafc);
+  padding: 2.5rem 2rem;
+  border-radius: 20px;
   text-align: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.4s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
 .feature-item:hover {
-  transform: translateY(-5px);
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border-color: #3b82f6;
 }
 
 .icon {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  display: block;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.feature-item:hover .icon {
+  transform: scale(1.2);
+}
+
+.feature-item p {
+  color: #1e3a8a;
+  font-weight: 600;
+  font-size: 1.1rem;
 }
 
 .description {
@@ -134,17 +172,20 @@ export default {
 }
 
 .highlight-box {
-  background: white;
-  padding: 3rem 2rem;
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  padding: 4rem 2rem;
   text-align: center;
-  margin-top: 4rem;
-  border-top: 1px solid #e5e7eb;
+  margin-top: 5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
 }
 
 .highlight {
-  color: #2563eb;
-  font-size: 1.25rem;
+  color: white;
+  font-size: 1.5rem;
   font-weight: 600;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
 }
 
 @media (max-width: 768px) {

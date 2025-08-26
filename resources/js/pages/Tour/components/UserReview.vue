@@ -113,30 +113,25 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.user-ratings {
-  padding: 5rem 2rem;
-  position: relative;
-  background: linear-gradient(
-    180deg,
-    #021036 0%,
-    #1a365d 15%,
-    #07488a 35%,
-    #ffffff 100%
-  );
-  overflow: hidden;
-}
+
 
 .fade-background::before {
   content: '';
-  position: absolute;
+  position: fixed; /* Use fixed to cover the viewport */
   top: 0;
   left: 0;
-  right: 0;
-  height: 150px;
-  background: linear-gradient(to bottom, #021036 0%, transparent 100%);
+  width: 100vw;
+  height: 100vh; /* Full screen height */
+  background: linear-gradient(
+    180deg,
+    #021036 0%,
+    #021036 15%,
+    #07488a 35%,
+    #ffffff 100%
+  );
   pointer-events: none;
+  z-index: -1; /* Optional: keep it behind other content */
 }
-
 .section-title {
   position: relative;
   font-size: 2.5rem;
@@ -152,13 +147,23 @@ onMounted(() => {
 
 .reviews-grid {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  overflow-x: auto;
   gap: 1.5rem;
   margin-bottom: 2.5rem;
+  padding: 1rem 0;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+}
+
+.reviews-grid::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
 }
 
 .review-card {
+  flex: 0 0 340px;
+  scroll-snap-align: start;
+  min-width: 340px;
   animation: fadeIn 0.6s ease-out forwards;
   animation-delay: calc(var(--index, 0) * 0.1s);
   opacity: 0;
@@ -360,6 +365,12 @@ onMounted(() => {
   .cancel-btn {
     padding: 0.625rem;
     font-size: 0.875rem;
+  }
+
+  .review-card {
+    flex: 0 0 280px;
+    min-width: 280px;
+    padding: 1.5rem;
   }
 }
 </style>

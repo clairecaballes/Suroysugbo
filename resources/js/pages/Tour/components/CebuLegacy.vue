@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject } from 'vue'
+import { ref, onMounted, inject, computed } from 'vue'
 import { Head } from '@inertiajs/vue3'
 import axios from 'axios'
 const slides = ref([]);
@@ -53,25 +53,26 @@ onMounted(() => {
     })
 })
 
-const itemsPerRow = 3
+const itemsPerRow = 3 // Fixed to show 3 items
 
-const maxIndex = Math.max(0, slides.length - itemsPerRow)
+// Update maxIndex calculation for 3 items
+const maxIndex = computed(() => Math.max(0, slides.value.length - itemsPerRow))
 const currentIndex = ref(0)
 
 
 function prev() {
-  currentIndex.value = currentIndex.value === 0 ? maxIndex : currentIndex.value - 1
+  currentIndex.value = currentIndex.value === 0 ? maxIndex.value : currentIndex.value - 1
 }
 
 function next() {
-  currentIndex.value = currentIndex.value === maxIndex ? 0 : currentIndex.value + 1
+  currentIndex.value = currentIndex.value === maxIndex.value ? 0 : currentIndex.value + 1
 }
 </script>
 
 <style scoped>
 .slider-section {
   padding: 4rem 2rem;
-  background: linear-gradient(180deg, #1a365d 0%, #0f172a 100%);
+  background: linear-gradient(180deg, #1a365d 0%, #f5f6f8 100%);
   position: relative;
   overflow: hidden;
 }
@@ -109,26 +110,47 @@ function next() {
 
 .slider-track {
   display: flex;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.5s ease-in-out;
   width: 100%;
+  padding: 2rem 0;
 }
 .slider-item {
-  flex: 0 0 25%;
-  box-sizing: border-box;
-  padding: 0 0.5rem;
-  padding: 1rem;
-  transition: transform 0.3s ease;
+  flex: 0 0 33.333%; /* Show exactly 3 items */
+  padding: 0 1rem;
+  transition: all 0.3s ease;
 }
+
+/* Middle item elevation */
+.slider-item:nth-child(3n-1) .slider-image-wrapper {
+  transform: translateY(-20px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.slider-item:nth-child(3n-1):hover .slider-image-wrapper {
+  transform: translateY(-30px);
+}
+
+/* Adjust mobile breakpoints for 3 items */
 @media (max-width: 1024px) {
   .slider-item {
-    flex: 0 0 50%;
+    flex: 0 0 33.333%;
+  }
+  
+  .slider-item:nth-child(3n-1) .slider-image-wrapper {
+    transform: translateY(-15px);
   }
 }
-@media (max-width: 600px) {
+
+@media (max-width: 768px) {
   .slider-item {
     flex: 0 0 100%;
   }
+  
+  .slider-item:nth-child(3n-1) .slider-image-wrapper {
+    transform: translateY(0);
+  }
 }
+
 .arrow-buttons {
   position: absolute;
   top: 50%;

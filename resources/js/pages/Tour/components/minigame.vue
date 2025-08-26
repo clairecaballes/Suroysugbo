@@ -278,27 +278,27 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
- .game-container {  
-  max-width: 800px;
+.game-container {  
+  max-width: 700px; /* Reduced from 800px */
   margin: 0 auto;
   background: rgb(255, 255, 255);
-  padding: 20px;
+  padding: 1.5rem; /* Reduced padding */
   border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(32, 32, 32, 0.2); /* Stronger and softer shadow */
+  box-shadow: 0 8px 24px rgba(32, 32, 32, 0.2);
   text-align: center;
-  transition: box-shadow 0.3s ease-in-out;
 }
+
 .game-board {
   display: grid;
   grid-template-columns: repeat(4, auto);
-  gap: 10px;
+  gap: 8px; /* Reduced gap */
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 1rem; /* Reduced margin */
 }
 
 .card {
-  width: 120px;
-  height: 120px;
+  width: 100px; /* Reduced from 120px */
+  height: 100px; /* Reduced from 120px */
   perspective: 1000px;
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -431,23 +431,23 @@ onUnmounted(() => {
     min-height: 100vh;
   }
   .game-container {
-    max-width: 98vw;
-    padding: 10px;
-    border-radius: 10px;
+    max-width: 95vw;
+    padding: 1rem;
   }
+  
   .game-board {
-    grid-template-columns: repeat(2);
-    gap: 8px;
-   
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
   }
+  
   .card {
-    width: 85px;
-    height: 85px;
+    width: 75px; /* Reduced from 85px */
+    height: 75px; /* Reduced from 85px */
   }
   
   .card-back img {
-    width: 80%;
-    height: 65%;
+    width: 75%;
+    height: 60%;
   }
   
   .card-back div {
