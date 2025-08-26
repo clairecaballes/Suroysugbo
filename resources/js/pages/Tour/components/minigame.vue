@@ -2,7 +2,22 @@
   <section id="minigame-container">
     <div class="game-container">
       <h2>Cultural Match Quest</h2>
-      <p>Match all the cultural items to win!</p>
+      
+      <!-- Add difficulty selector -->
+      <div class="difficulty-selector" v-if="!gameStarted">
+        <h3>Select Difficulty</h3>
+        <div class="difficulty-buttons">
+          <button @click="startGame('easy')" class="diff-btn easy">Easy (3:00)</button>
+          <button @click="startGame('medium')" class="diff-btn medium">Medium (2:00)</button>
+          <button @click="startGame('hard')" class="diff-btn hard">Hard (1:00)</button>
+        </div>
+      </div>
+
+      <!-- Add timer display -->
+      <div v-if="gameStarted" class="timer" :data-time="timeLeft <= 10 ? 'low' : ''">
+        Time Left: {{ formatTime(timeLeft) }}
+      </div>
+
       <div class="game-board">
         <div
           v-for="(item, index) in shuffledItems"
@@ -54,6 +69,17 @@ const showHelp = ref(false);
 const showConfetti = ref(false);
 const audio = new Audio('/sounds/success.mp3'); // Add your success sound file
 
+const gameStarted = ref(false);
+const timeLeft = ref(0);
+const timerInterval = ref(null);
+const difficulty = ref('');
+
+const difficultyTimes = {
+  easy: 180, // 3 minutes
+  medium: 120, // 2 minutes
+  hard: 60 // 1 minute
+};
+
 const getImageForItem = (item) => {
   const images = {
     "Sto Nino": 'img/santo.jpg',
@@ -79,6 +105,10 @@ const setupGame = () => {
   flippedCards.value = [];
   matchedCards.value = [];
   message.value = '';
+  if (timerInterval.value) {
+    clearInterval(timerInterval.value);
+  }
+  // Don't reset gameStarted or timeLeft here
 };
 
 const createConfetti = () => {
@@ -100,28 +130,32 @@ const clearConfetti = () => {
 };
 
 const celebrateWin = () => {
+  clearInterval(timerInterval.value);
   showConfetti.value = true;
   audio.play();
   createConfetti();
+  gameStarted.value = false; // Reset game started state
   
-  // Show congratulations modal
   Swal.fire({
     title: 'Congratulations! 🎉',
     text: 'You\'ve completed the Cultural Match Quest!',
     icon: 'success',
+    showCancelButton: true,
     confirmButtonText: 'Play Again',
-    showConfirmButton: true,
-    timer: 5000,
-    timerProgressBar: true,
+    cancelButtonText: 'Change Difficulty',
     background: '#fff',
     customClass: {
       popup: 'congratulations-modal',
       title: 'congratulations-title',
-      confirmButton: 'congratulations-button'
+      confirmButton: 'congratulations-button',
+      cancelButton: 'change-difficulty-button'
     }
   }).then((result) => {
     if (result.isConfirmed) {
-      setupGame();
+      startGame(difficulty.value); // Restart with same difficulty
+    } else {
+      setupGame(); // Reset game but don't start timer
+      gameStarted.value = false; // Show difficulty selection
     }
   });
   
@@ -155,11 +189,88 @@ const flipCard = (index) => {
   }
 };
 
+const formatTime = (seconds) => {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+};
+
+const startGame = (level) => {
+  difficulty.value = level;
+  timeLeft.value = difficultyTimes[level];
+  gameStarted.value = true; // Set game started immediately
+  setupGame();
+  startTimer(); // Start timer right away
+};
+
+const startTimer = () => {
+  clearInterval(timerInterval.value);
+  timerInterval.value = setInterval(() => {
+    if (timeLeft.value > 0) {
+      timeLeft.value--;
+      
+      if (timeLeft.value === 10) {
+        Swal.fire({
+          title: 'Hurry Up!',
+          text: '10 seconds remaining!',
+          icon: 'warning',
+          timer: 2000,
+          showConfirmButton: false,
+          position: 'top-end',
+          toast: true
+        });
+      }
+    }
+    if (timeLeft.value <= 0) {
+      endGame(false);
+    }
+  }, 1000);
+};
+
+const endGame = (won = false) => {
+  // Only show time's up if the game was actually started and time ran out
+  if (!won && gameStarted.value && timeLeft.value <= 0) {
+    clearInterval(timerInterval.value);
+    gameStarted.value = false;
+    
+    Swal.fire({
+      title: 'Time\'s Up! ⏰',
+      html: `
+        <div class="times-up-modal">
+          <p>Don't give up! Want to try again?</p>
+          <div class="score-info">
+            <p>Matched Pairs: ${matchedCards.value.length / 2}</p>
+            <p>Remaining Pairs: ${(items.length - matchedCards.value.length) / 2}</p>
+          </div>
+        </div>
+      `,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Try Again',
+      cancelButtonText: 'Change Difficulty',
+      allowOutsideClick: false,
+      customClass: {
+        popup: 'times-up-popup',
+        confirmButton: 'try-again-button',
+        cancelButton: 'change-difficulty-button'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        startGame(difficulty.value);
+      } else {
+        setupGame();
+        gameStarted.value = false;
+      }
+    });
+  }
+};
+
 onMounted(() => {
   setupGame();
 });
 
 onUnmounted(() => {
+  clearInterval(timerInterval.value);
   audio.pause();
   audio.currentTime = 0;
   clearConfetti();
@@ -424,5 +535,95 @@ onUnmounted(() => {
 :deep(.congratulations-button:hover) {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.difficulty-selector {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+}
+
+.difficulty-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.diff-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.diff-btn.easy {
+  background: #22c55e;
+  color: white;
+}
+
+.diff-btn.medium {
+  background: #f59e0b;
+  color: white;
+}
+
+.diff-btn.hard {
+  background: #ef4444;
+  color: white;
+}
+
+.diff-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.timer {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin: 1rem 0;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  display: inline-block;
+  transition: color 0.3s ease;
+}
+
+.timer[data-time="low"] {
+  color: #ef4444;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Times Up Modal Styles */
+:deep(.times-up-popup) {
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.times-up-modal {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.score-info {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.score-info p {
+  margin: 0.5rem 0;
+  color: #1e3a8a;
+  font-weight: 500;
 }
 </style>

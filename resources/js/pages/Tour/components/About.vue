@@ -1,5 +1,5 @@
 <template>
-  <section class="about-container">
+  <section id ="about-container">
     <div class="header-section">
       <h1>
         <span class="brand">SuroySugbo</span>

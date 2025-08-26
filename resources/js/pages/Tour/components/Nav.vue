@@ -27,6 +27,13 @@
         </li>
         <li>
           <a
+            href="#map-section"
+            :class="{ active: activeSection === 'map' }"
+            @click="setActive('map')"
+          >Mini Map</a>
+        </li>
+        <li>
+          <a
             href="#about-container"
             :class="{ active: activeSection === 'about' }"
             @click="setActive('about')"
@@ -67,6 +74,7 @@ function setActive(section) {
 const sectionIds = [
   'index.html',        // Home
   'slider-section',    // Gallery
+  'map-section', //map leaflet
   'about-container',           // About (not used in nav, but included for completeness)
   'minigame-container', // Fun Facts
   'compact-contact',   // Contact
@@ -75,6 +83,7 @@ const sectionIds = [
 const sectionNames = [
   'home',
   'gallery',
+  'map', //map leaflet
   'about',
   'minigame',
   'contact'
@@ -86,7 +95,7 @@ function onScroll() {
     if (el) {
       const rect = el.getBoundingClientRect()
       if (rect.top <= 80 && rect.bottom > 80) { // 80px offset for navbar height
-        activeSection.value = ['home', 'gallery', 'about', 'minigame', 'contact'][i]
+        activeSection.value = sectionNames[i]
         found = true
         break
       }

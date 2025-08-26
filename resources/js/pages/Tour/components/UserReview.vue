@@ -1,9 +1,9 @@
 <template>
-  <section class="user-ratings">
+  <section class="user-ratings fade-background">
     <h3 class="section-title">What Our Users Say</h3>
 
     <div class="reviews-grid">
-      <div class="review-card" v-for="(review, index) in reviews" :key="index">
+      <div class="review-card" v-for="(review, index) in reviews" :key="index" :style="review.style">
         <div class="review-header">
           <span class="reviewer-name">{{ review?.name }}</span>
          <span class="stars">
@@ -115,15 +115,39 @@ onMounted(() => {
 <style scoped>
 .user-ratings {
   padding: 5rem 2rem;
-  background: linear-gradient(to bottom, #f8fafc, #ffffff);
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    #021036 0%,
+    #1a365d 15%,
+    #07488a 35%,
+    #ffffff 100%
+  );
+  overflow: hidden;
+}
+
+.fade-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: linear-gradient(to bottom, #021036 0%, transparent 100%);
+  pointer-events: none;
 }
 
 .section-title {
+  position: relative;
   font-size: 2.5rem;
-  color: #1e3a8a;
+  background: linear-gradient(to right, #ffffff, #e2e8f0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-weight: 700;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
   font-family: 'Inter', sans-serif;
+  text-align: center;
 }
 
 .reviews-grid {
@@ -135,16 +159,35 @@ onMounted(() => {
 }
 
 .review-card {
+  animation: fadeIn 0.6s ease-out forwards;
+  animation-delay: calc(var(--index, 0) * 0.1s);
+  opacity: 0;
   background: white;
   border-radius: 16px;
   padding: 2rem;
   width: 340px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
 }
 
 .review-card:hover {
   transform: translateY(-5px);
+  background: linear-gradient(145deg, #ffffff, #f0f9ff);
+  border-color: #0ea5e9;
+  box-shadow: 0 10px 20px rgba(14, 165, 233, 0.15);
+}
+
+.review-text {
+  transition: color 0.3s ease;
+}
+
+.review-card:hover .review-text {
+  color: #0369a1;
+}
+
+.review-card:hover .stars .active {
+  color: #0ea5e9;
 }
 
 .modal-overlay {
@@ -269,11 +312,26 @@ onMounted(() => {
   background: #e5e7eb;
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (max-width: 768px) {
   .user-ratings {
-    padding: 3rem 1rem;
+    padding-top: 4rem;
   }
-
+  
+  .fade-background::before {
+    height: 100px;
+  }
+  
   .section-title {
     font-size: 2rem;
     margin-bottom: 2rem;

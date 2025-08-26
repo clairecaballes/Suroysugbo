@@ -1,6 +1,9 @@
 <template>
   <section id="slider-section" class="slider-section">
-    <h2 class="slider-title">Cebu's Legacy</h2>
+    <div class="section-header">
+      <h2 class="slider-title">Cebu's Legacy</h2>
+      <div class="title-underline"></div>
+    </div>
     <div class="slider-wrapper">
       <div class="slider">
         <div
@@ -66,6 +69,44 @@ function next() {
 </script>
 
 <style scoped>
+.slider-section {
+  padding: 4rem 2rem;
+  background: linear-gradient(180deg, #1a365d 0%, #0f172a 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.slider-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.title-underline {
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(to right, #3b82f6, #60a5fa);
+  margin: 0 auto;
+  border-radius: 2px;
+}
+
+.slider-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+}
+
 .slider-track {
   display: flex;
   transition: transform 0.3s ease-in-out;
@@ -75,6 +116,8 @@ function next() {
   flex: 0 0 25%;
   box-sizing: border-box;
   padding: 0 0.5rem;
+  padding: 1rem;
+  transition: transform 0.3s ease;
 }
 @media (max-width: 1024px) {
   .slider-item {
@@ -95,17 +138,97 @@ function next() {
   transform: translateY(-50%);
 }
 .arrow-btn {
-  background-color: rgba(0, 0, 0, 0.5);
+  background: rgba(59, 130, 246, 0.8);
   color: white;
-  border: none;
-  padding: 0.5rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 1.5rem;
   cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
 }
-.slider-wrapper {
-  overflow: hidden;
+.arrow-btn:hover {
+  background: #2563eb;
+  transform: scale(1.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.slider-image-wrapper {
   position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+.slider-image-wrapper:hover {
+  transform: translateY(-10px);
+}
+.slider-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.slider-description {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  color: white;
+  font-weight: 500;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+.slider-image-wrapper:hover .slider-description {
+  transform: translateY(0);
+}
+@media (max-width: 1024px) {
+  .slider-section {
+    padding: 3rem 1rem;
+  }
+
+  .slider-title {
+    font-size: 2rem;
+  }
+
+  .slider-image {
+    height: 250px;
+  }
 }
 
+@media (max-width: 768px) {
+  .slider-wrapper {
+    padding: 1rem;
+  }
 
+  .arrow-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .slider-section {
+    padding: 2rem 0.5rem;
+  }
+
+  .slider-title {
+    font-size: 1.75rem;
+  }
+
+  .slider-image {
+    height: 200px;
+  }
+
+  .slider-description {
+    font-size: 0.9rem;
+    padding: 0.75rem;
+  }
+}
 </style>
