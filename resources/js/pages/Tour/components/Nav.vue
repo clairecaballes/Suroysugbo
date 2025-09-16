@@ -131,6 +131,7 @@ onBeforeUnmount(() => {
 #open-menu-btn, #close-menu-btn {
   display: none;
 }
+/* Mobile & tablet */
 @media (max-width: 768px) {
   .nav_menu {
     display: none;
@@ -142,14 +143,19 @@ onBeforeUnmount(() => {
     width: 200px;
     z-index: 100;
     padding: 1em;
+    border-radius: 4px;
+    transition: all 0.3s ease-in-out; /* smooth open/close */
   }
+
   .nav_menu.active {
     display: flex;
   }
-  #open-menu-btn, #close-menu-btn {
+
+  #open-menu-btn,
+  #close-menu-btn {
     display: inline-block;
     position: absolute;
-    top: 20px;
+    top: 15px;
     right: 20px;
     background: none;
     border: none;
@@ -158,10 +164,59 @@ onBeforeUnmount(() => {
     cursor: pointer;
     z-index: 200;
   }
-}
-@media (min-width: 769px) {
-  #open-menu-btn, #close-menu-btn {
-    display: none;
+
+  /* Adjust nav links inside menu */
+  .nav_menu a {
+    color: #fff;
+    text-decoration: none;
+    padding: 0.5em 0;
+    display: block;
+  }
+
+  .nav_menu a:hover {
+    text-decoration: underline;
   }
 }
+
+/* Desktop */
+@media (min-width: 769px) {
+  .nav_menu {
+    display: flex; /* show nav normally */
+    flex-direction: row;
+    position: static;
+    background: none;
+    width: auto;
+    padding: 0;
+  }
+
+  #open-menu-btn,
+  #close-menu-btn {
+    display: none; /* hide buttons */
+  }
+}
+/* Default (desktop/tablet) */
+.map-funfacts-container {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.mini-map,
+.fun-facts {
+  flex: 1;
+}
+
+/* Small screen (stacked) */
+@media (max-width: 768px) {
+  .map-funfacts-container {
+    flex-direction: column;
+    gap: 1rem; /* space between stacked items */
+  }
+
+  .mini-map,
+  .fun-facts {
+    width: 100%;
+  }
+}
+
 </style>

@@ -53,7 +53,7 @@ onMounted(() => {
     })
 })
 
-const itemsPerRow = 3 // Fixed to show 3 items
+const itemsPerRow = 4 // Fixed to show 4 items
 
 // Update maxIndex calculation for 3 items
 const maxIndex = computed(() => Math.max(0, slides.value.length - itemsPerRow))
@@ -133,7 +133,7 @@ function next() {
 /* Adjust mobile breakpoints for 3 items */
 @media (max-width: 1024px) {
   .slider-item {
-    flex: 0 0 33.333%;
+    flex: 0 0 25%;
   }
   
   .slider-item:nth-child(3n-1) .slider-image-wrapper {

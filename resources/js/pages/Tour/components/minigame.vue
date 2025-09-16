@@ -279,10 +279,10 @@ onUnmounted(() => {
 
 <style scoped>
 .game-container {  
-  max-width: 700px; /* Reduced from 800px */
+  max-width: 800px; /* Reduced from 800px */
   margin: 0 auto;
-  background: rgb(255, 255, 255);
-  padding: 1.5rem; /* Reduced padding */
+  background: rgba(255, 255, 255, 0);
+  padding: .475rem; /* Reduced padding */
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(32, 32, 32, 0.2);
   text-align: center;
@@ -291,14 +291,14 @@ onUnmounted(() => {
 .game-board {
   display: grid;
   grid-template-columns: repeat(4, auto);
-  gap: 8px; /* Reduced gap */
+  gap: 6px; /* Reduced gap */
   justify-content: center;
   margin-top: 1rem; /* Reduced margin */
 }
 
 .card {
-  width: 100px; /* Reduced from 120px */
-  height: 100px; /* Reduced from 120px */
+  width: 90px; /* Reduced from 120px */
+  height: 90px; /* Reduced from 120px */
   perspective: 1000px;
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -335,8 +335,8 @@ onUnmounted(() => {
 
 .card-front {
   background-color: #ffc107;
-  color: white;
-  font-size: 20px;
+  color: rgba(255, 255, 255, 0.941);
+  font-size: 30px;
 }
 
 .card-back {
@@ -371,35 +371,47 @@ onUnmounted(() => {
 }
 
 .message {
-  margin-top: 20px;
-  color: green;
+  margin-top: 10px;
+  color: rgb(0, 0, 0);
   font-weight: bold;
-  min-height: 24px;
+  min-height: 20px;
+  background-color: #ffffff60;
 }
 
 .restart-btn {
   background-color: #007bff;
   color: white;
-  border-radius: 100px;
+  border-radius: 150px;
   padding: 0.40em 1.5em;    /* Makes the button taller and wider */
-  min-width: 160px;         /* Ensures a minimum width */
-  font-size: 1.1rem;        /* Optional: makes text a bit larger */
+  min-width: 150px;         /* Ensures a minimum width */
+  font-size: 1rem;        /* Optional: makes text a bit larger */
   border: none;             /* Optional: removes default border */
   cursor: pointer;          /* Optional: pointer cursor on hover */
   transition: background 0.2s;
 }
 .help-btn {
-  background-color: #28a745;
+  background-color: #007bff;
   color: white;
-  border-radius: 100px;
-  padding: 0.40em 1.5em;
-  min-width: 160px;
-  font-size: 1.1rem;
-  border: none;
-  cursor: pointer;
+  border-radius: 150px;
+  padding: 0.40em 1.5em;    /* Makes the button taller and wider */
+  min-width: 150px;         /* Ensures a minimum width */
+  font-size: 1rem;        /* Optional: makes text a bit larger */
+  border: none;             /* Optional: removes default border */
+  cursor: pointer;          /* Optional: pointer cursor on hover */
   transition: background 0.2s;
   margin-left: 1rem;
 }
+.help-btn:hover {
+background: #3414ea; /* darker green */
+  box-shadow: 0 6px 16px rgba(34, 48, 197, 0.4);
+  transform: translateY(-2px);
+}
+.restart-btn:hover {
+ background: #3414ea; /* darker green */
+  box-shadow: 0 6px 16px rgba(34, 48, 197, 0.4);
+  transform: translateY(-2px);
+}
+
 .back-btn {
   background-color: #dc3545;
   color: white;
@@ -427,47 +439,66 @@ onUnmounted(() => {
 @media (max-width: 600px) {
   #minigame-container {
     padding: 0;
-    min-width: 100vw;
-    min-height: 100vh;
+    width: 100vw;
+    height: 100vh;
   }
+
   .game-container {
-    max-width: 95vw;
+    max-width: 90vw;
+    min-height: 70vh;
     padding: 1rem;
   }
-  
+
   .game-board {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 6px;
   }
-  
+
   .card {
-    width: 75px; /* Reduced from 85px */
-    height: 75px; /* Reduced from 85px */
+    width: 60px;  /* Scaled for mobile */
+    height: 60px;
   }
-  
+
   .card-back img {
-    width: 75%;
-    height: 60%;
+    width: 85%;
+    height: auto; /* fixed invalid % */
   }
-  
+
   .card-back div {
     font-size: 10px;
   }
-  
-  .restart-btn {
-    min-width: 120px;
-    font-size: 1rem;
-    padding: 0.4em 1em;
-  }
+
+  .restart-btn,
   .help-btn {
     min-width: 120px;
     font-size: 1rem;
     padding: 0.4em 1em;
+  }
+
+  .help-btn {
     margin-top: 1rem;
     margin-left: 0;
   }
+
+  .diff-btn.easy,
+  .diff-btn.medium,
+  .diff-btn.hard {
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+    min-width: 80px;
+  }
+
+  h2 {
+    font-size: 0.9rem; /* scaled down but still readable */
+    text-align: center;
+  }
 }
 
+  .h2{
+    font-size: .5rem;
+    font-weight: 700;
+    color: #ffffff;
+  }
 .confetti-container {
   position: fixed;
   top: 0;
@@ -540,7 +571,7 @@ onUnmounted(() => {
 .difficulty-selector {
   margin-bottom: 2rem;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.004);
   border-radius: 12px;
 }
 
@@ -575,9 +606,23 @@ onUnmounted(() => {
   color: white;
 }
 
-.diff-btn:hover {
+/* Hover effects */
+.diff-btn.easy:hover {
+  background: #038c35; /* darker green */
+  box-shadow: 0 6px 16px rgba(34, 197, 94, 0.4);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.diff-btn.medium:hover {
+  background: #e67c03; /* darker amber */
+  box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4);
+  transform: translateY(-2px);
+}
+
+.diff-btn.hard:hover {
+  background: #dc2626; /* darker red */
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+  transform: translateY(-2px);
 }
 
 .timer {
