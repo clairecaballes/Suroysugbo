@@ -215,6 +215,9 @@ onMounted(() => {
   width: 90%;
   max-width: 500px;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  /* Keep modal within viewport and allow internal scrolling on very small screens */
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
 }
 
 .modal-title {
@@ -296,6 +299,53 @@ onMounted(() => {
   font-weight: 600;
   font-size: 1rem;
   transition: all 0.3s ease;
+}
+
+/* Responsive adjustments for very small screens */
+@media (max-width: 480px) {
+  .modal {
+    padding: 1rem;
+    width: 95%;
+    max-width: 420px;
+  }
+
+  .modal-title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .stars {
+    font-size: 1.5rem;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .modal-buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .submit-btn,
+  .cancel-btn {
+    width: 100%;
+    flex: none;
+  }
+}
+
+/* Slightly smaller spacing for small tablets/medium phones */
+@media (max-width: 768px) {
+  .modal {
+    max-width: 520px;
+  }
+
+  .review-card {
+    flex: 0 0 300px;
+    min-width: 300px;
+  }
 }
 
 .submit-btn {
