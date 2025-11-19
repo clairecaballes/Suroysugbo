@@ -189,9 +189,25 @@ onBeforeUnmount(() => {
     padding: 0;
   }
 
+  /* Keep multi-word nav labels on a single line */
+  .nav_menu a {
+    white-space: nowrap;
+  }
+
   #open-menu-btn,
   #close-menu-btn {
     display: none; /* hide buttons */
+  }
+}
+/* Medium screens: slightly reduce spacing so labels fit on one line */
+@media (min-width: 640px) and (max-width: 900px) {
+  .nav_menu {
+    gap: 0.6em;
+  }
+
+  .nav_menu a {
+    font-size: 0.95rem;
+    padding: 0.25em 0.4em;
   }
 }
 /* Default (desktop/tablet) */

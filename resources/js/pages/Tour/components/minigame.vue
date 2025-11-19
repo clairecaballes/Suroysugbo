@@ -37,7 +37,7 @@
       </div>
       <div class="message">{{ message }}</div>
       <div class="buttons">
-        <button class="restart-btn" @click="setupGame">Restart</button>
+        <button class="restart-btn" @click="restartToChoices">Restart</button>
         <button class="help-btn" @click="showHelp = true">How to Play</button>
       </div>
     </div>
@@ -109,6 +109,20 @@ const setupGame = () => {
     clearInterval(timerInterval.value);
   }
   // Don't reset gameStarted or timeLeft here
+};
+
+const restartToChoices = () => {
+  // Clear running timer and reset game state so difficulty selection shows
+  if (timerInterval.value) {
+    clearInterval(timerInterval.value);
+    timerInterval.value = null;
+  }
+  setupGame();
+  gameStarted.value = false; // show difficulty selector
+  timeLeft.value = 0;
+  difficulty.value = '';
+  showConfetti.value = false;
+  clearConfetti();
 };
 
 const createConfetti = () => {
@@ -455,8 +469,8 @@ background: #3414ea; /* darker green */
   }
 
   .card {
-    width: 60px;  /* Scaled for mobile */
-    height: 60px;
+    width: 75px;  /* Slightly larger on small screens */
+    height: 75px;
   }
 
   .card-back img {
@@ -465,7 +479,7 @@ background: #3414ea; /* darker green */
   }
 
   .card-back div {
-    font-size: 10px;
+    font-size: 11px;
   }
 
   .restart-btn,
