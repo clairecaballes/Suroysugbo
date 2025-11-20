@@ -43,8 +43,8 @@ class TourController extends Controller
 
         return Inertia::render('Tour/View', [
             'legacyItem' => $legacyItem,
-            'imageUrl' => $legacyItem->imageUrl,
-            'soundUrl' => $legacyItem->soundUrl, // Assuming you have a bgSoundUrl accessor in the model
+            'imageUrl' => $legacyItem?->imageUrl,
+            'soundUrl' => $legacyItem?->soundUrl, // Assuming you have a bgSoundUrl accessor in the model
         ]);
     }
 

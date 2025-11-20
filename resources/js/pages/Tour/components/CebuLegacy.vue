@@ -41,27 +41,10 @@ import { Head } from '@inertiajs/vue3'
 import axios from 'axios'
 const slides = ref([]);
 
-const openModal = inject('openModal')
-const setModalData = inject('setModalData')
+const openIframe = inject('openIframe')
 
 const handleItemClick = async (item) => {
-  console.log('Item clicked:', item);
-  
-  if (!openModal || !setModalData) {
-    console.error('Modal functions not available!');
-    // Fallback to opening in new tab
-    window.open(`/cebu-legacy/view/${item.id}`, '_blank');
-    return;
-  }
-  
-  try {
-    setModalData(item);
-    openModal();
-  } catch (error) {
-    console.error('Error opening modal:', error);
-    // Fallback to opening in new tab
-    window.open(`/cebu-legacy/view/${item.id}`, '_blank');
-  }
+  openIframe(item.id);
 }
 
 // Reactive items per row based on screen size
