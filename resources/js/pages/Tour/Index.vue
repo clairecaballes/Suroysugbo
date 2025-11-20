@@ -29,7 +29,7 @@
 
         <div class="lg:w-1/2 p-6 flex flex-col">
           <div class="mb-6">
-            <button class="flex items-center space-x-2 text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300 rounded-md p-2 transition duration-200 ease-in-out">
+            <button @click="closeModal" class="flex items-center space-x-2 text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300 rounded-md p-2 transition duration-200 ease-in-out">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
               </svg>
@@ -38,25 +38,30 @@
           </div>
 
           <div class="relative rounded-lg overflow-hidden flex-grow shadow-lg">
-            <img src="image_410a1a.jpg" alt="Interior of a room with large windows and furniture" class="w-full h-full object-cover">
-            <img src="https://placehold.co/600x400/E0E0E0/333333?text=Image+Unavailable" alt="Placeholder" class="w-full h-full object-cover hidden" onerror="this.style.display='block'; this.previousElementSibling.style.display='none';">
+            <img 
+              :src="modalData?.imageUrl || 'https://placehold.co/600x400/E0E0E0/333333?text=Image+Unavailable'" 
+              :alt="modalData?.title || 'Legacy Item'" 
+              class="w-full h-full object-cover"
+              @error="$event.target.src = 'https://placehold.co/600x400/E0E0E0/333333?text=Image+Unavailable'"
+            >
 
             <div class="absolute bottom-4 left-4 bg-white bg-opacity-80 text-gray-800 text-sm font-semibold py-1.5 px-4 rounded-full shadow-md">
-              cebu
+              {{ modalData?.title || 'Cebu Legacy' }}
             </div>
           </div>
         </div>
 
         <div class="lg:w-1/2 p-6 flex flex-col justify-between">
           <div>
-            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-4">Picture's Name</h1>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-4">{{ modalData?.title || 'Legacy Item' }}</h1>
             <p class="text-gray-600 leading-relaxed text-base sm:text-lg mb-6">
-              This is the detailed description for Image 1. This is the detailed description for Image 1. Context
-              or anything relevant to the image. Enjoy exploring it virtually. It is the detailed description for Image 1.
-              You can explain content of this here, here, is the detailed description for Image 1. This is the
-              detailed description for Image 1. This is a detailed description for Image here, I can explain content
-              of this here, here. This is detailed description for Image 1. You can explain content of the image.
+              {{ modalData?.description || 'Discover the rich heritage and fascinating stories behind this Cebu legacy site. Each location holds unique historical significance and cultural value that has shaped the identity of Cebu through the ages.' }}
             </p>
+            
+            <!-- Debug info (temporary) -->
+            <div v-if="modalData" class="bg-gray-100 p-2 rounded text-xs mb-4">
+              <strong>Debug:</strong> ID: {{ modalData.id }}, Title: {{ modalData.title }}
+            </div>
           </div>
 
           <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 mt-6">
@@ -65,10 +70,10 @@
                            flex-grow sm:flex-grow-0 text-lg">
               View Location's Info
             </button>
-            <button class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition duration-200 ease-in-out
+            <button @click="closeModal" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition duration-200 ease-in-out
                            focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75
                            flex-grow sm:flex-grow-0 text-lg">
-              Fun Facts
+              Close
             </button>
           </div>
         </div>
@@ -77,7 +82,7 @@
 </template>
 
 <script setup>
-import { ref, provide } from 'vue'
+import { ref, provide, onMounted, onUnmounted } from 'vue'
 import PageNav from './components/Nav.vue'
 import PageHeader from './components/Header.vue'
 import CebuLegacy from './components/CebuLegacy.vue'
@@ -85,23 +90,31 @@ import Contact from './components/Contact.vue'
 import PageFooter from './components/Footer.vue'
 import Faq from './components/Faq.vue'
 import UserReview from './components/UserReview.vue'
-
-import {  onMounted, onUnmounted } from 'vue';
 import About from './components/About.vue'
 import Minigame from './components/minigame.vue'
 import Map from './components/Map.vue'
 
-// Reactive state for modal visibility
+// Reactive state for modal visibility and data
 const isModalOpen = ref(false);
+const modalData = ref(null);
 
 // Function to open the modal
 const openModal = () => {
+  console.log('Opening modal...', { isModalOpen: isModalOpen.value, modalData: modalData.value });
   isModalOpen.value = true;
 };
 
 // Function to close the modal
 const closeModal = () => {
+  console.log('Closing modal...');
   isModalOpen.value = false;
+  modalData.value = null;
+};
+
+// Function to set modal data
+const setModalData = (data) => {
+  console.log('Setting modal data:', data);
+  modalData.value = data;
 };
 
 // Handle Escape key to close modal
@@ -121,6 +134,7 @@ onUnmounted(() => {
 });
 
 provide('openModal', openModal)
+provide('setModalData', setModalData)
 
 
 </script>

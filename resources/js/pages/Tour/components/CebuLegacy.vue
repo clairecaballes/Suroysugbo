@@ -16,10 +16,10 @@
             :key="idx"
           >
             <div class="slider-image-wrapper">
-              <a :href="`/cebu-legacy/view/${item.id}`"  class="slider-link" target="_blank">
+              <div class="slider-link" @click="handleItemClick(item)" style="cursor: pointer;">
                 <img :src="item.imageUrl" class="slider-image" />
                 <div class="slider-description">{{ item.title }}</div>
-              </a>
+              </div>
             </div>
           </div>
         </div>
@@ -36,36 +36,108 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject, computed } from 'vue'
+import { ref, onMounted, onUnmounted, inject, computed } from 'vue'
 import { Head } from '@inertiajs/vue3'
 import axios from 'axios'
 const slides = ref([]);
 
 const openModal = inject('openModal')
+const setModalData = inject('setModalData')
+
+const handleItemClick = async (item) => {
+  console.log('Item clicked:', item);
+  
+  if (!openModal || !setModalData) {
+    console.error('Modal functions not available!');
+    // Fallback to opening in new tab
+    window.open(`/cebu-legacy/view/${item.id}`, '_blank');
+    return;
+  }
+  
+  try {
+    setModalData(item);
+    openModal();
+  } catch (error) {
+    console.error('Error opening modal:', error);
+    // Fallback to opening in new tab
+    window.open(`/cebu-legacy/view/${item.id}`, '_blank');
+  }
+}
+
+// Reactive items per row based on screen size
+const itemsPerRow = ref(3)
+
+// Function to update items per row based on screen size
+const updateItemsPerRow = () => {
+  const oldItemsPerRow = itemsPerRow.value;
+  
+  if (window.innerWidth <= 768) {
+    itemsPerRow.value = 1; // Mobile: 1 item
+  } else if (window.innerWidth <= 1024) {
+    itemsPerRow.value = 4; // Tablet: 4 items  
+  } else {
+    itemsPerRow.value = 3; // Desktop: 3 items
+  }
+  
+  // Reset current index if it becomes invalid due to screen size change
+  if (oldItemsPerRow !== itemsPerRow.value) {
+    const newMaxIndex = Math.max(0, slides.value.length - itemsPerRow.value);
+    if (currentIndex.value > newMaxIndex) {
+      currentIndex.value = 0;
+    }
+  }
+  
+  console.log('Updated itemsPerRow to:', itemsPerRow.value, 'for screen width:', window.innerWidth);
+}
 
 onMounted(() => {
   axios.get('/api/legacy')
     .then(response => {
-      slides.value =response.data;
+      slides.value = response.data;
+      console.log('Loaded legacy items:', response.data.length);
     })
     .catch(error => {
       console.error('Error fetching Cebu Legacy data:', error)
     })
+  
+  // Set initial items per row
+  updateItemsPerRow();
+  
+  // Listen for window resize
+  window.addEventListener('resize', updateItemsPerRow);
 })
 
-const itemsPerRow = 4 // Fixed to show 4 items
-
-// Update maxIndex calculation for 3 items
-const maxIndex = computed(() => Math.max(0, slides.value.length - itemsPerRow))
+// Calculate max index for navigation
+const maxIndex = computed(() => {
+  const max = Math.max(0, slides.value.length - itemsPerRow.value);
+  console.log('Max index:', max, 'Total items:', slides.value.length, 'Items per row:', itemsPerRow.value);
+  return max;
+})
 const currentIndex = ref(0)
 
+// Cleanup event listener
+onUnmounted(() => {
+  window.removeEventListener('resize', updateItemsPerRow);
+})
 
 function prev() {
-  currentIndex.value = currentIndex.value === 0 ? maxIndex.value : currentIndex.value - 1
+  console.log('Prev clicked, current:', currentIndex.value, 'max:', maxIndex.value);
+  if (currentIndex.value === 0) {
+    currentIndex.value = maxIndex.value;
+  } else {
+    currentIndex.value = Math.max(0, currentIndex.value - 1);
+  }
+  console.log('New index:', currentIndex.value);
 }
 
 function next() {
-  currentIndex.value = currentIndex.value === maxIndex.value ? 0 : currentIndex.value + 1
+  console.log('Next clicked, current:', currentIndex.value, 'max:', maxIndex.value);
+  if (currentIndex.value >= maxIndex.value) {
+    currentIndex.value = 0;
+  } else {
+    currentIndex.value = Math.min(maxIndex.value, currentIndex.value + 1);
+  }
+  console.log('New index:', currentIndex.value);
 }
 </script>
 
@@ -187,6 +259,29 @@ function next() {
 }
 .slider-image-wrapper:hover {
   transform: translateY(-10px);
+}
+.slider-link {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.slider-link:hover .slider-image {
+  transform: scale(1.05);
+}
+.slider-link::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(59, 130, 246, 0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.slider-link:hover::after {
+  opacity: 1;
 }
 .slider-image {
   width: 100%;
