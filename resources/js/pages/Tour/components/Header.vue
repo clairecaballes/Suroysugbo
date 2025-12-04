@@ -9,7 +9,8 @@
 From iconic landmarks to vibrant traditions, experience the living legacy of Cebu.
 
         </p>
-        <router-link to="/about" class="btn-primary">Learn More</router-link>
+        <a href="#about-container" @click.prevent="scrollToAbout" class="btn-primary">Learn More</a>
+       
       </div>
       <div class="header-right">
         <img src="/img/header1.png" alt="Cebu Scenery" class="header-image" />
@@ -95,3 +96,17 @@ h1 {
   transform: translateY(-10px);
 }
 </style>
+
+<script setup>
+const scrollToAbout = () => {
+  const el = document.getElementById('about-container');
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // update hash without jumping
+    history.replaceState(null, '', '#about-container');
+  } else {
+    // fallback: set hash so navigation will attempt to locate it
+    window.location.hash = '#about-container';
+  }
+};
+</script>

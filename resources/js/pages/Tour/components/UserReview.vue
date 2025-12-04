@@ -195,6 +195,16 @@ onMounted(() => {
   color: #0ea5e9;
 }
 
+.leave-review-link {
+  font-weight: bold;
+  font-style: italic;
+  transition: color 0.3s ease;
+}
+
+.leave-review-link:hover {
+  color: #0369a1;
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;

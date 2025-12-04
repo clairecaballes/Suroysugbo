@@ -36,6 +36,7 @@
         </div>
       </div>
       <div class="message">{{ message }}</div>
+
       <div class="buttons">
         <button class="restart-btn" @click="restartToChoices">Restart</button>
         <button class="help-btn" @click="showHelp = true">How to Play</button>
@@ -47,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onUnmounted } from 'vue';
+import { ref, reactive, onMounted, onUnmounted, computed } from 'vue';
 import GameHelpGuide from '@/components/GameHelpGuide.vue';
 import Swal from 'sweetalert2';
 
@@ -56,7 +57,7 @@ const funFacts = reactive({
   "Sto Nino": 'The Santo Niño de Cebu is a small statue of the Child Jesus, found in a burned hut in Cebu in 1565, believed to be the same image gifted by Magellan to Queen Juana in 1521.',
   "Gazebo": 'Magellan’s Cross gazebo is an octagonal coral-stone structure built in 1834 beside the Basilica Minore del Santo Niño in Cebu to protect the historic cross planted by Magellan’s expedition.',
   "Sinulog": 'The Sinulog Festival is a vibrant cultural and religious celebration held every third Sunday of January in Cebu City, where devotees honor the Santo Niño through dance and devotion centered around the Basilica Minore del Santo Niño.',
-  "Cross": 'what when why  of this if possible add details make it  short  because  its for thesis website: Santo Niño image in 1565, believed to be the one gifted by Magellan in 1521.',
+  "Cross": 'Planted in 1521 by Ferdinand Magellan’s expedition, Magellan’s Cross marks the arrival of Christianity in the Philippines. Located beside the Basilica Minore del Santo Niño in Cebu City, it symbolizes faith, history, and the beginning of Spanish influence.',
   "Mural": 'The Magellan’s Cross mural was painted on the ceiling of the cross’s coral-stone gazebo in Cebu City, showing the 1521 baptism of Rajah Humabon and his people at the very site where Christianity was first introduced in the Philippines.',
   "Fort": 'Fort San Pedro is the oldest and smallest fort in the Philippines, built in 1565 by Spanish and Cebuano laborers under Miguel López de Legazpi in Cebu City’s Plaza Independencia to defend the first Spanish settlement.',
 });
@@ -79,6 +80,28 @@ const difficultyTimes = {
   medium: 120, // 2 minutes
   hard: 60 // 1 minute
 };
+
+// computed helpers for showing item names and matched state during active game
+const uniqueItems = computed(() => {
+  const seen = new Set();
+  const list = [];
+  for (const it of items) {
+    if (!seen.has(it)) {
+      seen.add(it);
+      list.push(it);
+    }
+  }
+  return list;
+});
+
+const matchedItemSet = computed(() => {
+  const s = new Set();
+  matchedCards.value.forEach(idx => {
+    const name = shuffledItems.value[idx];
+    if (name) s.add(name);
+  });
+  return s;
+});
 
 const getImageForItem = (item) => {
   const images = {
@@ -390,6 +413,43 @@ onUnmounted(() => {
   font-weight: bold;
   min-height: 20px;
   background-color: #ffffff60;
+}
+
+.items-list {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
+.item-entry {
+  background: rgba(255,255,255,0.9);
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(59,130,246,0.08);
+}
+
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.item-name {
+  font-weight: 700;
+  color: #1e3a8a;
+}
+
+.item-check {
+  color: #16a34a;
+  font-weight: 800;
+  flex-shrink: 0;
 }
 
 .restart-btn {

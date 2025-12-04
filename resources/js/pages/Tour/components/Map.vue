@@ -345,7 +345,8 @@ export default {
 
 .map-layout {
   display: grid;
-  grid-template-columns: 1fr 300px;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto;
   gap: 20px;
   padding: 20px;
   min-height: calc(100vh - 64px);
