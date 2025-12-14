@@ -100,6 +100,22 @@
       v-if="isModalOpen"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
     >
+      <!-- Instruction Popup -->
+      <div v-if="showInstructions" class="fixed inset-0 flex items-center justify-center z-60 p-4">
+        <div class="bg-white rounded-lg shadow-2xl p-8 max-w-sm w-full text-center">
+          <h3 class="text-xl font-bold mb-4 text-gray-800">360° View Instructions</h3>
+          <p class="text-gray-600 mb-6 text-lg">
+            Drag or tilt the view to see the whole 360 view.
+          </p>
+          <button
+            @click="showInstructions = false"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded transition"
+          >
+            Got it!
+          </button>
+        </div>
+      </div>
+
       <div class="relative bg-white rounded-lg shadow-lg max-w-lg w-full">
         <button
           class="absolute top-2 right-2 text-2xl text-gray-700 hover:text-black"
@@ -156,11 +172,13 @@ const pinOptions = { background: "#FBBC04" };
 // Modal state
 const isModalOpen = ref(false);
 const modalImageUrl = ref("");
+const showInstructions = ref(false);
 
 // Open modal and set the image URL
 const openModal = (param) => {
   modalImageUrl.value = param.imageUrl;
   isModalOpen.value = true;
+  showInstructions.value = true; // Show instructions when modal opens
 
   nextTick(() => {
     let lat = 0;
@@ -196,6 +214,7 @@ const closeModal = () => {
     audio.currentTime = 0;
   }
   isModalOpen.value = false;
+  showInstructions.value = false; // Also close instructions
   modalImageUrl.value = "";
   // Clear the Street View container
   const streetViewContainer = document.getElementById("street-view");

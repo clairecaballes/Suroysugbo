@@ -36,7 +36,6 @@
         </div>
       </div>
       <div class="message">{{ message }}</div>
-
       <div class="buttons">
         <button class="restart-btn" @click="restartToChoices">Restart</button>
         <button class="help-btn" @click="showHelp = true">How to Play</button>
@@ -48,18 +47,19 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onUnmounted, computed } from 'vue';
+import { ref, reactive, onMounted, onUnmounted } from 'vue';
 import GameHelpGuide from '@/components/GameHelpGuide.vue';
 import Swal from 'sweetalert2';
 
 const items = ['Sto Nino', 'Gazebo', 'Sinulog', 'Cross', 'Mural', 'Fort', 'Sto Nino', 'Gazebo', 'Sinulog', 'Cross', 'Mural', 'Fort'];
+
 const funFacts = reactive({
   "Sto Nino": 'The Santo Niño de Cebu is a small statue of the Child Jesus, found in a burned hut in Cebu in 1565, believed to be the same image gifted by Magellan to Queen Juana in 1521.',
   "Gazebo": 'Magellan’s Cross gazebo is an octagonal coral-stone structure built in 1834 beside the Basilica Minore del Santo Niño in Cebu to protect the historic cross planted by Magellan’s expedition.',
   "Sinulog": 'The Sinulog Festival is a vibrant cultural and religious celebration held every third Sunday of January in Cebu City, where devotees honor the Santo Niño through dance and devotion centered around the Basilica Minore del Santo Niño.',
   "Cross": 'Planted in 1521 by Ferdinand Magellan’s expedition, Magellan’s Cross marks the arrival of Christianity in the Philippines. Located beside the Basilica Minore del Santo Niño in Cebu City, it symbolizes faith, history, and the beginning of Spanish influence.',
   "Mural": 'The Magellan’s Cross mural was painted on the ceiling of the cross’s coral-stone gazebo in Cebu City, showing the 1521 baptism of Rajah Humabon and his people at the very site where Christianity was first introduced in the Philippines.',
-  "Fort": 'Fort San Pedro is the oldest and smallest fort in the Philippines, built in 1565 by Spanish and Cebuano laborers under Miguel López de Legazpi in Cebu City’s Plaza Independencia to defend the first Spanish settlement.',
+  "Fort": 'Fort San Pedro is the oldest and smallest fort in the Philippines, built in 1565 by Spanish and Cebuano laborers under Miguel López de Legazpi in Cebu City’s Plaza Independencia to defend the first Spanish settlement.'
 });
 
 const shuffledItems = ref([]);
@@ -68,40 +68,18 @@ const matchedCards = ref([]);
 const message = ref('');
 const showHelp = ref(false);
 const showConfetti = ref(false);
-const audio = new Audio('/sounds/success.mp3'); // Add your success sound file
+const audio = new Audio('/sounds/success.mp3');
 
 const gameStarted = ref(false);
 const timeLeft = ref(0);
 const timerInterval = ref(null);
-const difficulty = ref('');
+const difficulty = ref(''); // empty = no difficulty
 
 const difficultyTimes = {
   easy: 180, // 3 minutes
   medium: 120, // 2 minutes
   hard: 60 // 1 minute
 };
-
-// computed helpers for showing item names and matched state during active game
-const uniqueItems = computed(() => {
-  const seen = new Set();
-  const list = [];
-  for (const it of items) {
-    if (!seen.has(it)) {
-      seen.add(it);
-      list.push(it);
-    }
-  }
-  return list;
-});
-
-const matchedItemSet = computed(() => {
-  const s = new Set();
-  matchedCards.value.forEach(idx => {
-    const name = shuffledItems.value[idx];
-    if (name) s.add(name);
-  });
-  return s;
-});
 
 const getImageForItem = (item) => {
   const images = {
@@ -128,20 +106,16 @@ const setupGame = () => {
   flippedCards.value = [];
   matchedCards.value = [];
   message.value = '';
-  if (timerInterval.value) {
-    clearInterval(timerInterval.value);
-  }
-  // Don't reset gameStarted or timeLeft here
+  if (timerInterval.value) clearInterval(timerInterval.value);
 };
 
 const restartToChoices = () => {
-  // Clear running timer and reset game state so difficulty selection shows
   if (timerInterval.value) {
     clearInterval(timerInterval.value);
     timerInterval.value = null;
   }
   setupGame();
-  gameStarted.value = false; // show difficulty selector
+  gameStarted.value = false;
   timeLeft.value = 0;
   difficulty.value = '';
   showConfetti.value = false;
@@ -171,8 +145,8 @@ const celebrateWin = () => {
   showConfetti.value = true;
   audio.play();
   createConfetti();
-  gameStarted.value = false; // Reset game started state
-  
+  gameStarted.value = false;
+
   Swal.fire({
     title: 'Congratulations! 🎉',
     text: 'You\'ve completed the Cultural Match Quest!',
@@ -189,33 +163,40 @@ const celebrateWin = () => {
     }
   }).then((result) => {
     if (result.isConfirmed) {
-      startGame(difficulty.value); // Restart with same difficulty
+      startGame(difficulty.value);
     } else {
-      setupGame(); // Reset game but don't start timer
-      gameStarted.value = false; // Show difficulty selection
+      setupGame();
+      gameStarted.value = false;
     }
   });
-  
+
   setTimeout(clearConfetti, 5000);
 };
 
 const flipCard = (index) => {
   if (flippedCards.value.length >= 2 || flippedCards.value.includes(index) || matchedCards.value.includes(index)) return;
-  
+
   flippedCards.value.push(index);
-  
+
   if (flippedCards.value.length === 2) {
     const [firstIndex, secondIndex] = flippedCards.value;
+
     if (shuffledItems.value[firstIndex] === shuffledItems.value[secondIndex]) {
       matchedCards.value.push(firstIndex, secondIndex);
       const matchedItem = shuffledItems.value[firstIndex];
-      message.value = `Matched: ${matchedItem} — Fun fact: ${funFacts[matchedItem]}`;
-      
+
+      // Show fun fact only if no difficulty selected
+      if (!difficulty.value) {
+        message.value = `Matched: ${matchedItem} — Fun fact: ${funFacts[matchedItem]}`;
+      } else {
+        message.value = `Matched: ${matchedItem}`;
+      }
+
       if (matchedCards.value.length === items.length) {
         message.value += ` Congratulations! You matched all items! Cultural hero! 🎉`;
         celebrateWin();
       }
-      
+
       flippedCards.value = [];
     } else {
       setTimeout(() => {
@@ -233,11 +214,11 @@ const formatTime = (seconds) => {
 };
 
 const startGame = (level) => {
-  difficulty.value = level;
-  timeLeft.value = difficultyTimes[level];
-  gameStarted.value = true; // Set game started immediately
+  difficulty.value = level; // sets difficulty
+  timeLeft.value = difficultyTimes[level] || 0;
+  gameStarted.value = true;
   setupGame();
-  startTimer(); // Start timer right away
+  if (level) startTimer(); // start timer only if difficulty selected
 };
 
 const startTimer = () => {
@@ -245,7 +226,6 @@ const startTimer = () => {
   timerInterval.value = setInterval(() => {
     if (timeLeft.value > 0) {
       timeLeft.value--;
-      
       if (timeLeft.value === 10) {
         Swal.fire({
           title: 'Hurry Up!',
@@ -265,11 +245,10 @@ const startTimer = () => {
 };
 
 const endGame = (won = false) => {
-  // Only show time's up if the game was actually started and time ran out
   if (!won && gameStarted.value && timeLeft.value <= 0) {
     clearInterval(timerInterval.value);
     gameStarted.value = false;
-    
+
     Swal.fire({
       title: 'Time\'s Up! ⏰',
       html: `
@@ -314,12 +293,13 @@ onUnmounted(() => {
 });
 </script>
 
+
 <style scoped>
 .game-container {  
   max-width: 800px; /* Reduced from 800px */
-  margin: 0 auto;
+  margin: 50px auto;
   background: rgba(255, 255, 255, 0);
-  padding: .475rem; /* Reduced padding */
+  padding: 1.5rem; /* Reduced padding */
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(32, 32, 32, 0.2);
   text-align: center;
@@ -408,48 +388,11 @@ onUnmounted(() => {
 }
 
 .message {
-  margin-top: 10px;
+  margin-top: 1.5 rem;
   color: rgb(0, 0, 0);
   font-weight: bold;
   min-height: 20px;
   background-color: #ffffff60;
-}
-
-.items-list {
-  margin-top: 1rem;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.75rem;
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: left;
-}
-
-.item-entry {
-  background: rgba(255,255,255,0.9);
-  padding: 0.75rem 1rem;
-  border-radius: 10px;
-  border: 1px solid rgba(59,130,246,0.08);
-}
-
-.item-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-}
-
-.item-name {
-  font-weight: 700;
-  color: #1e3a8a;
-}
-
-.item-check {
-  color: #16a34a;
-  font-weight: 800;
-  flex-shrink: 0;
 }
 
 .restart-btn {
@@ -643,8 +586,8 @@ background: #3414ea; /* darker green */
 }
 
 .difficulty-selector {
-  margin-bottom: 2rem;
-  padding: 1rem;
+  margin-bottom: 2.5 rem;
+  padding: 1.2 rem;
   background: rgba(255, 255, 255, 0.004);
   border-radius: 12px;
 }
@@ -653,7 +596,7 @@ background: #3414ea; /* darker green */
   display: flex;
   gap: 1rem;
   justify-content: center;
-  margin-top: 1rem;
+  margin-top: 1.5 rem;
 }
 
 .diff-btn {
@@ -703,7 +646,7 @@ background: #3414ea; /* darker green */
   font-size: 1.5rem;
   font-weight: 700;
   color: #1e3a8a;
-  margin: 1rem 0;
+  margin: 1.8  rem 0;
   padding: 0.5rem 1rem;
   background: rgba(255, 255, 255, 0.9);
   border-radius: 8px;

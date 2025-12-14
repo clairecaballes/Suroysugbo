@@ -60,114 +60,206 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster";
 
+/* ===============================
+   LANDMARK LOCATIONS
+================================ */
+const LANDMARKS = [
+  { name: "Fort San Pedro", lat: 10.2929, lon: 123.9056, type: "Historical Monument" },
+  { name: "Basilica Minore del Santo Niño", lat: 10.2937, lon: 123.9026, type: "Church" },
+  { name: "Magellan's Cross", lat: 10.2926, lon: 123.9022, type: "Historical Monument" },
+  { name: "Cebu North Bus Terminal", lat: 10.3111, lon: 123.9158, type: "Transport Terminal" }
+];
+
+
 export default {
   name: "Map",
+
   data() {
     return {
       searchQuery: "",
       map: null,
-      markers: [],
       markerCluster: null,
-      selectedCategories: ["restaurant", "cafe", "fast_food", "mall"],
-      searchCenterMarker: null,
+      searchCenterMarker: null
     };
   },
+
   mounted() {
-    this.map = L.map("map").setView([10.2923, 123.9024], 17);
+    // Initialize map
+    this.map = L.map("map").setView([10.2923, 123.9024], 13);
+
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "&copy; OpenStreetMap contributors",
+      attribution: "&copy; OpenStreetMap contributors"
     }).addTo(this.map);
 
     this.markerCluster = L.markerClusterGroup();
     this.map.addLayer(this.markerCluster);
+
+    const CEBU_NORTH_BUS = LANDMARKS.find(
+      place => place.name === "Cebu North Bus Terminal"
+    );
+
+    // Add landmark pins with distance & fare
+    LANDMARKS.forEach(place => {
+      if (place.name !== "Cebu North Bus Terminal") {
+        const distance = this.calculateDistance(
+          CEBU_NORTH_BUS.lat,
+          CEBU_NORTH_BUS.lon,
+          place.lat,
+          place.lon
+        );
+
+        const fare = this.calculateJeepneyFare(distance);
+
+        L.marker([place.lat, place.lon])
+  .addTo(this.map)
+  .bindPopup(`
+    <div style="font-size:13px; text-align:center;">
+      📍 <strong>${place.name}</strong><br>
+      📍 From: Cebu North Bus Terminal<br>
+      📏 Distance: ${distance.toFixed(2)} km<br>
+      🚌 Jeepney Fare: ₱${fare}<br>
+      🏷 Type: ${place.type}
+    </div>
+  `);
+
+      }
+    });
   },
+  
+
   methods: {
+    // DISTANCE (HAVERSINE)
+    calculateDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371; // km
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+
+      const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos(lat1 * Math.PI / 180) *
+        Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) ** 2;
+
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
+    },
+
+    // JEEPNEY FARE ESTIMATE
+    calculateJeepneyFare(distanceKm) {
+      const baseFare = 15; // first 4 km
+      const extraPerKm = 2;
+      if (distanceKm <= 4) return baseFare;
+      return baseFare + Math.ceil(distanceKm - 4) * extraPerKm;
+    },
+
+    // SEARCH PLACE & NEARBY RESTAURANTS
     async searchPlace() {
       if (!this.searchQuery) return;
-      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${this.searchQuery}`;
+
+      // Nominatim search restricted to Cebu City
+      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${this.searchQuery}&bounded=1&viewbox=123.85,10.23,123.95,10.35`;
       const response = await fetch(url);
       const data = await response.json();
 
-      if (data.length === 0) {
-        alert("Place not found.");
+      if (!data.length) {
+        alert("Place not found in Cebu City.");
         return;
       }
 
       const lat = parseFloat(data[0].lat);
       const lon = parseFloat(data[0].lon);
+
       this.map.setView([lat, lon], 15);
 
       if (this.searchCenterMarker) {
         this.map.removeLayer(this.searchCenterMarker);
       }
 
+      const CEBU_NORTH_BUS = LANDMARKS.find(
+        place => place.name === "Cebu North Bus Terminal"
+      );
+
+      // Distance & fare for searched place
+      let distance = this.calculateDistance(
+        CEBU_NORTH_BUS.lat,
+        CEBU_NORTH_BUS.lon,
+        lat,
+        lon
+      );
+
+      const maxDistanceKm = 30; // limit
+      if (distance > maxDistanceKm) distance = maxDistanceKm;
+
+      const fare = this.calculateJeepneyFare(distance);
+
+      // Marker for searched place
       this.searchCenterMarker = L.marker([lat, lon], {
         icon: L.icon({
           iconUrl: "https://cdn-icons-png.flaticon.com/512/1046/1046785.png",
-          iconSize: [60, 60]
-        })
+          iconSize: [60, 60],
+        }),
       })
-      .addTo(this.map)
-     .bindPopup(`
-  <div class="popup-content">
-    <h3 style='color: #007bff; margin: 2px 0;'>${this.searchQuery}</h3>
-    <p style='font-size: 12px; margin: 0;'>Coordinates: ${lat}, ${lon}</p>
-  </div>
-`).openPopup();
+        .addTo(this.map)
+        .bindPopup(`
+          <div class="popup-content">
+            <h3 style="color:#2563eb;">${this.searchQuery}</h3>
+            <p style="font-size:12px;">📍 From: Cebu North Bus Terminal</p>
+            <p style="font-size:12px;">📏 Distance: ${distance.toFixed(2)} km</p>
+            <p style="font-size:13px; font-weight:600; color:#16a34a;">
+              🚌 Jeepney Fare: ₱${fare}
+            </p>
+            <p style="font-size:12px;">🍴 Type: Search Result</p>
+            <small style="font-size:10px; color:#6b7280;">
+              *Estimated fare only
+            </small>
+          </div>
+        `)
+        .openPopup();
 
-      this.fetchNearbyPlaces(lat, lon);
-    },
+      // Fetch nearby restaurants using Overpass API
+      const radius = 1000; // 1 km radius
+      const overpassQuery = `
+        [out:json];
+        node
+          ["amenity"="restaurant"]
+          (around:${radius},${lat},${lon});
+        out;
+      `;
+      const overpassUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`;
+      const restaurantRes = await fetch(overpassUrl);
+      const restaurantData = await restaurantRes.json();
 
-    async fetchNearbyPlaces(lat, lon) {
-      let filters = "";
-      const radiusLimit = 1000; // Fixed 1km radius for all categories
+      restaurantData.elements.forEach(place => {
+        const name = place.tags.name || "Unnamed Restaurant";
+        const plat = place.lat;
+        const plon = place.lon;
+        const pdistance = this.calculateDistance(
+          CEBU_NORTH_BUS.lat,
+          CEBU_NORTH_BUS.lon,
+          plat,
+          plon
+        );
+        const pfare = this.calculateJeepneyFare(pdistance);
 
-      for (const category of this.selectedCategories) {
-        filters += `node(around:${radiusLimit},${lat},${lon})[amenity=${category}];\n`;
-      }
-
-      if (!filters) {
-        alert("Please select at least one category.");
-        return;
-      }
-
-      const query = `[out:json];(${filters});out;`;
-      const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
-      const response = await fetch(url);
-      const data = await response.json();
-
-      this.markerCluster.clearLayers();
-      this.markers = [];
-
-      const icons = {
-        restaurant: L.icon({ iconUrl: "https://cdn-icons-png.flaticon.com/512/1046/1046784.png", iconSize: [50, 50] }),
-        cafe: L.icon({ iconUrl: "https://cdn-icons-png.flaticon.com/512/1046/1046790.png", iconSize: [50, 50] }),
-        fast_food: L.icon({ iconUrl: "https://cdn-icons-png.flaticon.com/512/1046/1046786.png", iconSize: [50, 50] }),
-        mall: L.icon({ iconUrl: "https://cdn-icons-png.flaticon.com/512/1046/1046787.png", iconSize: [50, 50] }),
-      };
-
-      data.elements.forEach(el => {
-        if (el.lat && el.lon) {
-          const name = el.tags.name || "Unnamed Place";
-          const type = el.tags.amenity || el.tags.shop;
-          const marker = L.marker([el.lat, el.lon], { icon: icons[type] || icons.restaurant })
-            .bindPopup(`
-              <div style='text-align: center; padding: 2px; font-size: 12px;'>
-                <h3 style='color: #007bff;'>${name}</h3>
-                <p><strong>Type:</strong> ${type}</p>
-              </div>
-            `);
-
-          this.markers.push(marker);
-          this.markerCluster.addLayer(marker);
-        }
+        L.marker([plat, plon])
+          .addTo(this.map)
+          .bindPopup(`
+            <div style="font-size:13px; text-align:center;">
+              🍴 <strong>${name}</strong><br>
+              📍 From: Cebu North Bus Terminal<br>
+              📏 Distance: ${pdistance.toFixed(2)} km<br>
+              🚌 Jeepney Fare: ₱${pfare}<br>
+              🍽 Type: Restaurant
+            </div>
+          `);
       });
-
-      this.map.addLayer(this.markerCluster);
     }
   }
 };
 </script>
+
+
+
 
 <style scoped>
 .popup-content {
@@ -231,7 +323,13 @@ export default {
     margin-top: 12px; /* Creates space between search & legend */
     text-align: center; /* Keeps layout balanced */
   }
+
+  .legend-items {
+    flex-wrap: wrap;   /* Allow wrapping on mobile */
+    justify-content: center;
+  }
 }
+
 .map-legend {
   position: static;
   background: rgba(255, 255, 255, 0.98);
@@ -239,7 +337,7 @@ export default {
   padding: 16px;
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
   width: 100%;
-  max-width: 300px;
+  max-width: none; /* remove fixed 300px so items can stretch */
   height: fit-content;
 }
 
@@ -256,10 +354,12 @@ export default {
 }
 
 .legend-items {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 12px;
+  display: flex;              /* horizontal layout */
+  flex-wrap: nowrap;          /* prevent wrapping by default */
+  justify-content: center;    /* center items */
+  gap: 12px;                  /* spacing between items */
   margin-top: 12px;
+  overflow-x: auto;           /* scroll if too many items */
 }
 
 .legend-item {
@@ -270,6 +370,7 @@ export default {
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.8);
   transition: all 0.2s;
+  flex: 0 0 auto;             /* prevent shrinking, keep items inline */
 }
 
 .legend-item:hover {
@@ -288,6 +389,7 @@ export default {
   color: #4b5563;
   white-space: nowrap;
 }
+
 
 .search-container {
   width: 100%;

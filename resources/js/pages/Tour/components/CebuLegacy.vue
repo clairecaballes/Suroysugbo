@@ -172,6 +172,7 @@ function next() {
 .slider-item {
   flex: 0 0 33.333%; /* Show exactly 3 items */
   padding: 0 1rem;
+  box-sizing: border-box;
   transition: all 0.3s ease;
 }
 
