@@ -277,7 +277,6 @@ export default {
 
 #map-section {
   position: relative;
-  
 }
 
 #map {
@@ -285,15 +284,18 @@ export default {
   width: 100%;
   z-index: 0; /* Keeps map behind navbar */
 }
+
 #map {
   max-height: calc(100vh - 80px); /* Adjust based on navbar height */
   overflow: hidden;
 }
+
 @media (max-width: 768px) {
   #map {
     height: 400px; /* Reduce map height for better visibility */
   }
 }
+
 @media (max-width: 768px) {
   .search-container {
     flex-direction: column; /* Stack elements vertically */
@@ -310,12 +312,14 @@ export default {
     justify-content: center;
   }
 }
+
 @media (max-width: 768px) {
   .search-container {
     flex-direction: column; /* Stacks elements */
     align-items: center;
   }
 }
+
 @media (max-width: 768px) {
   .map-legend {
     position: relative; /* Prevents overlap */
@@ -325,7 +329,7 @@ export default {
   }
 
   .legend-items {
-    flex-wrap: wrap;   /* Allow wrapping on mobile */
+    flex-wrap: wrap; /* Allow wrapping on mobile */
     justify-content: center;
   }
 }
@@ -390,11 +394,10 @@ export default {
   white-space: nowrap;
 }
 
-
 .search-container {
   width: 100%;
   max-width: 600px;
- margin: 0 auto;
+  margin: 0 auto;
   background: white;
   border-radius: 12px;
   padding: 4px;
@@ -534,13 +537,6 @@ export default {
 }
 
 :deep(.leaflet-control-zoom a) {
-  background: white !important;
-  color: #2563eb !important;
-  border: 1px solid #e5e7eb !important;
-}
-
-:deep(.leaflet-popup-content-wrapper) {
-  border-radius: 8px !important;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  background: white !
 }
 </style>
