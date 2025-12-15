@@ -315,51 +315,51 @@ export default {
   .search-container {
     flex-direction: column;
     align-items: stretch;
-    padding: 8px;
-    gap: 8px;
+    padding: 6px;
+    gap: 6px;
   }
 
   .search-input {
     width: 100% !important;
-    padding: 10px 12px !important;
+    padding: 8px 10px !important;
     text-align: left;
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .search-button {
     width: 100%;
-    padding: 10px 12px;
-    font-size: 14px;
+    padding: 8px 10px;
+    font-size: 13px;
   }
 
   .map-legend {
     width: 100%;
-    padding: 12px;
-    margin-top: 12px;
+    padding: 8px;
+    margin-top: 8px;
   }
 
   .legend-title {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .legend-items {
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
     overflow-x: visible;
   }
 
   .legend-item {
     flex: 0 0 auto;
-    padding: 6px 10px;
-    font-size: 12px;
+    padding: 4px 8px;
+    font-size: 11px;
   }
 
   .legend-item span {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   #map {
-    height: 350px;
+    height: 300px;
   }
 }
 
@@ -372,42 +372,42 @@ export default {
 
   .search-input {
     padding: 8px 10px !important;
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .search-button {
     padding: 8px 10px;
-    font-size: 13px;
-  }
-
-  .map-legend {
-    padding: 10px;
-  }
-
-  .legend-title {
     font-size: 12px;
   }
 
+  .map-legend {
+    padding: 8px;
+  }
+
+  .legend-title {
+    font-size: 11px;
+  }
+
   .legend-items {
-    gap: 6px;
+    gap: 5px;
   }
 
   .legend-item {
-    padding: 4px 8px;
-    font-size: 11px;
+    padding: 3px 6px;
+    font-size: 10px;
   }
 
   .legend-item img {
-    width: 16px !important;
-    height: 16px !important;
+    width: 14px !important;
+    height: 14px !important;
   }
 
   .legend-item span {
-    font-size: 11px;
+    font-size: 10px;
   }
 
   #map {
-    height: 300px;
+    height: 280px;
   }
 }
 
@@ -452,11 +452,11 @@ export default {
 .map-legend {
   position: static;
   background: rgba(255, 255, 255, 0.98);
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   width: 100%;
-  max-width: none; /* remove fixed 300px so items can stretch */
+  max-width: none;
   height: fit-content;
 }
 
@@ -567,27 +567,28 @@ export default {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto auto auto;
-  gap: 20px;
-  padding: 20px;
-  min-height: calc(100vh - 64px);
+  gap: 12px;
+  padding: 8px;
+  min-height: auto;
   background: #f8fafc;
 }
 
 .map-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  height: 100%;
+  gap: 8px;
+  height: auto;
   background: white;
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #map {
   flex: 1;
-  min-height: 600px;
-  border-radius: 12px;
+  min-height: 280px;
+  height: 280px;
+  border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
@@ -602,77 +603,46 @@ export default {
   box-sizing: border-box;
 }
 
-/* Ultra small screens - 220px width */
 @media (max-width: 320px) {
-  #map-section {
-    padding: 4px !important;
-  }
-
   .search-wrapper {
     padding: 4px;
   }
 
   .search-container {
-    padding: 2px !important;
+    padding: 4px;
     gap: 4px;
   }
 
   .search-input {
     font-size: 12px !important;
-    padding: 6px 4px !important;
-    padding-right: 40px !important;
+    padding: 6px 8px !important;
   }
 
   .search-button {
-    padding: 6px 8px !important;
+    padding: 6px 10px !important;
     font-size: 11px !important;
-  }
-
-  .search-button span {
-    display: none;
-  }
-
-  .search-button::after {
-    content: '🔍';
-  }
-
-  .map-element {
-    height: 250px !important;
-    margin-top: 4px !important;
   }
 
   .map-legend {
     padding: 6px !important;
-    margin-top: 6px !important;
-  }
-
-  .legend-header {
-    margin-bottom: 4px !important;
-    padding-bottom: 2px !important;
   }
 
   .legend-title {
+    font-size: 11px !important;
+  }
+
+  .legend-item {
+    padding: 3px 6px !important;
     font-size: 10px !important;
+  }
+
+  .legend-item img {
+    width: 14px !important;
+    height: 14px !important;
   }
 
   .legend-items {
     gap: 4px !important;
-    flex-wrap: wrap;
-  }
-
-  .legend-item {
-    padding: 2px 4px !important;
-    gap: 2px !important;
-    font-size: 9px !important;
-  }
-
-  .legend-item img {
-    width: 12px !important;
-    height: 12px !important;
-  }
-
-  .legend-item span {
-    font-size: 9px !important;
   }
 }
 
