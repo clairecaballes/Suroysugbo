@@ -1,6 +1,6 @@
 <template>
   <section class="user-ratings fade-background">
-    <h3 class="section-title">What Our Users Say</h3>
+    <h3 class="section-title">Share Your Experience</h3>
 
     <div class="reviews-grid">
       <div class="review-card" v-for="(review, index) in reviews" :key="index" :style="review.style">
@@ -134,15 +134,13 @@ onMounted(() => {
 }
 .section-title {
   position: relative;
-  font-size: 2.5rem;
-  background: linear-gradient(to right, #ffffff, #e2e8f0);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 1.5rem;
+  color: #ffffff;
   font-weight: 700;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
   font-family: 'Inter', sans-serif;
   text-align: center;
+  letter-spacing: -1.5px;
 }
 
 .reviews-grid {
@@ -398,8 +396,8 @@ onMounted(() => {
   }
   
   .section-title {
-    font-size: 2rem;
-    margin-bottom: 2rem;
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
   }
 
   .modal {
