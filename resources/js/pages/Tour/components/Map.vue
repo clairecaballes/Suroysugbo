@@ -2,18 +2,18 @@
   <section id="map-section" class="map-layout">
     <div class="map-container">
       <!-- Search Bar -->
-      <div class="flex justify-center w-full p-3 search-wrapper">
+      <div class="flex justify-center w-full search-wrapper">
         <div class="search-container">
           <div class="relative flex items-center justify-center w-full">
             <input 
               v-model="searchQuery" 
-              placeholder="🔍 Discover Places in Cebu"
-              class="search-input w-full pl-4 pr-24 py-3 text-center"
-              :style="{ textIndent: searchQuery ? '0' : '60px' }"
+              placeholder="🔍 Discover Places"
+              class="search-input w-full"
+              :style="{ textIndent: searchQuery ? '0' : '40px' }"
             >
             <button 
               @click="searchPlace"
-              class="search-button absolute right-3"
+              class="search-button absolute right-1"
             >
               <span>Explore</span>
             </button>
@@ -21,13 +21,13 @@
         </div>
       </div>
       <!-- Map -->
-      <div id="map" style="height: 500px; width: 100%; margin-top: 10px;"></div>
+      <div id="map" class="map-element"></div>
     </div>
 
     <!-- Legend moved outside -->
     <div class="map-legend">
       <div class="legend-header">
-        <span class="legend-title">📍 Places to Visit</span>
+        <span class="legend-title">📍 Places</span>
       </div>
       <div class="legend-items">
         <div class="legend-item">
@@ -48,7 +48,7 @@
         </div>
         <div class="legend-item">
           <img src="https://cdn-icons-png.flaticon.com/512/1046/1046785.png" alt="Search Location" />
-          <span>Your Search</span>
+          <span>Search</span>
         </div>
       </div>
     </div>
@@ -110,17 +110,30 @@ export default {
 
         const fare = this.calculateJeepneyFare(distance);
 
-        L.marker([place.lat, place.lon])
-  .addTo(this.map)
-  .bindPopup(`
-    <div style="font-size:13px; text-align:center;">
-      📍 <strong>${place.name}</strong><br>
-      📍 From: Cebu North Bus Terminal<br>
-      📏 Distance: ${distance.toFixed(2)} km<br>
-      🚌 Jeepney Fare: ₱${fare}<br>
-      🏷 Type: ${place.type}
-    </div>
-  `);
+        // Create emoji marker icon
+        const redPinSvg = `
+          <div style="font-size: 40px; text-align: center;">📍</div>
+        `;
+
+        const redPinIcon = L.divIcon({
+          html: redPinSvg,
+          iconSize: [40, 40],
+          iconAnchor: [20, 40],
+          popupAnchor: [0, -40],
+          className: 'emoji-marker',
+        });
+
+        L.marker([place.lat, place.lon], { icon: redPinIcon })
+          .addTo(this.map)
+          .bindPopup(`
+            <div style="font-size:13px; text-align:center;">
+              📍 <strong>${place.name}</strong><br>
+              📍 From: Cebu North Bus Terminal<br>
+              📏 Distance: ${distance.toFixed(2)} km<br>
+              🚌 Jeepney Fare: ₱${fare}<br>
+              🏷 Type: ${place.type}
+            </div>
+          `);
 
       }
     });
@@ -285,7 +298,8 @@ export default {
   z-index: 0; /* Keeps map behind navbar */
 }
 
-#map {
+#map,
+.map-element {
   max-height: calc(100vh - 80px); /* Adjust based on navbar height */
   overflow: hidden;
 }
@@ -293,6 +307,107 @@ export default {
 @media (max-width: 768px) {
   #map {
     height: 400px; /* Reduce map height for better visibility */
+  }
+}
+
+/* Small screens - search bar and legend optimization */
+@media (max-width: 640px) {
+  .search-container {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .search-input {
+    width: 100% !important;
+    padding: 10px 12px !important;
+    text-align: left;
+    font-size: 14px;
+  }
+
+  .search-button {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .map-legend {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+  }
+
+  .legend-title {
+    font-size: 13px;
+  }
+
+  .legend-items {
+    flex-wrap: wrap;
+    gap: 8px;
+    overflow-x: visible;
+  }
+
+  .legend-item {
+    flex: 0 0 auto;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .legend-item span {
+    font-size: 12px;
+  }
+
+  #map {
+    height: 350px;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .search-container {
+    padding: 6px;
+    gap: 6px;
+  }
+
+  .search-input {
+    padding: 8px 10px !important;
+    font-size: 13px;
+  }
+
+  .search-button {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .map-legend {
+    padding: 10px;
+  }
+
+  .legend-title {
+    font-size: 12px;
+  }
+
+  .legend-items {
+    gap: 6px;
+  }
+
+  .legend-item {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  .legend-item img {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .legend-item span {
+    font-size: 11px;
+  }
+
+  #map {
+    height: 300px;
   }
 }
 
@@ -475,6 +590,90 @@ export default {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.search-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: white;
+  padding: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Ultra small screens - 220px width */
+@media (max-width: 320px) {
+  #map-section {
+    padding: 4px !important;
+  }
+
+  .search-wrapper {
+    padding: 4px;
+  }
+
+  .search-container {
+    padding: 2px !important;
+    gap: 4px;
+  }
+
+  .search-input {
+    font-size: 12px !important;
+    padding: 6px 4px !important;
+    padding-right: 40px !important;
+  }
+
+  .search-button {
+    padding: 6px 8px !important;
+    font-size: 11px !important;
+  }
+
+  .search-button span {
+    display: none;
+  }
+
+  .search-button::after {
+    content: '🔍';
+  }
+
+  .map-element {
+    height: 250px !important;
+    margin-top: 4px !important;
+  }
+
+  .map-legend {
+    padding: 6px !important;
+    margin-top: 6px !important;
+  }
+
+  .legend-header {
+    margin-bottom: 4px !important;
+    padding-bottom: 2px !important;
+  }
+
+  .legend-title {
+    font-size: 10px !important;
+  }
+
+  .legend-items {
+    gap: 4px !important;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    padding: 2px 4px !important;
+    gap: 2px !important;
+    font-size: 9px !important;
+  }
+
+  .legend-item img {
+    width: 12px !important;
+    height: 12px !important;
+  }
+
+  .legend-item span {
+    font-size: 9px !important;
+  }
 }
 
 .search-wrapper {
