@@ -100,12 +100,21 @@
       v-if="isModalOpen"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
     >
+    
+      <button
+        @click="toggleMusic"
+        class="music-btn absolute left-4 bottom-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+      >
+        {{ isPlaying ? "🔇 Stop Music" : "🔊 Play Music" }}
+      </button>
+    
+
       <!-- Instruction Popup -->
       <div v-if="showInstructions" class="fixed inset-0 flex items-center justify-center z-60 p-4">
         <div class="bg-white rounded-lg shadow-2xl p-8 max-w-sm w-full text-center">
           <h3 class="text-xl font-bold mb-4 text-gray-800">360° View Instructions</h3>
           <p class="text-gray-600 mb-6 text-lg">
-            Drag or tilt the view to see the whole 360 view.
+            Drag or tilt your device to see the whole 360 view.
           </p>
           <button
             @click="showInstructions = false"
@@ -125,12 +134,7 @@
         </button>
         <div id="street-view" class="street-view"></div>
       </div>
-      <button
-        @click="toggleMusic"
-        class="music-btn absolute left-4 bottom-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >
-        {{ isPlaying ? "🔇 Stop Music" : "🔊 Play Music" }}
-      </button>
+   
     </div>
   </div>
 </template>
