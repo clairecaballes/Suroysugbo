@@ -127,7 +127,7 @@ function next() {
 <style scoped>
 .slider-section {
   padding: 4rem 2rem;
-  background: linear-gradient(180deg, #1a365d 0%, #f5f6f8 100%);
+  background: linear-gradient(180deg, #f8fafc 0%, #f5f6f8 100%);
   position: relative;
   overflow: hidden;
 }
@@ -176,11 +176,7 @@ function next() {
   transition: all 0.3s ease;
 }
 
-/* Middle item elevation */
-.slider-item:nth-child(3n-1) .slider-image-wrapper {
-  transform: translateY(-20px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-}
+
 
 .slider-item:nth-child(3n-1):hover .slider-image-wrapper {
   transform: translateY(-30px);

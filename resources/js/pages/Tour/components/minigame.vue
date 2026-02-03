@@ -303,6 +303,34 @@ onUnmounted(() => {
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(32, 32, 32, 0.2);
   text-align: center;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 700;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  position: relative;
+  z-index: 10;
+  
+  /* Modern gradient text */
+  background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 50%, #2563eb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  
+  /* Text effects */
+  text-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
+  letter-spacing: 1px;
+  
+  /* Hover animation */
+  transition: all 0.3s ease;
 }
 
 .game-board {
@@ -366,13 +394,16 @@ onUnmounted(() => {
 }
 
 .card-back img {
-  width: 85%;
-  height: 70%;
+  width: 80%;
+  height: 55%;
   border-radius: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   object-fit: cover;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
+  border: 2px solid #e2e8f0;
+  padding: 2px;
+  background-color: white;
 }
 
 .card.flipped:hover .card-back img {
@@ -385,6 +416,15 @@ onUnmounted(() => {
   color: #2563eb;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  word-wrap: break-word;
+  white-space: normal;
+  padding: 0 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.2;
 }
 
 .message {
@@ -506,8 +546,9 @@ background: #3414ea; /* darker green */
   }
 
   h2 {
-    font-size: 0.9rem; /* scaled down but still readable */
+    font-size: 1.2rem;
     text-align: center;
+    margin-bottom: 1rem;
   }
 }
 
@@ -663,6 +704,75 @@ background: #3414ea; /* darker green */
   0% { opacity: 1; }
   50% { opacity: 0.5; }
   100% { opacity: 1; }
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .game-container {
+    max-width: 100%;
+    margin: 30px auto;
+    padding: 1rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: #1e3a8a;
+  }
+
+  .game-board {
+    grid-template-columns: repeat(3, auto);
+    gap: 8px;
+  }
+
+  .card {
+    width: 100px;
+    height: 100px;
+  }
+
+  .card-front {
+    font-size: 26px;
+  }
+
+  .card-back div {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-board {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    padding: 0 8px;
+  }
+
+  .card {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    min-width: 75px;
+    max-width: 110px;
+  }
+
+  .card-front {
+    font-size: 22px;
+  }
+
+  .card-back {
+    font-size: 13px;
+  }
+
+  .card-back div {
+    font-size: 11px;
+    line-height: 1.1;
+    padding: 0 3px;
+  }
+
+  .card-back img {
+    height: 65%;
+    margin-bottom: 6px;
+  }
 }
 
 /* Times Up Modal Styles */

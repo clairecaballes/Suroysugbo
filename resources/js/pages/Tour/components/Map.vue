@@ -20,6 +20,7 @@
           </div>
         </div>
       </div>
+      <button class="center-button" @click="centerOnMe">🧍‍♂️ Me</button>
       <!-- Map -->
       <div id="map" class="map-element"></div>
     </div>
@@ -31,23 +32,23 @@
       </div>
       <div class="legend-items">
         <div class="legend-item">
-          <img src="https://cdn-icons-png.flaticon.com/512/1046/1046784.png" alt="Restaurant" />
+          <span class="legend-emoji">🍽️</span>
           <span>Restaurant</span>
         </div>
         <div class="legend-item">
-          <img src="https://cdn-icons-png.flaticon.com/512/1046/1046790.png" alt="Cafe" />
+          <span class="legend-emoji">☕</span>
           <span>Cafe</span>
         </div>
         <div class="legend-item">
-          <img src="https://cdn-icons-png.flaticon.com/512/1046/1046786.png" alt="Fast Food" />
+          <span class="legend-emoji">🍔</span>
           <span>Fast Food</span>
         </div>
         <div class="legend-item">
-          <img src="https://cdn-icons-png.flaticon.com/512/1046/1046787.png" alt="Mall" />
+          <span class="legend-emoji">🏬</span>
           <span>Mall</span>
         </div>
         <div class="legend-item">
-          <img src="https://cdn-icons-png.flaticon.com/512/1046/1046785.png" alt="Search Location" />
+          <span class="legend-emoji">📍</span>
           <span>Search</span>
         </div>
       </div>
@@ -70,7 +71,6 @@ const LANDMARKS = [
   { name: "Cebu North Bus Terminal", lat: 10.3111, lon: 123.9158, type: "Transport Terminal" }
 ];
 
-
 export default {
   name: "Map",
 
@@ -79,13 +79,17 @@ export default {
       searchQuery: "",
       map: null,
       markerCluster: null,
-      searchCenterMarker: null
+      searchCenterMarker: null,
+      userMarker: null, // marker for "Center on Me"
     };
   },
 
   mounted() {
     // Initialize map
-    this.map = L.map("map").setView([10.2923, 123.9024], 13);
+   this.map = L.map("map", {
+  minZoom: 13,
+  maxZoom: 18
+}).setView([10.2923, 123.9024], 13); // initial center Cebu
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "&copy; OpenStreetMap contributors"
@@ -98,7 +102,7 @@ export default {
       place => place.name === "Cebu North Bus Terminal"
     );
 
-    // Add landmark pins with distance & fare
+    // Add landmark pins with emoji 📍
     LANDMARKS.forEach(place => {
       if (place.name !== "Cebu North Bus Terminal") {
         const distance = this.calculateDistance(
@@ -110,20 +114,15 @@ export default {
 
         const fare = this.calculateJeepneyFare(distance);
 
-        // Create emoji marker icon
-        const redPinSvg = `
-          <div style="font-size: 40px; text-align: center;">📍</div>
-        `;
-
-        const redPinIcon = L.divIcon({
-          html: redPinSvg,
+        const pinIcon = L.divIcon({
+          html: `<div style="font-size: 40px; text-align: center;">📍</div>`,
           iconSize: [40, 40],
           iconAnchor: [20, 40],
           popupAnchor: [0, -40],
           className: 'emoji-marker',
         });
 
-        L.marker([place.lat, place.lon], { icon: redPinIcon })
+        L.marker([place.lat, place.lon], { icon: pinIcon })
           .addTo(this.map)
           .bindPopup(`
             <div style="font-size:13px; text-align:center;">
@@ -134,16 +133,14 @@ export default {
               🏷 Type: ${place.type}
             </div>
           `);
-
       }
     });
   },
-  
 
   methods: {
     // DISTANCE (HAVERSINE)
     calculateDistance(lat1, lon1, lat2, lon2) {
-      const R = 6371; // km
+      const R = 6371;
       const dLat = (lat2 - lat1) * Math.PI / 180;
       const dLon = (lon2 - lon1) * Math.PI / 180;
 
@@ -157,19 +154,19 @@ export default {
       return R * c;
     },
 
-    // JEEPNEY FARE ESTIMATE
+    // JEEPNEY FARE
     calculateJeepneyFare(distanceKm) {
-      const baseFare = 15; // first 4 km
+      const baseFare = 15;
       const extraPerKm = 2;
       if (distanceKm <= 4) return baseFare;
       return baseFare + Math.ceil(distanceKm - 4) * extraPerKm;
     },
 
-    // SEARCH PLACE & NEARBY RESTAURANTS
+    // SEARCH PLACE & NEARBY PLACES
     async searchPlace() {
       if (!this.searchQuery) return;
 
-      // Nominatim search restricted to Cebu City
+      // Search via Nominatim
       const url = `https://nominatim.openstreetmap.org/search?format=json&q=${this.searchQuery}&bounded=1&viewbox=123.85,10.23,123.95,10.35`;
       const response = await fetch(url);
       const data = await response.json();
@@ -181,80 +178,53 @@ export default {
 
       const lat = parseFloat(data[0].lat);
       const lon = parseFloat(data[0].lon);
-
       this.map.setView([lat, lon], 15);
 
-      if (this.searchCenterMarker) {
-        this.map.removeLayer(this.searchCenterMarker);
-      }
+      if (this.searchCenterMarker) this.map.removeLayer(this.searchCenterMarker);
 
       const CEBU_NORTH_BUS = LANDMARKS.find(
         place => place.name === "Cebu North Bus Terminal"
       );
 
-      // Distance & fare for searched place
-      let distance = this.calculateDistance(
-        CEBU_NORTH_BUS.lat,
-        CEBU_NORTH_BUS.lon,
-        lat,
-        lon
+      const distance = Math.min(
+        this.calculateDistance(CEBU_NORTH_BUS.lat, CEBU_NORTH_BUS.lon, lat, lon),
+        30
       );
-
-      const maxDistanceKm = 30; // limit
-      if (distance > maxDistanceKm) distance = maxDistanceKm;
-
       const fare = this.calculateJeepneyFare(distance);
 
-      // Marker for searched place
+      // Marker for searched place with 📍 emoji
       this.searchCenterMarker = L.marker([lat, lon], {
-        icon: L.icon({
-          iconUrl: "https://cdn-icons-png.flaticon.com/512/1046/1046785.png",
-          iconSize: [60, 60],
+        icon: L.divIcon({
+          html: `<div style="font-size: 40px; line-height:1; transform: translate(-50%, -100%);">📍</div>`,
+          iconSize: [40, 40],
+          iconAnchor: [20, 40],
+          popupAnchor: [0, -40],
+          className: ''
         }),
-      })
-        .addTo(this.map)
+      }).addTo(this.map)
         .bindPopup(`
           <div class="popup-content">
             <h3 style="color:#2563eb;">${this.searchQuery}</h3>
             <p style="font-size:12px;">📍 From: Cebu North Bus Terminal</p>
             <p style="font-size:12px;">📏 Distance: ${distance.toFixed(2)} km</p>
-            <p style="font-size:13px; font-weight:600; color:#16a34a;">
-              🚌 Jeepney Fare: ₱${fare}
-            </p>
+            <p style="font-size:13px; font-weight:600; color:#16a34a;">🚌 Jeepney Fare: ₱${fare}</p>
             <p style="font-size:12px;">🍴 Type: Search Result</p>
-            <small style="font-size:10px; color:#6b7280;">
-              *Estimated fare only
-            </small>
+            <small style="font-size:10px; color:#6b7280;">*Estimated fare only</small>
           </div>
         `)
         .openPopup();
 
-      // Icon mapping based on amenity type (matching legend icons)
+      // Emoji map for nearby places
       const iconMap = {
-        restaurant: {
-          url: "https://cdn-icons-png.flaticon.com/512/1046/1046784.png",
-          label: "Restaurant"
-        },
-        cafe: {
-          url: "https://cdn-icons-png.flaticon.com/512/1046/1046790.png",
-          label: "Cafe"
-        },
-        fast_food: {
-          url: "https://cdn-icons-png.flaticon.com/512/1046/1046786.png",
-          label: "Fast Food"
-        },
-        mall: {
-          url: "https://cdn-icons-png.flaticon.com/512/1046/1046787.png",
-          label: "Mall"
-        },
-        bar: {
-          url: "https://cdn-icons-png.flaticon.com/512/1046/1046790.png",
-          label: "Bar"
-        }
+        restaurant: { emoji: "🍽️", label: "Restaurant" },
+        cafe: { emoji: "☕", label: "Cafe" },
+        fast_food: { emoji: "🍔", label: "Fast Food" },
+        mall: { emoji: "🏬", label: "Mall" },
+        bar: { emoji: "🍹", label: "Bar" },
       };
 
-      // Fetch nearby places using Overpass API (restaurants, cafes, fast food, bars)
-      const radius = 1000; // 1 km radius
+      // Fetch nearby places via Overpass API
+      const radius = 1000;
       const overpassQuery = `
         [out:json];
         (
@@ -275,31 +245,24 @@ export default {
         const plat = place.lat;
         const plon = place.lon;
         const pdistance = this.calculateDistance(
-          CEBU_NORTH_BUS.lat,
-          CEBU_NORTH_BUS.lon,
-          plat,
-          plon
+          CEBU_NORTH_BUS.lat, CEBU_NORTH_BUS.lon, plat, plon
         );
         const pfare = this.calculateJeepneyFare(pdistance);
 
-        // Get icon based on amenity type
-        const iconData = iconMap[amenity] || {
-          url: "https://cdn-icons-png.flaticon.com/512/1046/1046784.png",
-          label: "Place"
-        };
-
-        const placeIcon = L.icon({
-          iconUrl: iconData.url,
-          iconSize: [50, 50],
-          iconAnchor: [25, 50],
-          popupAnchor: [0, -50],
+        const iconData = iconMap[amenity] || { emoji: "📍", label: "Place" };
+        const placeIcon = L.divIcon({
+          html: `<div style="font-size:28px; text-align:center;">${iconData.emoji}</div>`,
+          iconSize: [28, 28],
+          iconAnchor: [14, 28],
+          popupAnchor: [0, -28],
+          className: 'emoji-marker'
         });
 
         L.marker([plat, plon], { icon: placeIcon })
           .addTo(this.map)
           .bindPopup(`
             <div style="font-size:13px; text-align:center;">
-              🍴 <strong>${name}</strong><br>
+              ${iconData.emoji} <strong>${name}</strong><br>
               📍 From: Cebu North Bus Terminal<br>
               📏 Distance: ${pdistance.toFixed(2)} km<br>
               🚌 Jeepney Fare: ₱${pfare}<br>
@@ -307,7 +270,43 @@ export default {
             </div>
           `);
       });
+    },
+
+    // CENTER ON USER BUTTON
+    centerOnMe() {
+  if (!navigator.geolocation) {
+    alert("Geolocation is not supported by your browser.");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const { latitude, longitude } = pos.coords;
+
+      // Center map
+      this.map.setView([latitude, longitude], 16);
+
+      // Add emoji marker for user
+      const userMarker = L.divIcon({
+        html: `<div style="font-size: 36px; text-align:center;">🧍‍♂️</div>`,
+        iconSize: [36, 36],
+        iconAnchor: [18, 36],
+        popupAnchor: [0, -36],
+        className: 'emoji-marker'
+      });
+
+      L.marker([latitude, longitude], { icon: userMarker })
+        .addTo(this.map)
+        .bindPopup(`<strong>You are here</strong>`)
+        .openPopup();
+    },
+    (err) => {
+      alert("Unable to retrieve your location.");
+      console.error(err);
     }
+  );
+}
+
   }
 };
 </script>
@@ -458,17 +457,18 @@ export default {
 .legend-item {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.8);
-  transition: all 0.2s;
-  flex: 0 0 auto;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: #ffffffff; /* light gray background */
+  transition: all 0.2s ease;
+  cursor: default;
 }
 
 .legend-item:hover {
-  background: rgba(255, 255, 255, 1);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  background: #e0f7fa; /* subtle hover color */
 }
 
 .legend-item img {
@@ -477,11 +477,60 @@ export default {
   object-fit: contain;
 }
 
+.legend-emoji {
+  font-size: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+.legend-item:nth-child(1) .legend-emoji { background: #ffe0b2; } /* Restaurant - light orange */
+.legend-item:nth-child(2) .legend-emoji { background: #fff9c4; } /* Cafe - light yellow */
+.legend-item:nth-child(3) .legend-emoji { background: #ffccbc; } /* Fast Food - salmon */
+.legend-item:nth-child(4) .legend-emoji { background: #b3e5fc; } /* Mall - light blue */
+.legend-item:nth-child(5) .legend-emoji { background: #c8e6c9; } /* Search - light green */
+
+
 .legend-item span {
   font-size: 13px;
   color: #4b5563;
   white-space: nowrap;
 }
+.legend-item span:last-child {
+  font-weight: 600;
+  color: #1a0b0bff;
+}
+
+.center-button {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  z-index: 1000;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: all 0.2s ease;
+}
+
+.center-button:hover {
+  transform: translateY(-2px);
+  background: #3b82f6;
+}
+
 
 /* Custom Leaflet Styling */
 :deep(.leaflet-control-zoom) {

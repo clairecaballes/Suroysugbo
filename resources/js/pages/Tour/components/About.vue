@@ -61,7 +61,7 @@ export default {
 <style scoped>
 .about-container {
   min-height: 100vh;
-  background: linear-gradient(180deg, #1a365d 0%, #ffffff 100%);
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
   position: relative;
 }
 
@@ -80,10 +80,10 @@ export default {
   left: 0;
   right: 0;
   height: 40px;
-  background: linear-gradient(45deg, transparent 33.333%, #ffffff 33.333%, #ffffff 66.666%, transparent 66.666%),
+  background: linear-gradient(45deg, transparent 33.333%, #ffffffff 33.333%, #ffffff 66.666%, transparent 66.666%),
               linear-gradient(-45deg, transparent 33.333%, #ffffff 33.333%, #ffffff 66.666%, transparent 66.666%);
   background-size: 20px 40px;
-  opacity: 0.1;
+  opacity: .75;
 }
 
 .brand {
@@ -143,9 +143,10 @@ export default {
 }
 
 .feature-item:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  border-color: #3b82f6;
+    transform: translateY(-10px);
+  box-shadow:
+    0 20px 40px rgba(0, 188, 212, 0.35),
+    0 0 25px rgba(0, 188, 212, 0.25);
 }
 
 .icon {
