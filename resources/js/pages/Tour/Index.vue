@@ -2,12 +2,12 @@
    <button 
     v-if="isIframeOpen"
       @click="closeModal"
-      class="back-button"
+      class="fixed top-4 left-4 z-50 bg-white hover:bg-gray-100 text-gray-800 px-4 py-2 rounded-lg shadow-lg transition-colors flex items-center gap-2 border border-gray-300"
     >
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
       </svg>
-      <span>Back</span>
+      Back
     </button>
   <div v-if="isIframeOpen">
     <!-- Back button -->
@@ -84,73 +84,9 @@ provide("openIframe", openIframe);
 </script>
 
 <style scoped>
-/* Back button with modern glassmorphism and gradient theme */
-.back-button {
-  position: fixed;
-  top: 1.5rem;
-  left: 1.5rem;
-  z-index: 50;
-  
-  /* Modern glassmorphism effect */
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  
-  /* Gradient accent border */
-  border: 1.5px solid;
-  border-image: linear-gradient(135deg, #3b82f6, #1e3a8a) 1;
-  
-  /* Padding and sizing */
-  padding: 0.65rem 1.25rem;
-  border-radius: 0.75rem;
-  
-  /* Typography */
-  color: #1e3a8a;
-  font-weight: 600;
-  font-size: 0.95rem;
-  
-  /* Layout */
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  
-  /* Transitions */
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
-  /* Shadow */
-  box-shadow: 0 10px 30px rgba(30, 58, 138, 0.15);
-  
-  /* Cursor */
-  cursor: pointer;
-  font-family: inherit;
-  border-collapse: collapse;
-}
-
-.back-button:hover {
-  /* Gradient background on hover */
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(30, 58, 138, 0.1));
-  backdrop-filter: blur(12px);
-  
-  /* Enhanced shadow */
-  box-shadow: 0 15px 40px rgba(30, 58, 138, 0.25);
-  
-  /* Subtle scale */
-  transform: translateY(-2px);
-}
-
-.back-button:active {
-  transform: translateY(0);
-  box-shadow: 0 8px 20px rgba(30, 58, 138, 0.15);
-}
-
-.back-button svg {
-  stroke-width: 2.5;
-  flex-shrink: 0;
-}
-
 /* Scoped styles for the modal overlay and content */
 .modal-overlay {
-  background-color: rgba(255, 255, 255, 0.93); /* Dark semi-transparent background */
+  background-color: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
   backdrop-filter: blur(5px); /* Optional: blur effect for the background */
   z-index: 999; /* Ensure it's on top */
 }
