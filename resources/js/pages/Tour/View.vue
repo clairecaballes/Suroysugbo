@@ -103,7 +103,7 @@
     
       <button
         @click="toggleMusic"
-        class="music-btn absolute left-4 bottom-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        class="music-btn absolute left-4 top-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
       >
         {{ isPlaying ? "🔇 Stop Music" : "🔊 Play Music" }}
       </button>
