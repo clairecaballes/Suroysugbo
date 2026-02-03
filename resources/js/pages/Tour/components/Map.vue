@@ -229,21 +229,49 @@ export default {
         `)
         .openPopup();
 
-      // Fetch nearby restaurants using Overpass API
+      // Icon mapping based on amenity type (matching legend icons)
+      const iconMap = {
+        restaurant: {
+          url: "https://cdn-icons-png.flaticon.com/512/1046/1046784.png",
+          label: "Restaurant"
+        },
+        cafe: {
+          url: "https://cdn-icons-png.flaticon.com/512/1046/1046790.png",
+          label: "Cafe"
+        },
+        fast_food: {
+          url: "https://cdn-icons-png.flaticon.com/512/1046/1046786.png",
+          label: "Fast Food"
+        },
+        mall: {
+          url: "https://cdn-icons-png.flaticon.com/512/1046/1046787.png",
+          label: "Mall"
+        },
+        bar: {
+          url: "https://cdn-icons-png.flaticon.com/512/1046/1046790.png",
+          label: "Bar"
+        }
+      };
+
+      // Fetch nearby places using Overpass API (restaurants, cafes, fast food, bars)
       const radius = 1000; // 1 km radius
       const overpassQuery = `
         [out:json];
-        node
-          ["amenity"="restaurant"]
-          (around:${radius},${lat},${lon});
+        (
+          node["amenity"="restaurant"](around:${radius},${lat},${lon});
+          node["amenity"="cafe"](around:${radius},${lat},${lon});
+          node["amenity"="fast_food"](around:${radius},${lat},${lon});
+          node["amenity"="bar"](around:${radius},${lat},${lon});
+        );
         out;
       `;
       const overpassUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`;
-      const restaurantRes = await fetch(overpassUrl);
-      const restaurantData = await restaurantRes.json();
+      const placeRes = await fetch(overpassUrl);
+      const placeData = await placeRes.json();
 
-      restaurantData.elements.forEach(place => {
-        const name = place.tags.name || "Unnamed Restaurant";
+      placeData.elements.forEach(place => {
+        const amenity = place.tags.amenity || "unknown";
+        const name = place.tags.name || `Unnamed ${amenity}`;
         const plat = place.lat;
         const plon = place.lon;
         const pdistance = this.calculateDistance(
@@ -254,7 +282,20 @@ export default {
         );
         const pfare = this.calculateJeepneyFare(pdistance);
 
-        L.marker([plat, plon])
+        // Get icon based on amenity type
+        const iconData = iconMap[amenity] || {
+          url: "https://cdn-icons-png.flaticon.com/512/1046/1046784.png",
+          label: "Place"
+        };
+
+        const placeIcon = L.icon({
+          iconUrl: iconData.url,
+          iconSize: [50, 50],
+          iconAnchor: [25, 50],
+          popupAnchor: [0, -50],
+        });
+
+        L.marker([plat, plon], { icon: placeIcon })
           .addTo(this.map)
           .bindPopup(`
             <div style="font-size:13px; text-align:center;">
@@ -262,7 +303,7 @@ export default {
               📍 From: Cebu North Bus Terminal<br>
               📏 Distance: ${pdistance.toFixed(2)} km<br>
               🚌 Jeepney Fare: ₱${pfare}<br>
-              🍽 Type: Restaurant
+              📌 Type: ${iconData.label}
             </div>
           `);
       });
