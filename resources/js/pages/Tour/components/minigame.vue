@@ -298,10 +298,10 @@ onUnmounted(() => {
 .game-container {  
   max-width: 800px; /* Reduced from 800px */
   margin: 50px auto;
-  background: rgba(255, 255, 255, 0);
+  background: rgba(255, 255, 255, 0.42);
   padding: 1.5rem; /* Reduced padding */
   border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(32, 32, 32, 0.2);
+  box-shadow: 0 8px 24px rgba(32, 32, 32, 0.46);
   text-align: center;
   display: block;
   visibility: visible;

@@ -165,20 +165,20 @@ onMounted(() => {
   animation: fadeIn 0.6s ease-out forwards;
   animation-delay: calc(var(--index, 0) * 0.1s);
   opacity: 0;
-  background: linear-gradient(135deg, #4551ffff 0%, #8dcffcff 50%, #f5f3ff 100%);
+  background: linear-gradient(135deg, #ffffffff 0%, #8dcffcff 50%, #f5f3ff 100%);
   border-radius: 16px;
   padding: 2rem;
   width: 340px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
   transition: all 0.3s ease;
   border: 1px solid rgba(139, 92, 246, 0.1);
 }
 
 .review-card:hover {
   transform: translateY(-5px);
-  background: linear-gradient(135deg, #f0f9ff 0%, #00ffffff 50%, #f8fafc 100%);
+  background: linear-gradient(135deg, #f0f9ff 0%, #cfffffff 50%, #f8fafc 100%);
   border-color: rgba(59, 130, 246, 0.3);
-  box-shadow: 0 12px 24px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 12px 24px rgba(171, 255, 248, 1);
 }
 
 .review-text {

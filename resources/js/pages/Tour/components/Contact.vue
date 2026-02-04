@@ -19,9 +19,24 @@
             <i class="fas fa-envelope"></i>
             <div class="info-content">
               <h3>Email</h3>
-              <a href="https://mail.google.com/mail/?view=cm&to=cleyrni@gmail.com" target="_blank">
-                cleyrni@gmail.com
-              </a>
+              <a href="mailto:jeanpics1@gmail.com"
+   onclick="
+      var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if (isMobile) {
+          var now = Date.now();
+          window.location = 'googlegmail://co?to=jeanpics1@gmail.com';
+          setTimeout(function() {
+              if (Date.now() - now < 1000) window.location = 'mailto:jeanpics1@gmail.com';
+          }, 500);
+          return false;
+      } else {
+          window.open('https://mail.google.com/mail/?view=cm&to=jeanpics1@gmail.com', '_blank');
+          return false;
+      }
+   ">
+   jeanpics1@gmail.com
+</a>
+
             </div>
           </div>
           
