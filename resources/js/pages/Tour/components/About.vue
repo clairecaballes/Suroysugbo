@@ -191,7 +191,7 @@ export default {
 
 @media (max-width: 768px) {
   .header-section {
-    padding: 3rem 1rem;
+    padding: 3rem 1.25rem;
     margin-bottom: 2rem;
   }
 

@@ -20,7 +20,7 @@
           </div>
         </div>
       </div>
-      <button class="center-button" @click="centerOnMe">🧍‍♂️ Me</button>
+     
       <!-- Map -->
       <div id="map" class="map-element"></div>
     </div>
@@ -51,6 +51,10 @@
           <span class="legend-emoji">📍</span>
           <span>Search</span>
         </div>
+         <button class="center-button" @click="centerOnMe">
+         <span class="me-icon">🧍‍♂️</span>
+        <span class="me-text">Locate Me</span>
+        </button>
       </div>
     </div>
   </section>
@@ -87,8 +91,8 @@ export default {
   mounted() {
     // Initialize map
    this.map = L.map("map", {
-  minZoom: 13,
-  maxZoom: 18
+  minZoom: 16,
+  maxZoom: 17
 }).setView([10.2923, 123.9024], 13); // initial center Cebu
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -507,28 +511,35 @@ export default {
 }
 
 .center-button {
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
-  z-index: 1000;
-  background: #2563eb;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
-  font-size: 22px;
-  cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 2px;
+
+  background: #2469ffff;
+  color: white;
+  border: none;
+  border-radius: 777px; /* pill shape */
+
+  padding: 8px 10px;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   transition: all 0.2s ease;
 }
 
 .center-button:hover {
-  transform: translateY(-2px);
   background: #3b82f6;
+  transform: translateX(5px);
+}
+.me-icon {
+  font-size: 25px;
+  line-height: .5;
+}
+
+.me-text {
+  white-space: nowrap;
 }
 
 
@@ -664,7 +675,22 @@ export default {
   }
 
   .legend-item span {
-    font-size: 11px;
+    font-size: 30px;
+  }
+  .map-legend .legend-item {
+    padding: 7px 10px;      /* bigger touch area */
+    gap: 5px;
+  }
+
+  .map-legend .legend-emoji {
+    font-size: 30px;         /* bigger emoji */
+    width: 33px;
+    height: 33px;
+  }
+
+  .map-legend .legend-item span {
+    font-size: 14px;         /* bigger text */
+    font-weight: 600;
   }
 }
 
