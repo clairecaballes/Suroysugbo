@@ -8,7 +8,7 @@
       <div class="slider">
         <div
           class="slider-track"
-          :style="{ transform: `translateX(-${currentIndex * 100 / itemsPerRow}%)` }"
+          :style="{ transform: `translateX(-${currentIndex * (100 / itemsPerRow)}%)` }"
         >
           <div
             class="slider-item"
@@ -129,8 +129,14 @@ function next() {
   padding: 4rem 2rem;
   background: linear-gradient(180deg, #f8fafc 0%, #f5f6f8 100%);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+
 }
+.slider {
+  overflow: hidden;
+  width: 100%;
+}
+
 
 .section-header {
   text-align: center;
@@ -164,14 +170,15 @@ function next() {
 }
 
 .slider-track {
+  gap: 2rem;
   display: flex;
   transition: transform 0.5s ease-in-out;
   width: 100%;
   padding: 2rem 0;
 }
 .slider-item {
-  flex: 0 0 33.333%; /* Show exactly 3 items */
-  padding: 0 1rem;
+  flex: 0 0 calc(100% / 3);
+  box-sizing: border-box;
   box-sizing: border-box;
   transition: all 0.3s ease;
 }
@@ -264,8 +271,9 @@ function next() {
   opacity: 1;
 }
 .slider-image {
-  width: 100%;
-  height: 300px;
+   width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
   object-fit: cover;
   transition: transform 0.3s ease;
 }
@@ -307,6 +315,10 @@ function next() {
     width: 40px;
     height: 40px;
     font-size: 1.2rem;
+
+  .slider-image {
+    aspect-ratio: 4 / 3;
+  }
   }
 }
 
