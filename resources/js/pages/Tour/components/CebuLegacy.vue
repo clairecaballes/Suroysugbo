@@ -317,8 +317,10 @@ function next() {
     font-size: 1.2rem;
   }
   .slider-image {
-    aspect-ratio: 4 / 3;
-  
+    aspect-ratio: 1 / 1; /* square images */
+    width: 100%;
+    height: auto;
+    object-fit: cover;
   }
    .slider-link:hover .slider-image {
     transform: none;
