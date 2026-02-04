@@ -198,7 +198,17 @@ export default {
   .content-section {
     padding: 0 1rem 3rem;
   }
-
+  .brand {
+  font-size: 3.3rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 1rem;
+  background: linear-gradient(to right, #ffffff, #ffffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+  
   .feature-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;

@@ -1,5 +1,5 @@
 <template>
-  <section class="user-ratings fade-background">
+  <section class="user-ratings">
     <h3 class="section-title">Share Your Experience</h3>
 
     <div class="reviews-grid">
@@ -115,32 +115,32 @@ onMounted(() => {
 <style scoped>
 
 
-.fade-background::before {
-  content: '';
-  position: fixed; /* Use fixed to cover the viewport */
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh; /* Full screen height */
-  background: linear-gradient(
-    180deg,
-    #021036 0%,
-    #021036 15%,
-    #07488a 35%,
-    #ffffff 100%
-  );
-  pointer-events: none;
-  z-index: -1; /* Optional: keep it behind other content */
+
+
+.user-ratings {
+  position: relative; /* required for ::before absolute */
+  padding-top: 2rem;
+  
 }
+
 .section-title {
   position: relative;
-  font-size: 1.5rem;
-  color: #ffffff;
-  font-weight: 700;
-  margin-bottom: 2rem;
+  margin-top: 0;  /* Remove the space above */
+  margin-bottom: 2rem; /* Keep space below */
+  font-size: 2rem; /* bigger for impact */
+  font-weight: 800;
   font-family: 'Inter', sans-serif;
   text-align: center;
-  letter-spacing: -1.5px;
+  letter-spacing: -1px;
+  color: transparent;
+
+  /* Gradient text */
+
+   background: linear-gradient(95deg, #20ffffff, #070bffff, #006eff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.06);
 }
 
 .reviews-grid {
@@ -176,7 +176,8 @@ onMounted(() => {
 
 .review-card:hover {
   transform: translateY(-5px);
-  background: linear-gradient(145deg, #ffffff, #f0f9ff);
+  /* slightly stronger gradient on hover */
+  background: linear-gradient(145deg, #e6f0ff, #ffffff);
   border-color: #0ea5e9;
   box-shadow: 0 10px 20px rgba(14, 165, 233, 0.15);
 }
