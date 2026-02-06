@@ -311,61 +311,72 @@ async loadHeritageSites() {
   this.heritageSites = await res.json();
 },
     // CENTER ON USER BUTTON
+// CENTER ON USER BUTTON
 centerOnMe() {
-    if (!navigator.geolocation) {
-      alert('Geolocation not supported by your browser.');
-      return;
-    }
+  if (!navigator.geolocation) {
+    alert('Geolocation not supported by your browser.');
+    return;
+  }
 
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords;
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const { latitude, longitude } = pos.coords;
 
-        this.map.setView([latitude, longitude], 16);
+      // Center map on user
+      this.map.setView([latitude, longitude], 16);
 
-        if (this.userMarker) this.map.removeLayer(this.userMarker);
-
-        this.userMarker = L.marker([latitude, longitude], {
-          icon: L.divIcon({
-            html: `<div style="font-size:36px;">🧍‍♂️</div>`,
-            iconSize: [36, 36],
-            iconAnchor: [18, 36],
-          }),
-        }).addTo(this.map);
-
-        this.generateLocationInsight(latitude, longitude);
-      },
-      (error) => {
-        alert('Unable to get your location: ' + error.message);
+      // Remove old marker if exists
+      if (this.userMarker) {
+        this.map.removeLayer(this.userMarker);
       }
-    );
-  }
 
-  // LOCATION INSIGHT POPUP
-  generateLocationInsight(lat, lon) {
-    const nearestHeritage = this.heritageSites
-      .map(site => ({
-        ...site,
-        distance: this.calculateDistance(lat, lon, site.lat, site.lon)
-      }))
-      .sort((a, b) => a.distance - b.distance)[0];
+      // Create new user marker
+      this.userMarker = L.marker([latitude, longitude], {
+        icon: L.divIcon({
+          html: `<div style="font-size:36px;">🧍‍♂️</div>`,
+          iconSize: [36, 36],
+          iconAnchor: [18, 36],
+        }),
+      }).addTo(this.map);
 
-    const farFromHeritage = nearestHeritage.distance > 1;
+      // Bind popup reliably once marker is added
+      this.userMarker.on('add', () => {
+        this.generateLocationInsight(latitude, longitude);
+      });
+    },
+    (error) => {
+      alert('Unable to get your location: ' + error.message);
+    }
+  );
+},
 
-    const popupHTML = `
-      <div style="font-size:13px; line-height:1.4">
-        <strong>🧍‍♂️ You are here</strong><br><br>
+// LOCATION INSIGHT POPUP
+generateLocationInsight(lat, lon) {
+  if (!this.heritageSites || this.heritageSites.length === 0) return;
 
-        ${farFromHeritage ? `⚠ You are far from major heritage sites<br><br>` : ``}
+  // Find nearest heritage site
+  const nearestHeritage = this.heritageSites
+    .map(site => ({
+      ...site,
+      distance: this.calculateDistance(lat, lon, site.lat, site.lon)
+    }))
+    .sort((a, b) => a.distance - b.distance)[0];
 
-        <strong>Recommended Route:</strong><br>
-        1️⃣ Fort San Pedro<br>
-        2️⃣ Basilica del Santo Niño
-      </div>
-    `;
+  const farFromHeritage = nearestHeritage.distance > 1;
 
-    this.userMarker.bindPopup(popupHTML).openPopup();
-  }
+  const popupHTML = `
+    <div style="font-size:13px; line-height:1.4">
+      <strong>🧍‍♂️ You are here</strong><br><br>
+      ${farFromHeritage ? `⚠ You are far from major heritage sites<br><br>` : ``}
+      <strong>Recommended Route:</strong><br>
+      1️⃣ Fort San Pedro<br>
+      2️⃣ Basilica del Santo Niño
+    </div>
+  `;
+
+  // Bind popup to the user marker and open immediately
+  this.userMarker.bindPopup(popupHTML).openPopup();
+}
   }
 };
 </script>
