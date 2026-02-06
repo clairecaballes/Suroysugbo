@@ -51,9 +51,11 @@
           <span class="legend-emoji">📍</span>
           <span>Search</span>
         </div>
-         <button class="center-button" @click="centerOnMe">
-         <span class="me-icon">🧍‍♂️</span>
-        <span class="me-text">Locate Me</span>
+      </div>
+      <div style="margin-top:8px; display:flex; justify-content:center;">
+        <button class="center-button" @click="centerOnMe">
+          <span class="me-icon">🧍‍♂️</span>
+          <span class="me-text">Locate Me</span>
         </button>
       </div>
     </div>
@@ -84,7 +86,9 @@ export default {
       map: null,
       markerCluster: null,
       searchCenterMarker: null,
+      nearbyMarkers: [],
       userMarker: null, // marker for "Center on Me"
+     heritageSites: [] // fetched from JSON or API
     };
   },
 
@@ -170,6 +174,14 @@ export default {
     async searchPlace() {
       if (!this.searchQuery) return;
 
+      // Clear previous nearby markers when searching a new place
+      if (this.nearbyMarkers && this.nearbyMarkers.length) {
+        this.nearbyMarkers.forEach(m => {
+          try { if (this.map && this.map.hasLayer(m)) this.map.removeLayer(m); } catch (e) { /* ignore */ }
+        });
+        this.nearbyMarkers = [];
+      }
+
       // Search via Nominatim
       const url = `https://nominatim.openstreetmap.org/search?format=json&q=${this.searchQuery}&bounded=1&viewbox=123.85,10.23,123.95,10.35`;
       const response = await fetch(url);
@@ -227,7 +239,7 @@ export default {
         bar: { emoji: "🍹", label: "Bar" },
       };
 
-      // Fetch nearby places via Overpass API
+      // Fetch nearby places via Overpass API (includes malls)
       const radius = 1000;
       const overpassQuery = `
         [out:json];
@@ -235,13 +247,22 @@ export default {
           node["amenity"="restaurant"](around:${radius},${lat},${lon});
           node["amenity"="cafe"](around:${radius},${lat},${lon});
           node["amenity"="fast_food"](around:${radius},${lat},${lon});
-          node["amenity"="bar"](around:${radius},${lat},${lon});
+          node["shop"="mall"](around:${radius},${lat},${lon});
         );
         out;
       `;
       const overpassUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`;
       const placeRes = await fetch(overpassUrl);
       const placeData = await placeRes.json();
+
+      // Debug: log raw Overpass response
+      console.log('Overpass response for nearby places:', placeData);
+
+      // If no elements returned, inform the user
+      if (!placeData || !Array.isArray(placeData.elements) || placeData.elements.length === 0) {
+        alert('No nearby places found within 1km for this location.');
+        return;
+      }
 
       placeData.elements.forEach(place => {
         const amenity = place.tags.amenity || "unknown";
@@ -262,7 +283,7 @@ export default {
           className: 'emoji-marker'
         });
 
-        L.marker([plat, plon], { icon: placeIcon })
+        const marker = L.marker([plat, plon], { icon: placeIcon })
           .addTo(this.map)
           .bindPopup(`
             <div style="font-size:13px; text-align:center;">
@@ -273,44 +294,60 @@ export default {
               📌 Type: ${iconData.label}
             </div>
           `);
+        // track markers so we can clear them on next search
+        this.nearbyMarkers.push(marker);
       });
     },
-
+async loadHeritageSites() {
+  const res = await fetch("/data/heritage_sites.json");
+  this.heritageSites = await res.json();
+},
     // CENTER ON USER BUTTON
-    centerOnMe() {
-  if (!navigator.geolocation) {
-    alert("Geolocation is not supported by your browser.");
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    (pos) => {
+centerOnMe() {
+    navigator.geolocation.getCurrentPosition((pos) => {
       const { latitude, longitude } = pos.coords;
 
-      // Center map
       this.map.setView([latitude, longitude], 16);
 
-      // Add emoji marker for user
-      const userMarker = L.divIcon({
-        html: `<div style="font-size: 36px; text-align:center;">🧍‍♂️</div>`,
-        iconSize: [36, 36],
-        iconAnchor: [18, 36],
-        popupAnchor: [0, -36],
-        className: 'emoji-marker'
-      });
+      if (this.userMarker) this.map.removeLayer(this.userMarker);
 
-      L.marker([latitude, longitude], { icon: userMarker })
-        .addTo(this.map)
-        .bindPopup(`<strong>You are here</strong>`)
-        .openPopup();
-    },
-    (err) => {
-      alert("Unable to retrieve your location.");
-      console.error(err);
-    }
-  );
-}
+      this.userMarker = L.marker([latitude, longitude], {
+        icon: L.divIcon({
+          html: `<div style="font-size:36px;">🧍‍♂️</div>`,
+          iconSize: [36, 36],
+          iconAnchor: [18, 36],
+        }),
+      }).addTo(this.map);
 
+      this.generateLocationInsight(latitude, longitude);
+    });
+  },
+
+  // LOCATION INSIGHT POPUP
+  generateLocationInsight(lat, lon) {
+    const nearestHeritage = this.heritageSites
+      .map(site => ({
+        ...site,
+        distance: this.calculateDistance(lat, lon, site.lat, site.lon)
+      }))
+      .sort((a, b) => a.distance - b.distance)[0];
+
+    const farFromHeritage = nearestHeritage.distance > 1;
+
+    const popupHTML = `
+      <div style="font-size:13px; line-height:1.4">
+        <strong>🧍‍♂️ You are here</strong><br><br>
+
+        ${farFromHeritage ? `⚠ You are far from major heritage sites<br><br>` : ``}
+
+        <strong>Recommended Route:</strong><br>
+        1️⃣ Fort San Pedro<br>
+        2️⃣ Basilica del Santo Niño
+      </div>
+    `;
+
+    this.userMarker.bindPopup(popupHTML).openPopup();
+  }
   }
 };
 </script>
@@ -675,7 +712,7 @@ export default {
   }
 
   .legend-item span {
-    font-size: 30px;
+    font-size: 14px;
   }
   .map-legend .legend-item {
     padding: 7px 10px;      /* bigger touch area */
