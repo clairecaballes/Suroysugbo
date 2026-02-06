@@ -93,6 +93,14 @@ export default {
   },
 
   mounted() {
+    // Populate heritage sites for location insights
+    this.heritageSites = LANDMARKS.map(l => ({
+      name: l.name,
+      lat: l.lat,
+      lon: l.lon,
+      type: l.type
+    }));
+
     // Initialize map
    this.map = L.map("map", {
   minZoom: 16,
@@ -304,24 +312,34 @@ async loadHeritageSites() {
 },
     // CENTER ON USER BUTTON
 centerOnMe() {
-    navigator.geolocation.getCurrentPosition((pos) => {
-      const { latitude, longitude } = pos.coords;
+    if (!navigator.geolocation) {
+      alert('Geolocation not supported by your browser.');
+      return;
+    }
 
-      this.map.setView([latitude, longitude], 16);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
 
-      if (this.userMarker) this.map.removeLayer(this.userMarker);
+        this.map.setView([latitude, longitude], 16);
 
-      this.userMarker = L.marker([latitude, longitude], {
-        icon: L.divIcon({
-          html: `<div style="font-size:36px;">🧍‍♂️</div>`,
-          iconSize: [36, 36],
-          iconAnchor: [18, 36],
-        }),
-      }).addTo(this.map);
+        if (this.userMarker) this.map.removeLayer(this.userMarker);
 
-      this.generateLocationInsight(latitude, longitude);
-    });
-  },
+        this.userMarker = L.marker([latitude, longitude], {
+          icon: L.divIcon({
+            html: `<div style="font-size:36px;">🧍‍♂️</div>`,
+            iconSize: [36, 36],
+            iconAnchor: [18, 36],
+          }),
+        }).addTo(this.map);
+
+        this.generateLocationInsight(latitude, longitude);
+      },
+      (error) => {
+        alert('Unable to get your location: ' + error.message);
+      }
+    );
+  }
 
   // LOCATION INSIGHT POPUP
   generateLocationInsight(lat, lon) {
