@@ -219,11 +219,11 @@ export default {
       // Marker for searched place with 📍 emoji
       this.searchCenterMarker = L.marker([lat, lon], {
         icon: L.divIcon({
-          html: `<div style="font-size: 40px; line-height:1; transform: translate(-50%, -100%);">📍</div>`,
+          html: `<div style="font-size: 40px; text-align:center;">📍</div>`,
           iconSize: [40, 40],
           iconAnchor: [20, 40],
           popupAnchor: [0, -40],
-          className: ''
+          className: 'emoji-marker'
         }),
       }).addTo(this.map)
         .bindPopup(`
@@ -273,7 +273,7 @@ export default {
       }
 
       placeData.elements.forEach(place => {
-        const amenity = place.tags.amenity || "unknown";
+        const amenity = place.tags.amenity || place.tags.shop || "unknown";
         const name = place.tags.name || `Unnamed ${amenity}`;
         const plat = place.lat;
         const plon = place.lon;
