@@ -30,7 +30,7 @@
             @click="openModal(image)"
           />
           <label
-            class="absolute bottom-0 left-0 w-full px-2 py-1 bg-gray-700 bg-opacity-50 text-white text-xs sm:text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            class="absolute bottom-0 left-0 w-full px-2 py-1 bg-gray-700 bg-opacity-50 text-white text-xs sm:text-sm rounded opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300"
           >
             {{ image.title }}
           </label>
