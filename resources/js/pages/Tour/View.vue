@@ -126,9 +126,9 @@
         </div>
       </div>
 
-      <div class="relative bg-white rounded-lg shadow-lg max-w-lg w-full">
+      <div class="relative bg-white rounded-lg shadow-lg max-w-lg w-full flex flex-col">
         <button
-          class="absolute top-2 right-2 text-2xl text-gray-700 hover:text-black"
+          class="absolute top-2 right-2 text-2xl text-gray-700 hover:text-black z-10"
           @click="closeModal"
         >
           ×
@@ -259,7 +259,7 @@ const toggleMusic = () => {
 <style scoped>
 .street-view {
   width: 100%;
-  height: 350px;
+  height: 500x;
 }
 button {
   transition: background 0.3s ease;
