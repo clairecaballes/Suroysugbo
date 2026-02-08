@@ -333,9 +333,11 @@ centerOnMe() {
       // Create new user marker
       this.userMarker = L.marker([latitude, longitude], {
         icon: L.divIcon({
-          html: `<div style="font-size:36px;">🧍‍♂️</div>`,
+          html: `<div style="font-size:36px; text-align:center;">🧍‍♂️</div>`,
           iconSize: [36, 36],
           iconAnchor: [18, 36],
+          popupAnchor: [0, -36],
+          className: 'emoji-marker',
         }),
       }).addTo(this.map);
 
