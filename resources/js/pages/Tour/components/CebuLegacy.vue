@@ -48,7 +48,7 @@ const handleItemClick = async (item) => {
 }
 
 // Reactive items per row based on screen size
-const itemsPerRow = ref(3)
+const itemsPerRow = ref(4)
 
 // Function to update items per row based on screen size
 const updateItemsPerRow = () => {
