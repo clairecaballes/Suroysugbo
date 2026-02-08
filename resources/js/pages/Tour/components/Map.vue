@@ -339,10 +339,8 @@ centerOnMe() {
         }),
       }).addTo(this.map);
 
-      // Bind popup reliably once marker is added
-      this.userMarker.on('add', () => {
-        this.generateLocationInsight(latitude, longitude);
-      });
+      // Generate and show popup immediately
+      this.generateLocationInsight(latitude, longitude);
     },
     (error) => {
       alert('Unable to get your location: ' + error.message);
@@ -350,33 +348,33 @@ centerOnMe() {
   );
 },
 
-// LOCATION INSIGHT POPUP
-generateLocationInsight(lat, lon) {
-  if (!this.heritageSites || this.heritageSites.length === 0) return;
+    // LOCATION INSIGHT POPUP
+    generateLocationInsight(lat, lon) {
+      if (!this.heritageSites || this.heritageSites.length === 0) return;
 
-  // Find nearest heritage site
-  const nearestHeritage = this.heritageSites
-    .map(site => ({
-      ...site,
-      distance: this.calculateDistance(lat, lon, site.lat, site.lon)
-    }))
-    .sort((a, b) => a.distance - b.distance)[0];
+      // Find nearest heritage site
+      const nearestHeritage = this.heritageSites
+        .map(site => ({
+          ...site,
+          distance: this.calculateDistance(lat, lon, site.lat, site.lon)
+        }))
+        .sort((a, b) => a.distance - b.distance)[0];
 
-  const farFromHeritage = nearestHeritage.distance > 1;
+      const farFromHeritage = nearestHeritage.distance > 1;
 
-  const popupHTML = `
-    <div style="font-size:13px; line-height:1.4">
-      <strong>🧍‍♂️ You are here</strong><br><br>
-      ${farFromHeritage ? `⚠ You are far from major heritage sites<br><br>` : ``}
-      <strong>Recommended Route:</strong><br>
-      1️⃣ Fort San Pedro<br>
-      2️⃣ Basilica del Santo Niño
-    </div>
-  `;
+      const popupHTML = `
+        <div style="font-size:13px; line-height:1.4">
+          <strong>🧍‍♂️ You are here</strong><br><br>
+          ${farFromHeritage ? `⚠ You are far from major heritage sites<br><br>` : ``}
+          <strong>Recommended Route:</strong><br>
+          1️⃣ Fort San Pedro<br>
+          2️⃣ Basilica del Santo Niño
+        </div>
+      `;
 
-  // Bind popup to the user marker and open immediately
-  this.userMarker.bindPopup(popupHTML).openPopup();
-}
+      // Bind popup to the user marker and open immediately
+      this.userMarker.bindPopup(popupHTML).openPopup();
+    }
   }
 };
 </script>
