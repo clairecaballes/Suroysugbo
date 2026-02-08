@@ -48,7 +48,7 @@ const handleItemClick = async (item) => {
 }
 
 // Reactive items per row based on screen size
-const itemsPerRow = ref(4)
+const itemsPerRow = ref(3)
 
 // Function to update items per row based on screen size
 const updateItemsPerRow = () => {
@@ -59,7 +59,7 @@ const updateItemsPerRow = () => {
   } else if (window.innerWidth <= 1024) {
     itemsPerRow.value = 4; // Tablet: 4 items  
   } else {
-    itemsPerRow.value = 4; // Desktop: 4 items
+    itemsPerRow.value = 3; // Desktop: 3 items
   }
   
   // Reset current index if it becomes invalid due to screen size change
