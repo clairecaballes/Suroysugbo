@@ -259,7 +259,7 @@ const toggleMusic = () => {
 <style scoped>
 .street-view {
   width: 100%;
-  height: 500x;
+  height: 500px;
 }
 button {
   transition: background 0.3s ease;
