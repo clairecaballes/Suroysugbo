@@ -59,7 +59,7 @@ const updateItemsPerRow = () => {
   } else if (window.innerWidth <= 1024) {
     itemsPerRow.value = 4; // Tablet: 4 items  
   } else {
-    itemsPerRow.value = 3; // Desktop: 3 items
+    itemsPerRow.value = 4; // Desktop: 4 items
   }
   
   // Reset current index if it becomes invalid due to screen size change
