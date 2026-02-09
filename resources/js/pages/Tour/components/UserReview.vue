@@ -165,7 +165,7 @@ onMounted(() => {
   animation: fadeIn 0.6s ease-out forwards;
   animation-delay: calc(var(--index, 0) * 0.1s);
   opacity: 0;
-  background: linear-gradient(135deg, #ffffffff 0%, #8dcffcff 50%, #f5f3ff 100%);
+  background: linear-gradient(135deg, #ffffffff 0%, #ffffffff 50%, #f5f3ff 100%);
   border-radius: 16px;
   padding: 2rem;
   width: 340px;
@@ -176,7 +176,7 @@ onMounted(() => {
 
 .review-card:hover {
   transform: translateY(-5px);
-  background: linear-gradient(135deg, #f0f9ff 0%, #ebf8f8ff 50%, #f8fafc 100%);
+  background: linear-gradient(135deg, #f0f9ff 0%, #b8ffffff 50%, #f8fafc 100%);
   border-color: rgba(59, 130, 246, 0.3);
   box-shadow: 0 12px 24px rgba(171, 255, 248, 1);
 }
