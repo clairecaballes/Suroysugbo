@@ -176,7 +176,7 @@ onMounted(() => {
 
 .review-card:hover {
   transform: translateY(-5px);
-  background: linear-gradient(135deg, #f0f9ff 0%, #cfffffff 50%, #f8fafc 100%);
+  background: linear-gradient(135deg, #f0f9ff 0%, #ebf8f8ff 50%, #f8fafc 100%);
   border-color: rgba(59, 130, 246, 0.3);
   box-shadow: 0 12px 24px rgba(171, 255, 248, 1);
 }
