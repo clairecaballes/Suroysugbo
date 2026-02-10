@@ -77,81 +77,91 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/vue3';
-import axios from 'axios';
-import Swal from 'sweetalert2';
+import { ref, computed } from 'vue'
+import AppLayout from '@/layouts/AppLayout.vue'
+import { type BreadcrumbItem } from '@/types'
+import { Head } from '@inertiajs/vue3'
+import axios from 'axios'
+import Swal from 'sweetalert2'
+
+// Breadcrumbs
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-    },
-    {
-        title: 'Review',
-        href: '/reviews',
-    }
-];
+    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Review', href: '/reviews' }
+]
 
-defineProps({messages: Array});
+// Props
+const props = defineProps<{ messages: any[] }>()
 
+// Local reactive copy of messages
+const localMessages = ref([...props.messages])
 
-const showModal = ref(false)
-const selectedMessage = ref({})
+// Computed sorted messages (newest first)
 const sortedMessages = computed(() => {
-    return [...props.messages].sort((a, b) => {
-        // assuming created_at is ISO string or date string
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    })
+    return [...localMessages.value].sort(
+        (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
 })
 
+// Modal state
+const showModal = ref(false)
+const selectedMessage = ref<any>({})
 
-const onOK = () => {
-
-    axios.post(`/reviews/${selectedMessage.value.id}/publish`, { is_published: selectedMessage.value.isPublish })
-        .then(() => {
-            if(selectedMessage.value.isPublish) {
-               Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: 'Message has been published successfully.',
-                })
-            } else {
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Info',
-                    text: 'Message has been unpublished successfully.',
-                })
-            }
-        })
-        .catch(error => {
-            console.error('Error updating publish status:', error)
-        })
-}
-
+// Open modal and mark message as read
 function openModal(message) {
     selectedMessage.value = message
     showModal.value = true
 
-    // Mark message as read if it is not already
     if (!message.is_read) {
         axios.get(`/reviews/${message.id}/read`)
             .then(() => {
-                // Optionally, you can update the message state here
                 selectedMessage.value.is_read = true
+                // Also update in localMessages for UI
+                const index = localMessages.value.findIndex(m => m.id === message.id)
+                if (index !== -1) localMessages.value[index].is_read = true
             })
-            .catch(error => {
-                console.error('Error marking message as read:', error)
-            })
+            .catch(error => console.error('Error marking message as read:', error))
     }
 }
 
+// Close modal
 function closeModal() {
     showModal.value = false
     selectedMessage.value = {}
 }
+
+// Toggle publish/unpublish
+const onOK = () => {
+    axios.post(`/reviews/${selectedMessage.value.id}/publish`, {
+        is_published: selectedMessage.value.isPublish
+    })
+        .then(() => {
+            Swal.fire({
+                icon: selectedMessage.value.isPublish ? 'success' : 'info',
+                title: selectedMessage.value.isPublish ? 'Success' : 'Info',
+                text: selectedMessage.value.isPublish
+                    ? 'Message has been published successfully.'
+                    : 'Message has been unpublished successfully.'
+            })
+            // Update localMessages so table reflects change
+            const index = localMessages.value.findIndex(m => m.id === selectedMessage.value.id)
+            if (index !== -1) localMessages.value[index].isPublish = selectedMessage.value.isPublish
+        })
+        .catch(error => console.error('Error updating publish status:', error))
+}
+
+// Function to add a new review (can be called after submitting a form)
+async function addNewReview(newReview) {
+    try {
+        const response = await axios.post('/reviews', newReview)
+        // Add the new review to the localMessages array
+        localMessages.value.unshift(response.data)
+    } catch (error) {
+        console.error('Error creating review:', error)
+    }
+}
 </script>
+
 
 <style scoped>
 .table {
