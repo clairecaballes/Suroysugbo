@@ -13,7 +13,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(message, index) in messages" :key="message.id"
+                    <tr v-for="(message, index) in sortedMessages" :key="message.id"
                      class="border-t hover:bg-gray-50" :class="message.is_read ? '' : 'font-bold'">
                         <td class="px-3 py-2">{{ index + 1 }}</td>
                         <td class="px-3 py-2">{{ message.name }}</td>
@@ -46,51 +46,70 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/vue3';
-import PlaceholderPattern from '../components/PlaceholderPattern.vue';
-import axios from 'axios';
+import { ref, computed } from 'vue'
+import AppLayout from '@/layouts/AppLayout.vue'
+import { type BreadcrumbItem } from '@/types'
+import { Head } from '@inertiajs/vue3'
+import axios from 'axios'
+
+// Breadcrumbs
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-    },
-    {
-        title: 'Messages',
-        href: '/messages',
-    }
-];
+    { title: 'Dashboard', href: '/dashboard' },
+    { title: 'Messages', href: '/messages' }
+]
 
-defineProps({messages: Array});
+// Props
+const props = defineProps<{ messages: any[] }>()
 
+// Local reactive copy of messages
+const localMessages = ref([...props.messages])
 
+// Computed sorted messages (newest first)
+const sortedMessages = computed(() => {
+    return [...localMessages.value].sort(
+        (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
+})
+
+// Modal state
 const showModal = ref(false)
-const selectedMessage = ref({})
+const selectedMessage = ref<any>({})
 
+// Open modal and mark message as read
 function openModal(message) {
     selectedMessage.value = message
     showModal.value = true
 
-    // Mark message as read if it is not already
     if (!message.is_read) {
         axios.get(`/messages/${message.id}/read`)
             .then(() => {
-                // Optionally, you can update the message state here
                 selectedMessage.value.is_read = true
+                // Update localMessages so table reflects read status
+                const index = localMessages.value.findIndex(m => m.id === message.id)
+                if (index !== -1) localMessages.value[index].is_read = true
             })
-            .catch(error => {
-                console.error('Error marking message as read:', error)
-            })
+            .catch(error => console.error('Error marking message as read:', error))
     }
 }
 
+// Close modal
 function closeModal() {
     showModal.value = false
     selectedMessage.value = {}
 }
+
+// Optional: function to add a new message (e.g., after sending via form)
+async function addNewMessage(newMessage) {
+    try {
+        const response = await axios.post('/messages', newMessage)
+        // Add to top of localMessages so newest shows first
+        localMessages.value.unshift(response.data)
+    } catch (error) {
+        console.error('Error creating message:', error)
+    }
+}
 </script>
+
 
 <style scoped>
 .table {
