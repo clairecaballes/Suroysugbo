@@ -20,11 +20,20 @@
           </div>
         </div>
       </div>
+    
+
+
+
      
       <!-- Map -->
-      <div id="map" class="map-element"></div>
+      <div id="map" class="map-element" ref="miniMap"></div>
     </div>
 
+  <!-- Floating popup -->
+<div v-if="showFloatingPopup" class="floating-popup">
+    <span>To explore, type a place</span>
+    <button class="close-popup" @click="closePopup">×</button>
+  </div>
     <!-- Legend moved outside -->
     <div class="map-legend">
       <div class="legend-header">
@@ -88,9 +97,11 @@ export default {
       searchCenterMarker: null,
       nearbyMarkers: [],
       userMarker: null, // marker for "Center on Me"
-     heritageSites: [] // fetched from JSON or API
+      heritageSites: [], // fetched from JSON or API
+      showFloatingPopup: false
     };
   },
+ 
 
   mounted() {
     // Populate heritage sites for location insights
@@ -144,16 +155,42 @@ export default {
             <div style="font-size:13px; text-align:center;">
               📍 <strong>${place.name}</strong><br>
               📍 From: Cebu North Bus Terminal<br>
-              📏 Distance: ${distance.toFixed(2)} km<br>
-              🚌 Jeepney Fare: ₱${fare}<br>
+              📏 Estimated Distance: ${distance.toFixed(2)} km<br>
+              🚌 Estimated Jeepney Fare: ₱${fare}<br>
               🏷 Type: ${place.type}
             </div>
           `);
       }
     });
-  },
+   
+
+  // Add scroll listener
+  window.addEventListener('scroll', this.handleScroll);
+  
+
+},
+beforeUnmount() {
+  window.removeEventListener('scroll', this.handleScroll);
+},
+  
 
   methods: {
+    closePopup() {
+  this.showFloatingPopup = false;
+},
+
+handleScroll() {
+  const miniMapEl = this.$refs.miniMap; // the mini map
+  if (!miniMapEl) return;
+
+  const rect = miniMapEl.getBoundingClientRect();
+  const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+  if (isVisible) {
+    this.showFloatingPopup = true;
+  }
+},
+
     // DISTANCE (HAVERSINE)
     calculateDistance(lat1, lon1, lat2, lon2) {
       const R = 6371;
@@ -230,8 +267,8 @@ export default {
           <div class="popup-content">
             <h3 style="color:#2563eb;">${this.searchQuery}</h3>
             <p style="font-size:12px;">📍 From: Cebu North Bus Terminal</p>
-            <p style="font-size:12px;">📏 Distance: ${distance.toFixed(2)} km</p>
-            <p style="font-size:13px; font-weight:600; color:#16a34a;">🚌 Jeepney Fare: ₱${fare}</p>
+            <p style="font-size:12px;">📏 Estimated Distance: ${distance.toFixed(2)} km</p>
+            <p style="font-size:13px; font-weight:600; color:#16a34a;">🚌 Estimated Jeepney Fare: ₱${fare}</p>
             <p style="font-size:12px;">🍴 Type: Search Result</p>
             <small style="font-size:10px; color:#6b7280;">*Estimated fare only</small>
           </div>
@@ -297,8 +334,8 @@ export default {
             <div style="font-size:13px; text-align:center;">
               ${iconData.emoji} <strong>${name}</strong><br>
               📍 From: Cebu North Bus Terminal<br>
-              📏 Distance: ${pdistance.toFixed(2)} km<br>
-              🚌 Jeepney Fare: ₱${pfare}<br>
+              📏 Estimated Distance: ${pdistance.toFixed(2)} km<br>
+              🚌 Estimated Jeepney Fare: ₱${pfare}<br>
               📌 Type: ${iconData.label}
             </div>
           `);
@@ -385,6 +422,35 @@ centerOnMe() {
 
 
 <style scoped>
+.floating-popup {
+  position: absolute; /* relative to map-container now */
+  top: 70px;
+  right: 12px;
+  background: #91b4ff;
+  color: black;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  z-index: 100; /* ensures it’s above the map */
+}
+
+.floating-popup .close-popup {
+  background: transparent;
+  border: none;
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+
 .popup-content {
   padding: 2px;
   font-size: 10px;
@@ -427,6 +493,7 @@ centerOnMe() {
   border-radius: 8px;
   padding: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .search-wrapper {
@@ -535,11 +602,6 @@ centerOnMe() {
   cursor: default;
 }
 
-.legend-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  background: #e0f7fa; /* subtle hover color */
-}
 
 .legend-item img {
   width: 20px;

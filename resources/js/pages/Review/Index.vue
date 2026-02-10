@@ -16,7 +16,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(message, index) in messages" :key="message.id"
+                    <tr v-for="(message, index) in sortedMessages" :key="message.id"
                      class="border-t hover:bg-gray-50" :class="message.isRead ? '' : 'font-bold'">
                         <td class="px-3 py-2">{{ index + 1 }}</td>
                         <td class="px-3 py-2">{{ message.name }}</td>
@@ -99,6 +99,13 @@ defineProps({messages: Array});
 
 const showModal = ref(false)
 const selectedMessage = ref({})
+const sortedMessages = computed(() => {
+    return [...props.messages].sort((a, b) => {
+        // assuming created_at is ISO string or date string
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    })
+})
+
 
 const onOK = () => {
 
