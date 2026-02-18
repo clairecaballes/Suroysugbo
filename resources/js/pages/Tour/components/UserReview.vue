@@ -104,12 +104,13 @@ const submitReview = () => {
 onMounted(() => {
   axios.get('/api/show-publish-review')
     .then(response => {
-      reviews.value = response.data.review;
-    })
-    .catch(error => {
-      console.error('Error fetching Cebu Legacy data:', error)
+      reviews.value = [...response.data.review].sort(
+        (a, b) => new Date(b.created_at).getTime() - 
+                  new Date(a.created_at).getTime()
+      );
     })
 })
+
 </script>
 
 <style scoped>
