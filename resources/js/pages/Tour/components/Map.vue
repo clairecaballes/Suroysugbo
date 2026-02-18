@@ -31,7 +31,12 @@
 
   <!-- Floating popup -->
 <div v-if="showFloatingPopup" class="floating-popup">
-    <span>To explore, type a place</span>
+    <span>
+  To explore, type a place.<br>
+  Please ensure that the complete <br>
+  and correct name of the location is entered.
+</span>
+
     <button class="close-popup" @click="closePopup">×</button>
   </div>
     <!-- Legend moved outside -->
