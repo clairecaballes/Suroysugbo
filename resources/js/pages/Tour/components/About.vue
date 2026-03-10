@@ -34,6 +34,7 @@
           <div
             class="feature-card"
             :class="{ flipped: flippedCards[index] }"
+             @click.stop
           >
 
             <!-- FRONT -->
@@ -307,39 +308,44 @@ height:190px;
 }
 
 /* MOBILE */
+@media (max-width:480px) {
 
-@media (max-width:480px){
+  .brand {
+    font-size: 2.2rem;
+  }
 
-.brand{
-font-size:2.2rem;
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .content-section {
+    margin: 2rem auto 0;  /* instead of -3rem */
+    padding: 3rem 1rem;   /* extra top padding for spacing */
+  }
+
+  .intro {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-top: 1rem;    /* spacing from header */
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-card {
+    height: 200px;
+  }
+
+  .feature-front,
+  .feature-back {
+    padding: 1.5rem;
+  }
+
+  .icon {
+    font-size: 2rem;
+  }
+
 }
-
-.subtitle{
-font-size:1rem;
-}
-
-.content-section{
-padding:2rem 1rem;
-}
-
-.feature-grid{
-grid-template-columns:1fr;
-}
-
-.feature-card{
-height:200px;
-}
-
-.feature-front,
-.feature-back{
-padding:1.5rem;
-}
-
-.icon{
-font-size:2rem;
-}
-
-}
-
 </style>
 
