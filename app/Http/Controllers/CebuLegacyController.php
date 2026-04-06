@@ -50,6 +50,8 @@ class CebuLegacyController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:10240',
+            'audio' => 'nullable|file|mimes:mp3,wav,ogg,aac|max:20480',
         ]);
         $legacyItem = new CebuLegacy();
         $imagePath = null; // Initialize image path
