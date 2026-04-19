@@ -44,8 +44,8 @@ ChartJS.register(
   CategoryScale
 )
 
-const monthlyLabels = ref<string[]>(props.monthlyLabels ?? ['Jan', 'Feb', 'Mar', 'Apr', 'May'])
-const monthlyRequests = ref<number[]>(props.monthlyRequests ?? [100, 200, 150, 300, 250])
+const monthlyLabels = ref<string[]>(props.monthlyLabels)
+const monthlyRequests = ref<number[]>(props.monthlyRequests)
 
 const chartData = computed(() => ({
   labels: monthlyLabels.value,
