@@ -16,12 +16,16 @@ import {
   CategoryScale
 } from 'chart.js'
 import { Line } from 'vue-chartjs'
+import axios from 'axios'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 
-const props = defineProps({
-    totalLegacyItems:  Number,
-    totalMessages: Number,
-    totalReviews: Number,
-});
+const props = defineProps<{
+  totalLegacyItems: number
+  totalMessages: number
+  totalReviews: number
+  monthlyLabels: string[]
+  monthlyRequests: number[]
+}>()
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
@@ -40,19 +44,44 @@ ChartJS.register(
   CategoryScale
 )
 
-const chartData = {
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+const monthlyLabels = ref<string[]>(props.monthlyLabels ?? ['Jan', 'Feb', 'Mar', 'Apr', 'May'])
+const monthlyRequests = ref<number[]>(props.monthlyRequests ?? [100, 200, 150, 300, 250])
+
+const chartData = computed(() => ({
+  labels: monthlyLabels.value,
   datasets: [
     {
       label: 'Requests',
-      data: [100, 200, 150, 300, 250],
+      data: monthlyRequests.value,
       borderColor: '#42A5F5',
       backgroundColor: 'rgba(66, 165, 245, 0.2)',
       fill: true,
       tension: 0.4,
     }
   ]
+}))
+
+const fetchChartData = async () => {
+  try {
+    const response = await axios.get('/dashboard/chart-data')
+    monthlyLabels.value = response.data.labels
+    monthlyRequests.value = response.data.data
+  } catch (error) {
+    console.error('Unable to refresh dashboard chart data:', error)
+  }
 }
+
+let refreshInterval: number | undefined
+onMounted(() => {
+  fetchChartData()
+  refreshInterval = window.setInterval(fetchChartData, 30000)
+})
+
+onUnmounted(() => {
+  if (refreshInterval) {
+    window.clearInterval(refreshInterval)
+  }
+})
 
 const chartOptions = {
   responsive: true,

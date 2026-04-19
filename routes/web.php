@@ -8,6 +8,7 @@ Route::get('/cebu-legacy/view/{id}', [App\Http\Controllers\TourController::class
 
 
 Route::get('dashboard', [App\Http\Controllers\DashboardController::class,'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('dashboard/chart-data', [App\Http\Controllers\DashboardController::class, 'chartData'])->middleware(['auth', 'verified'])->name('dashboard.chart-data');
 
 Route::group(['middleware' => ['auth', 'verified']], function () {
 
